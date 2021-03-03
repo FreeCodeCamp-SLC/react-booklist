@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../auth-context";
-import { clearAuthToken } from "../local-storage";
+import { clearAuthToken } from "../utils/local-storage";
 
 export default function Header() {
   const { user, setUser } = useContext(AuthContext);

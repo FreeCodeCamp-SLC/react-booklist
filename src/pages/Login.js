@@ -9,6 +9,7 @@ export default function LoginPage() {
     email: "",
     password: "",
   });
+
   const { user } = useContext(AuthContext);
 
   const { error, loading, submitLogin } = useAuthentication({
@@ -19,10 +20,15 @@ export default function LoginPage() {
     return <Redirect to="/dashboard" />;
   }
 
+  function handleClick(e) {
+    e.preventDefault();
+    submitLogin(values);
+  }
+
   return (
     <div>
-      <h2>Login</h2>
-      <form onSubmit={submitLogin}>
+      <h2>Login Page</h2>
+      <form onSubmit={handleClick}>
         <fieldset>
           <label htmlFor="email">
             Email
@@ -35,10 +41,10 @@ export default function LoginPage() {
               required
             />
           </label>
-          <label>
+          <label htmlFor="password">
             password
             <input
-              type="text"
+              type="password"
               name="password"
               id="password"
               value={values.password}
@@ -46,10 +52,14 @@ export default function LoginPage() {
               required
             />
           </label>
-          <div>{error ? <p>Error: {error}</p> : ""}</div>
+          {error && (
+            <div>
+              <p>Error: {error}</p>
+            </div>
+          )}
           <button type="submit" disabled={loading}>
             {loading ? "Loading" : "Login"}
-          </button>{" "}
+          </button>
         </fieldset>
       </form>
     </div>

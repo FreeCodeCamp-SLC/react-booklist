@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
+import AuthenticateRoute from "./AuthenticateRoute";
 import Header from "./Header";
 import LandingPage from "../pages/Landing";
 import LoginPage from "../pages/Login";
@@ -16,11 +17,13 @@ function App() {
       <AuthContext.Provider value={{ user, setUser }}>
         <Header />
         <main>
-          <Route path="/" exact component={LandingPage} />
-          <Route path="/login" component={LoginPage} />
-          <Route path="/register" component={RegistrationPage} />
-          <Route path="/dashboard" component={DashboardPage} />
-          <Route path="/tailwind" component={TestingTailwind} />
+          <Switch>
+            <Route path="/" exact component={LandingPage} />
+            <Route path="/login" component={LoginPage} />
+            <Route path="/register" component={RegistrationPage} />
+            <AuthenticateRoute path="/dashboard" component={DashboardPage} />
+            <Route path="/tailwind" component={TestingTailwind} />
+          </Switch>
         </main>
       </AuthContext.Provider>
     </>

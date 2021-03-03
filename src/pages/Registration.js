@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { Redirect } from "react-router-dom";
 import useForm from "../utils/useForm";
 import { AuthContext } from "../auth-context";
 import useAuthentication from "../utils/useAuthentication";
+import { Redirect } from "react-router-dom";
 
 export default function RegistrationPage() {
   const { values, updateValue } = useForm({
@@ -10,6 +10,7 @@ export default function RegistrationPage() {
     password: "",
     confirmPassword: "",
   });
+
   const { user } = useContext(AuthContext);
 
   const { error, loading, submitRegistration } = useAuthentication({ values });
@@ -20,7 +21,7 @@ export default function RegistrationPage() {
 
   return (
     <div>
-      <h2>Registration</h2>
+      <h2>Registration Page</h2>
       <form onSubmit={submitRegistration}>
         <fieldset>
           <label htmlFor="email">
@@ -34,10 +35,10 @@ export default function RegistrationPage() {
               required
             />
           </label>
-          <label>
+          <label htmlFor="password">
             password
             <input
-              type="text"
+              type="password"
               name="password"
               id="password"
               value={values.password}
@@ -45,10 +46,10 @@ export default function RegistrationPage() {
               required
             />
           </label>
-          <label>
+          <label htmlFor="confirmPassword">
             Confirm password
             <input
-              type="text"
+              type="password"
               name="confirmPassword"
               id="confirmPassword"
               value={values.confirmPassword}

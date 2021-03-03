@@ -1,8 +1,7 @@
 import { useContext, useState } from "react";
-import jwtDecode from "jwt-decode";
 import { AuthContext } from "../auth-context";
 import { API_BASE_URL } from "../config";
-import { saveAuthToken, clearAuthToken } from "../local-storage";
+import { saveAuthToken } from "./local-storage";
 
 const storeAuthInfo = (accessToken) => {
   // const decodedToken = jwtDecode(accessToken);
@@ -14,8 +13,7 @@ export default function useAuthentication({ values }) {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  async function submitLogin(e) {
-    e.preventDefault();
+  async function submitLogin(values) {
     setLoading(true);
     setError(false);
 
@@ -88,11 +86,3 @@ export default function useAuthentication({ values }) {
     submitRegistration,
   };
 }
-
-// export const logout = async () => {
-//   return {
-//     id: null,
-//     username: null,
-//     email: null,
-//   };
-// };

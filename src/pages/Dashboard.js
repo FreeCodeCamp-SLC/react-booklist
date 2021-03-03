@@ -1,14 +1,6 @@
-import React, { useContext } from "react";
-import { Redirect } from "react-router-dom";
-import { AuthContext } from "../auth-context";
+import React from "react";
 
 export default function DashboardPage() {
-  const { user } = useContext(AuthContext);
-
-  if (!user) {
-    return <Redirect to="/" />;
-  }
-
   return (
     <div>
       <h2>Dashboard</h2>

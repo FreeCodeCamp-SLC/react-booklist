@@ -2,7 +2,7 @@ import React from "react";
 import Books from "../data/books";
 import Book from "../components/Book";
 
-const DashboardPage = () => {
+export default function DashboardPage() {
   return (
     <div className="bg-gray-100">
       <div>
@@ -16,6 +16,4 @@ const DashboardPage = () => {
       </div>
     </div>
   );
-};
-
-export default DashboardPage;
+}

@@ -3,6 +3,7 @@ import useForm from "../utils/useForm";
 import { AuthContext } from "../auth-context";
 import useAuthentication from "../utils/useAuthentication";
 import { Redirect } from "react-router-dom";
+import Header from "../components/Header";
 
 export default function RegistrationPage() {
   const { values, updateValue } = useForm({
@@ -20,7 +21,8 @@ export default function RegistrationPage() {
   }
 
   return (
-    <div>
+    <div className="sm:grid grid-cols-layout">
+      <Header />
       <h2>Registration Page</h2>
       <form onSubmit={submitRegistration}>
         <fieldset>

@@ -4,7 +4,7 @@ import bookmark from "../images/bookmark-icon.png";
 
 export default function Book({ book }) {
   return (
-    <div className="flex flex-col items-center justify-center bg-white w-full  mt-7 mx-auto py-7 rounded-md shadow-md">
+    <div className="flex flex-col items-center justify-center bg-white w-full mt-7 mx-auto py-7 rounded-md shadow-md">
       <div className="inline">
         <img className="max-h-40 my-3" src={bookImg} alt="book cover" />
       </div>

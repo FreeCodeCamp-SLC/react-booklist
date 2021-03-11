@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Route, Switch } from "react-router-dom";
 import AuthenticateRoute from "./AuthenticateRoute";
-import Header from "./Header";
+// import Header from "./Header";
 import LandingPage from "../pages/Landing";
 import LoginPage from "../pages/Login";
 import RegistrationPage from "../pages/Registration";
@@ -15,7 +15,7 @@ function App() {
   return (
     <>
       <AuthContext.Provider value={{ user, setUser }}>
-        <Header />
+        {/* <Header /> */}
         <main>
           <Switch>
             <Route path="/" exact component={LandingPage} />

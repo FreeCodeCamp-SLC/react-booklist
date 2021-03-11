@@ -3,6 +3,7 @@ import { Redirect } from "react-router-dom";
 import { AuthContext } from "../auth-context";
 import useAuthentication from "../utils/useAuthentication";
 import useForm from "../utils/useForm";
+import Header from "../components/Header";
 
 export default function LoginPage() {
   const { values, updateValue } = useForm({
@@ -26,7 +27,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div>
+    <div className="sm:grid grid-cols-layout">
+      <Header />
       <h2>Login Page</h2>
       <form onSubmit={handleClick}>
         <fieldset>

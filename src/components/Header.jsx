@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth0 } from '@auth0/auth0-react';
-import LoginButton from './LoginButton';
-import LogoutButton from './LogoutButton';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
+import LoginButton from "./LoginButton";
+import LogoutButton from "./LogoutButton";
 
 export default function Header() {
   const { isAuthenticated } = useAuth0();
 
   const [toggle, setToggle] = useState(false);
-  const [searchValue, setSearchValue] = useState('Search');
+  const [searchValue, setSearchValue] = useState("Search");
 
   let homeButton = (
     <li className="p-1 focus:bg-booklistBlue-dark">
@@ -20,6 +20,20 @@ export default function Header() {
   if (isAuthenticated) {
     homeButton = (
       <li className="p-1 focus:bg-booklistBlue-dark">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+          />
+        </svg>
         <Link to="/dashboard">Dashboard</Link>
       </li>
     );
@@ -121,7 +135,7 @@ export default function Header() {
       <header
         className={`
         col-start-1 absolute top-16 sm:hidden w-screen bg-booklistBlue transform transition z-20
-          ${!toggle ? '-translate-y-full transparent' : 'translate-y-0'}
+          ${!toggle ? "-translate-y-full transparent" : "translate-y-0"}
         `}
       >
         <nav className="m-2 text-white text-lg font-semibold text-center">

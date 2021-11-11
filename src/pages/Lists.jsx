@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
 import useListsApi from '../hooks/useListsApi';
 import Header from '../components/Header';
+import useBooksApi from '../hooks/useBooksApi';
 
 export default function Lists() {
   const { getAllLists } = useListsApi();
+  const { getAllBooks } = useBooksApi();
+  const [books, setBooks] = useState([]);
   const [lists, setLists] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -21,6 +24,33 @@ export default function Lists() {
     await getLists();
   }, []);
 
+  useEffect(async () => {
+    const getBooks = async () => {
+      try {
+        const data = await getAllBooks();
+        setBooks(data);
+      } catch (e) {
+        console.log(e.message);
+      }
+    };
+    await getBooks();    
+  }, []);
+
+  const booksInList = (list_id) => {
+    return books.filter((book)=> {
+      return book.list_id === list_id
+    })
+    .map((book) => {
+      return (
+        <ul className="mt-4 mb-4 pl-6">
+          <li>
+            <span>{book.title}</span><br />
+            <span>{book.author}</span>
+          </li>
+        </ul>)
+    });
+  }
+
   useEffect(() => {
     if (lists) {
       setLoading(false);
@@ -35,7 +65,10 @@ export default function Lists() {
       <div className="grid grid-cols-1 pb-6 mx-6 gap-x-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         <div>
           {lists.map((list) => (
-            <p key={list.list_id}>{list.name}</p>
+            <Fragment key={list.list_id}>
+              <h3 className="font-extrabold">{list.name}</h3>
+              {booksInList(list.list_id)}
+            </Fragment>
           ))}
         </div>
       </div>
@@ -74,3 +107,5 @@ export default function Lists() {
     </section>
   );
 }
+
+

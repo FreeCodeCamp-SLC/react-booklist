@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import useListsApi from '../hooks/useListsApi';
 import Header from '../components/Header';
 import useBooksApi from '../hooks/useBooksApi';
+import List from '../components/List.jsx';
 
 export default function Lists() {
   const { getAllLists } = useListsApi();
@@ -36,21 +37,6 @@ export default function Lists() {
     await getBooks();    
   }, []);
 
-  const booksInList = (list_id) => {
-    return books.filter((book)=> {
-      return book.list_id === list_id
-    })
-    .map((book) => {
-      return (
-        <ul className="mt-4 mb-4 pl-6">
-          <li>
-            <span>{book.title}</span><br />
-            <span>{book.author}</span>
-          </li>
-        </ul>)
-    });
-  }
-
   useEffect(() => {
     if (lists) {
       setLoading(false);
@@ -62,30 +48,25 @@ export default function Lists() {
     series = null;
   } else {
     series = (
-      <div className="grid grid-cols-1 pb-6 mx-6 gap-x-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        <div>
+      <div className="grid grid-cols-1 pb-6 mx-6 gap-6 lg:grid-cols-2 xl:grid-cols-3">
           {lists.map((list) => (
-            <Fragment key={list.list_id}>
-              <h3 className="font-extrabold">{list.name}</h3>
-              {booksInList(list.list_id)}
-            </Fragment>
+            <List key={list.list_id} listName={list.name} booksInList={books.filter(book=> book.list_id === list.list_id)}/>
           ))}
-        </div>
       </div>
     );
   }
 
   return (
-    <section className=" sm:grid grid-cols-layout grid-rows-layout">
+    <section className="sm:grid grid-cols-layout grid-rows-layout">
       <Header />
       <div className="min-h-screen col-start-2 row-start-2 bg-gray-100 ">
-        <div className="flex pt-5 justify-between items-center">
-          <h2 className="px-4 text-3xl font-bold text-gray-900 ">Lists</h2>
+        <div className="flex py-5 px-6 justify-between items-center">
+          <h2 className="text-3xl font-bold text-gray-900">Lists</h2>
           <div className="flex flex-col items-center">
             <Link className="text-booklistBlue-dark" to="add-list">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 mr-2 "
+                className="h-8 w-8"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -98,7 +79,7 @@ export default function Lists() {
                 />
               </svg>
             </Link>
-            <span>New List</span>
+            <span className="text-sm">new list</span>
           </div>
         </div>
         {series}

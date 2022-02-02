@@ -10,7 +10,7 @@ export default function AddBookPage() {
   const [pages, setPages] = useState('');
   const [author, setAuthor] = useState('');
   const [favorite, setFavorite] = useState(false);
-  const [series, setSeries] = useState('');
+  const [series, setSeries] = useState('1');
   const [seriesOptions, setSeriesOptions] = useState([]);
   const [bookSelection, setBookSelection] = useState([]);
   const [bookChoice, setBookChoice] = useState({});
@@ -41,6 +41,10 @@ export default function AddBookPage() {
 
     const pagesNum = parseFloat(pages);
     const listNum = parseFloat(series);
+
+    const selectedBook = bookSelection.filter(val => val.volumeInfo.title === title)
+    const coverPhoto = selectedBook[0].volumeInfo.imageLinks.thumbnail
+
     axios
       .post(
         `${API_BASE_URL}/books`,
@@ -49,7 +53,7 @@ export default function AddBookPage() {
           author,
           title,
           pages: pagesNum,
-          // image_url: coverPhoto,
+          image_url: coverPhoto,
         },
         {
           headers: {

@@ -5,13 +5,11 @@ import BookIcon from './BookIcon';
 import Rating from './Rating';
 
 const List = ({ listName, booksInList }) => {
-  const books = booksInList.map((book, idx) => {
-    return (
-      <Fragment>
-        <div className="border-b border-gray-200 border-solid">
-          </div>
+  const books = booksInList.map((book, idx) => (
+      <>
+        <div className="border-b border-gray-200 border-solid" />
           <div className="p-6 flex items-center">
-            <div className="w-16 mr-6"><img className="object-cover w-full" src={bookImg} alt={book.title} /></div>
+            <div className="w-16 mr-6"><img className="object-cover w-full" src={book.image_url || bookImg} alt={book.title} /></div>
             <div className="w-full text-sm">
               <span className="font-medium">{book.title}</span>
               <br />
@@ -19,10 +17,9 @@ const List = ({ listName, booksInList }) => {
             </div>
             <Rating placeholderRating="4/5"/>
           </div>
-      </Fragment>
-      
-    );
-  });
+      </>
+
+    ));
 
   return (
     <div className="w-full bg-white rounded-bl-md rounded-br-md shadow-md">

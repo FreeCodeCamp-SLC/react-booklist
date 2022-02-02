@@ -5,6 +5,8 @@ import Header from '../components/Header';
 import { loadAuthToken } from '../utils/local-storage';
 import API_BASE_URL from '../config';
 
+import CustomDropdown from '../components/CustomDropdown';
+
 export default function AddBookPage() {
   const [title, setTitle] = useState('');
   const [pages, setPages] = useState('');
@@ -38,7 +40,6 @@ export default function AddBookPage() {
   function addBook(e) {
     e.preventDefault();
     const authToken = loadAuthToken();
-
     const pagesNum = parseFloat(pages);
     const listNum = parseFloat(series);
     axios
@@ -70,6 +71,7 @@ export default function AddBookPage() {
     axios
       .get(`https://www.googleapis.com/books/v1/volumes?q=${title}`)
       .then((res) => {
+        console.log('res.data', res.data);
         setBookSelection(res.data.items);
         setSearchBookLoading(false);
       })
@@ -87,6 +89,7 @@ export default function AddBookPage() {
     seriesSelect = (
       <select
         onChange={(e) => {
+          console.log('e', e);
           setSeries(e.target.value);
         }}
         className="w-full border-2"
@@ -118,7 +121,7 @@ export default function AddBookPage() {
           <form className="flex flex-col px-5 pt-5 pb-2 bg-white" id="new book">
             <label className="my-2.5" htmlFor="Book Title">
               Book Title
-              <input
+              {/* <input
                 onChange={(e) => {
                   setTitle(e.target.value);
                   if (title.length > 2) {
@@ -136,16 +139,19 @@ export default function AddBookPage() {
                 list="bookTitle"
                 autoComplete="off"
                 required
-              />
-              <datalist id="bookTitle">
+              /> */}
+              {/* <datalist id="bookTitle">
                 {bookSelection.map((book) => (
                   <option value={book.volumeInfo.title} key={book.id}>
                     {book.volumeInfo.title}
                   </option>
                 ))}
-              </datalist>
+              </datalist> */}
               {loading}
             </label>
+            <div className="relative">
+              <CustomDropdown />
+            </div>
             <label className="my-2.5" htmlFor="Pages">
               Pages
               <input

@@ -13,7 +13,6 @@ export default function AddBookPage() {
   const [series, setSeries] = useState('');
   const [seriesOptions, setSeriesOptions] = useState([]);
   const [bookSelection, setBookSelection] = useState([]);
-  const [bookChoice, setBookChoice] = useState({});
   const [searchBookLoading, setSearchBookLoading] = useState(false);
 
   const history = useHistory();
@@ -38,9 +37,9 @@ export default function AddBookPage() {
   function addBook(e) {
     e.preventDefault();
     const authToken = loadAuthToken();
-
     const pagesNum = parseFloat(pages);
     const listNum = parseFloat(series);
+
     axios
       .post(
         `${API_BASE_URL}/books`,
@@ -67,6 +66,7 @@ export default function AddBookPage() {
 
   function searchBooks() {
     setSearchBookLoading(true);
+    
     axios
       .get(`https://www.googleapis.com/books/v1/volumes?q=${title}`)
       .then((res) => {
@@ -84,23 +84,11 @@ export default function AddBookPage() {
   if (seriesOptions.length === 0) {
     seriesSelect = null;
   } else {
-    seriesSelect = (
-      <select
-        onChange={(e) => {
-          setSeries(e.target.value);
-        }}
-        className="w-full border-2"
-        name="Series"
-        id="Series"
-        value={series.list_id}
-      >
-        {seriesOptions.map((item) => (
-          <option value={item.list_id} key={item.list_id}>
-            {item.name}
-          </option>
-        ))}
-      </select>
-    );
+    seriesSelect = seriesOptions.map((item) => (
+      <option value={item.list_id} key={item.list_id}>
+        {item.name}
+      </option>
+    ));
   }
 
   if (!searchBookLoading || title.length === 0) {
@@ -124,9 +112,6 @@ export default function AddBookPage() {
                   if (title.length > 2) {
                     searchBooks(title);
                   }
-                }}
-                onSelect={(e) => {
-                  console.log('value', e.target.value);
                 }}
                 className="w-full border-2"
                 type="text"
@@ -191,7 +176,17 @@ export default function AddBookPage() {
             </label>
             <label className="my-3" htmlFor="Series">
               Series / Collection
-              {seriesSelect}
+              <select
+                onChange={(e) => {
+                  setSeries(e.target.value);
+                }}
+                className="w-full border-2"
+                name="Series"
+                id="Series"
+                value={series.list_id}
+              >
+                {seriesSelect}
+              </select>
             </label>
           </form>
 

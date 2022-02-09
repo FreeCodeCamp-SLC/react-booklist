@@ -6,7 +6,7 @@ export default function Book({ book }) {
   return (
     <div className="flex flex-col items-center justify-center bg-white w-full  mt-7 mx-auto py-7 rounded-md shadow-md">
       <div className="inline">
-        <img className="max-h-40 my-3" src={bookImg} alt="book cover" />
+        <img className="max-h-40 my-3" src={book.image_url || bookImg} alt="book cover" />
       </div>
       <h3 className="text-gray-900 font-extrabold mt-3">{book.title}</h3>
       <h4 className="text-gray-600 mt-2">{book.author}</h4>

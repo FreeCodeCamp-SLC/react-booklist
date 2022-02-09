@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 
-function Select() {
+function Select({ name, searchBooks, bookSelection }) {
   const [toggle, setToggle] = useState(false);
-  const [selected, selectedToggle] = useState(null);
+  const [selected, setSelected] = useState({});
   const [selectInput, setSelectInput] = useState('');
-  const [options, setOptions] = useState([]);
 
-  function handleSelect(e, option) {
+  function handleSelect(e, book) {
+    setToggle(true);
     if (e.type === 'click' || e.charCode === 13) {
-      selectedToggle(option);
-      setSelectInput(option);
+      setSelected(book);
+      setSelectInput(book.volumeInfo.title);
       setToggle(false);
     }
     if (e.key === 'ArrowDown') {
@@ -20,24 +20,88 @@ function Select() {
         e.currentTarget.previousSibling.focus();
     }
   }
-
-  function search(event) {
-    setSelectInput(event.target.value);
-    setOptions([...options, event.target.value]);
+  let selectList;
+  if (bookSelection) {
+    selectList = bookSelection.map((book) => {
+      let authors;
+      if (book.volumeInfo.authors) {
+        authors = (
+          <div className="text-sm bookAuthor">
+            {book.volumeInfo.authors.map((a) => a).join(', ')}
+          </div>
+        );
+      } else {
+        authors = null;
+      }
+      let image;
+      if (
+        book.volumeInfo.imageLinks &&
+        book.volumeInfo.imageLinks.smallThumbnail
+      ) {
+        image = (
+          <div className="h-12 overflow-y-hidden rounded-lg">
+            <img
+              src={book.volumeInfo.imageLinks.smallThumbnail}
+              alt="book"
+              className="w-12 overflow-y-hidden "
+            />
+          </div>
+        );
+      } else {
+        <img
+          src="https://img.icons8.com/fluency/48/000000/book.png"
+          alt="book"
+          className="w-12"
+        />;
+      }
+      return (
+        <li
+          role="option"
+          aria-selected={selected.id === book.id}
+          tabIndex="0"
+          key={book.id}
+          className="flex items-center justify-between px-4 py-4 border-t cursor-pointer border-slate-800 focus:bg-slate-400 hover:bg-slate-400"
+          onClick={(e) => {
+            handleSelect(e, book);
+          }}
+          onKeyDown={(e) => {
+            handleSelect(e, book);
+          }}
+        >
+          <div>
+            <div className="text-lg bookTitle">{book.volumeInfo.title}</div>
+            {authors}
+          </div>
+          {image}
+        </li>
+      );
+    });
+  } else {
+    selectList = null;
   }
 
   return (
-    <>
+    <div className="relative">
       <input
         id="selectLabel"
+        name={name}
         value={selectInput}
-        onChange={(e) => search(e)}
-        className="absolute z-10 flex items-center justify-center w-full h-10 px-4 bg-gray-300 rounded-xl"
+        autoComplete="off"
+        onChange={(e) => {
+          setSelectInput(e.target.value);
+          if (selectInput.length > 2) {
+            console.log('selectInput', selectInput);
+            handleSelect(e);
+            searchBooks(selectInput);
+          }
+        }}
+        className="relative z-10 flex items-center justify-center w-full h-10 px-4 bg-gray-300 rounded-xl"
         placeholder="Search"
         type="text"
-        onClick={() => setToggle(!toggle)}
+        onClick={() => {
+          setToggle(!toggle);
+        }}
       />
-
       <ul
         role="listbox"
         aria-labelledby="selectLabel"
@@ -48,29 +112,9 @@ function Select() {
             : '-translate-y-20 rounded-xl opacity-0 '
         }`}
       >
-        {options.map((option, i) => (
-          <li
-            role="option"
-            aria-selected={selected === option}
-            tabIndex="0"
-            key={option + i}
-            className="flex items-center justify-between h-10 px-4 border-t cursor-pointer border-slate-800 focus:bg-slate-400"
-            onClick={(e) => {
-              handleSelect(e, option);
-            }}
-            onKeyDown={(e) => {
-              handleSelect(e, option);
-            }}
-          >
-            {option}
-            <img
-              src="https://img.icons8.com/ios-glyphs/30/000000/book.png"
-              alt="book"
-            />
-          </li>
-        ))}
+        {selectList}
       </ul>
-    </>
+    </div>
   );
 }
 

@@ -66,10 +66,10 @@ export default function AddBookPage() {
       });
   }
 
-  function searchBooks() {
+  function searchBooks(query) {
     setSearchBookLoading(true);
     axios
-      .get(`https://www.googleapis.com/books/v1/volumes?q=${title}`)
+      .get(`https://www.googleapis.com/books/v1/volumes?q=${query}`)
       .then((res) => {
         console.log('res.data', res.data);
         setBookSelection(res.data.items);
@@ -117,9 +117,9 @@ export default function AddBookPage() {
       <Header />
       <div className="min-h-screen col-start-2 row-start-2 bg-gray-100 ">
         <h2 className="px-4 pt-5 text-3xl font-bold text-gray-900 ">Add New</h2>
-        <div className="mx-5 overflow-hidden rounded-md shadow-md mt-7">
+        <div className="mx-5 rounded-md shadow-md mt-7">
           <form className="flex flex-col px-5 pt-5 pb-2 bg-white" id="new book">
-            <label className="my-2.5" htmlFor="Book Title">
+            <label className="my-2.5" htmlFor="Book-Title">
               Book Title
               {/* <input
                 onChange={(e) => {
@@ -149,9 +149,13 @@ export default function AddBookPage() {
               </datalist> */}
               {loading}
             </label>
-            <div className="relative">
-              <CustomDropdown />
-            </div>
+
+            <CustomDropdown
+              name="Book-Title"
+              searchBooks={searchBooks}
+              bookSelection={bookSelection}
+            />
+
             <label className="my-2.5" htmlFor="Pages">
               Pages
               <input

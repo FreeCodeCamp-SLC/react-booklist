@@ -12,10 +12,10 @@ export default function AddBookPage() {
   const [pages, setPages] = useState('');
   const [author, setAuthor] = useState('');
   const [favorite, setFavorite] = useState(false);
-  const [series, setSeries] = useState('');
+  const [series, setSeries] = useState('1');
   const [seriesOptions, setSeriesOptions] = useState([]);
   const [bookSelection, setBookSelection] = useState([]);
-  const [bookChoice, setBookChoice] = useState({});
+  const [bookImage, setBookImage] = useState(null);
   const [searchBookLoading, setSearchBookLoading] = useState(false);
 
   const history = useHistory();
@@ -50,7 +50,7 @@ export default function AddBookPage() {
           author,
           title,
           pages: pagesNum,
-          // image_url: coverPhoto,
+          image_url: bookImage,
         },
         {
           headers: {
@@ -65,13 +65,19 @@ export default function AddBookPage() {
         console.log(err);
       });
   }
+  function autofillBookInfo(book) {
+    console.log(book);
+    setAuthor(book.volumeInfo.authors.map((a) => a).join(', '));
+    setPages(book.volumeInfo.pageCount);
+    setBookImage(book.volumeInfo.imageLinks.thumbnail);
+    setTitle(book.volumeInfo.title);
+  }
 
   function searchBooks(query) {
     setSearchBookLoading(true);
     axios
       .get(`https://www.googleapis.com/books/v1/volumes?q=${query}`)
       .then((res) => {
-        console.log('res.data', res.data);
         setBookSelection(res.data.items);
         setSearchBookLoading(false);
       })
@@ -82,6 +88,7 @@ export default function AddBookPage() {
 
   let seriesSelect;
   let loading;
+  let image;
 
   if (seriesOptions.length === 0) {
     seriesSelect = null;
@@ -112,6 +119,16 @@ export default function AddBookPage() {
     loading = <span>loading books...</span>;
   }
 
+  if (!bookImage) {
+    image = null;
+  } else {
+    image = (
+      <div className="flex justify-center py-4">
+        <img src={bookImage} alt="book cover" className="w-1/3" />
+      </div>
+    );
+  }
+
   return (
     <section className=" sm:grid grid-cols-layout grid-rows-layout">
       <Header />
@@ -121,32 +138,6 @@ export default function AddBookPage() {
           <form className="flex flex-col px-5 pt-5 pb-2 bg-white" id="new book">
             <label className="my-2.5" htmlFor="Book-Title">
               Book Title
-              {/* <input
-                onChange={(e) => {
-                  setTitle(e.target.value);
-                  if (title.length > 2) {
-                    searchBooks(title);
-                  }
-                }}
-                onSelect={(e) => {
-                  console.log('value', e.target.value);
-                }}
-                className="w-full border-2"
-                type="text"
-                id="Book Title"
-                name="Book Title"
-                value={title}
-                list="bookTitle"
-                autoComplete="off"
-                required
-              /> */}
-              {/* <datalist id="bookTitle">
-                {bookSelection.map((book) => (
-                  <option value={book.volumeInfo.title} key={book.id}>
-                    {book.volumeInfo.title}
-                  </option>
-                ))}
-              </datalist> */}
               {loading}
             </label>
 
@@ -154,6 +145,7 @@ export default function AddBookPage() {
               name="Book-Title"
               searchBooks={searchBooks}
               bookSelection={bookSelection}
+              autofillBookInfo={autofillBookInfo}
             />
 
             <label className="my-2.5" htmlFor="Pages">
@@ -184,6 +176,7 @@ export default function AddBookPage() {
                 required
               />
             </label>
+            {image}
             <label className="flex flex-col my-2.5" htmlFor="Favorite">
               Favorite
               <div className="text-gray-500">

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function Select({ name, searchBooks, bookSelection }) {
+function Select({ name, searchBooks, bookSelection, autofillBookInfo }) {
   const [toggle, setToggle] = useState(false);
   const [selected, setSelected] = useState({});
   const [selectInput, setSelectInput] = useState('');
@@ -8,17 +8,18 @@ function Select({ name, searchBooks, bookSelection }) {
   function handleSelect(e, book) {
     setToggle(true);
     if (e.type === 'click' || e.charCode === 13) {
+      autofillBookInfo(book);
       setSelected(book);
       setSelectInput(book.volumeInfo.title);
       setToggle(false);
     }
-    if (e.key === 'ArrowDown') {
-      e.currentTarget.nextSibling && e.currentTarget.nextSibling.focus();
-    }
-    if (e.key === 'ArrowUp') {
-      e.currentTarget.previousSibling &&
-        e.currentTarget.previousSibling.focus();
-    }
+    // if (e.key === 'ArrowDown') {
+    //   e.currentTarget.nextSibling && e.currentTarget.nextSibling.focus();
+    // }
+    // if (e.key === 'ArrowUp') {
+    //   e.currentTarget.previousSibling &&
+    //     e.currentTarget.previousSibling.focus();
+    // }
   }
   let selectList;
   if (bookSelection) {
@@ -58,15 +59,13 @@ function Select({ name, searchBooks, bookSelection }) {
         <li
           role="option"
           aria-selected={selected.id === book.id}
-          tabIndex="0"
           key={book.id}
+          tabIndex="0"
           className="flex items-center justify-between px-4 py-4 border-t cursor-pointer border-slate-800 focus:bg-slate-400 hover:bg-slate-400"
           onClick={(e) => {
             handleSelect(e, book);
           }}
-          onKeyDown={(e) => {
-            handleSelect(e, book);
-          }}
+          onKeyDown={(e) => {}}
         >
           <div>
             <div className="text-lg bookTitle">{book.volumeInfo.title}</div>
@@ -90,7 +89,6 @@ function Select({ name, searchBooks, bookSelection }) {
         onChange={(e) => {
           setSelectInput(e.target.value);
           if (selectInput.length > 2) {
-            console.log('selectInput', selectInput);
             handleSelect(e);
             searchBooks(selectInput);
           }

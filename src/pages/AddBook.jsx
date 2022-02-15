@@ -74,16 +74,19 @@ export default function AddBookPage() {
   }
 
   function searchBooks(query) {
-    setSearchBookLoading(true);
-    axios
-      .get(`https://www.googleapis.com/books/v1/volumes?q=${query}`)
-      .then((res) => {
-        setBookSelection(res.data.items);
-        setSearchBookLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (query.length > 2) {
+      setSearchBookLoading(true);
+      axios
+        .get(`https://www.googleapis.com/books/v1/volumes?q=${query}`)
+        .then((res) => {
+          setSearchBookLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      setBookSelection(null);
+    }
   }
 
   let seriesSelect;

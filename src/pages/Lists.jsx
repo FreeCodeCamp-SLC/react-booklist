@@ -1,10 +1,10 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import useListsApi from '../hooks/useListsApi';
 import Header from '../components/Header';
 import useBooksApi from '../hooks/useBooksApi';
-import List from '../components/List.jsx';
+import List from '../components/List';
 
 export default function Lists() {
   const { getAllLists } = useListsApi();
@@ -34,7 +34,7 @@ export default function Lists() {
         console.log(e.message);
       }
     };
-    await getBooks();    
+    await getBooks();
   }, []);
 
   useEffect(() => {
@@ -49,9 +49,13 @@ export default function Lists() {
   } else {
     series = (
       <div className="grid grid-cols-1 pb-6 mx-6 gap-6 lg:grid-cols-2 xl:grid-cols-3">
-          {lists.map((list) => (
-            <List key={list.list_id} listName={list.name} booksInList={books.filter(book=> book.list_id === list.list_id)}/>
-          ))}
+        {lists.map((list) => (
+          <List
+            key={list.list_id}
+            listName={list.name}
+            booksInList={books.filter((book) => book.list_id === list.list_id)}
+          />
+        ))}
       </div>
     );
   }
@@ -88,5 +92,3 @@ export default function Lists() {
     </section>
   );
 }
-
-

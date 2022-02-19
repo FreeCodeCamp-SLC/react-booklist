@@ -41,6 +41,12 @@ export default function AddBookPage() {
     const authToken = loadAuthToken();
     const pagesNum = parseFloat(pages);
     const listNum = parseFloat(series);
+
+    const selectedBook = bookSelection.filter(
+      (val) => val.volumeInfo.title === title,
+    );
+    const coverPhoto = selectedBook[0].volumeInfo.imageLinks.thumbnail;
+
     axios
       .post(
         `${API_BASE_URL}/books`,

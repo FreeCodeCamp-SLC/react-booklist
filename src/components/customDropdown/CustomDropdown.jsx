@@ -18,7 +18,7 @@ function Select({ name, searchBooks, bookSelection, autofillBookInfo }) {
   }
 
   return (
-    <div className="relative">
+    <div className="relative mt-1">
       <input
         id="selectLabel"
         name={name}
@@ -29,7 +29,9 @@ function Select({ name, searchBooks, bookSelection, autofillBookInfo }) {
           handleSelect(e);
           searchBooks(selectInput);
         }}
-        className="relative z-10 flex items-center justify-center w-full h-10 px-4 bg-gray-300 rounded-xl"
+        className={`relative z-10 flex items-center justify-center w-full py-1.5 px-4  border-2 ${
+          toggle ? ' rounded-t-md' : 'rounded-md'
+        }`}
         placeholder="Search"
         type="text"
         onClick={() => {
@@ -39,8 +41,8 @@ function Select({ name, searchBooks, bookSelection, autofillBookInfo }) {
       <ul
         role="listbox"
         aria-labelledby="selectLabel"
-        style={{ top: '30px' }}
-        className={`absolute w-full pt-3  bg-gray-300 flex-col justify-center  items-center ${
+        style={{ top: '27px' }}
+        className={`absolute w-full pt-3 bg-white flex-col justify-center  items-center ${
           toggle ? ' rounded-b-xl' : 'rounded-xl hidden'
         }`}
       >

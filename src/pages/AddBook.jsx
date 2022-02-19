@@ -16,7 +16,6 @@ export default function AddBookPage() {
   const [seriesOptions, setSeriesOptions] = useState([]);
   const [bookSelection, setBookSelection] = useState([]);
   const [bookImage, setBookImage] = useState(null);
-  const [searchBookLoading, setSearchBookLoading] = useState(false);
 
   const history = useHistory();
 
@@ -86,12 +85,10 @@ export default function AddBookPage() {
 
   function searchBooks(query) {
     if (query.length > 2) {
-      setSearchBookLoading(true);
       axios
         .get(`https://www.googleapis.com/books/v1/volumes?q=${query}`)
         .then((res) => {
           setBookSelection(res.data.items);
-          setSearchBookLoading(false);
         })
         .catch((err) => {
           console.log(err);
@@ -102,9 +99,9 @@ export default function AddBookPage() {
   }
 
   let seriesSelect;
-  let loading;
   let image;
 
+  // this could probably be removed once this issue is resolved https://github.com/FreeCodeCamp-SLC/react-booklist/issues/12
   if (seriesOptions.length === 0) {
     seriesSelect = null;
   } else {
@@ -114,7 +111,7 @@ export default function AddBookPage() {
           console.log('e', e);
           setSeries(e.target.value);
         }}
-        className="w-full border-2"
+        className="w-full border-2 py-1.5 px-2 rounded-md"
         name="Series"
         id="Series"
         value={series.list_id}
@@ -126,12 +123,6 @@ export default function AddBookPage() {
         ))}
       </select>
     );
-  }
-
-  if (!searchBookLoading || title.length === 0) {
-    loading = null;
-  } else {
-    loading = <span>loading books...</span>;
   }
 
   if (!bookImage) {
@@ -151,25 +142,23 @@ export default function AddBookPage() {
         <h2 className="px-4 pt-5 text-3xl font-bold text-gray-900 ">Add New</h2>
         <div className="mx-5 rounded-md shadow-md mt-7">
           <form className="flex flex-col px-5 pt-5 pb-2 bg-white" id="new book">
-            <label className="my-2.5" htmlFor="Book-Title">
+            <label className="my-3" htmlFor="Book-Title">
               Book Title
-              {loading}
+              <CustomDropdown
+                name="Book-Title"
+                searchBooks={searchBooks}
+                bookSelection={bookSelection}
+                autofillBookInfo={autofillBookInfo}
+              />
             </label>
 
-            <CustomDropdown
-              name="Book-Title"
-              searchBooks={searchBooks}
-              bookSelection={bookSelection}
-              autofillBookInfo={autofillBookInfo}
-            />
-
-            <label className="my-2.5" htmlFor="Pages">
+            <label className="my-3 flex flex-col" htmlFor="Pages">
               Pages
               <input
                 onChange={(e) => {
                   setPages(e.target.value);
                 }}
-                className="w-full border-2"
+                className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
                 type="number"
                 id="pages"
                 name="Pages"
@@ -177,13 +166,13 @@ export default function AddBookPage() {
                 required
               />
             </label>
-            <label className="my-2.5" htmlFor="Author">
-              Author
+            <label className="my-3" htmlFor="Author">
+              Author(s)
               <input
                 onChange={(e) => {
                   setAuthor(e.target.value);
                 }}
-                className="w-full border-2"
+                className="w-full mt-1 border-2 py-1.5 px-2 rounded-md"
                 type="text"
                 name="Author"
                 id="Author"
@@ -192,7 +181,7 @@ export default function AddBookPage() {
               />
             </label>
             {image}
-            <label className="flex flex-col my-2.5" htmlFor="Favorite">
+            <label className="flex flex-col my-3" htmlFor="Favorite">
               Favorite
               <div className="text-gray-500">
                 Add this book to your list of favorites
@@ -201,6 +190,7 @@ export default function AddBookPage() {
                 onChange={(e) => {
                   setFavorite(e.target.value);
                 }}
+                className="w-5 mt-1"
                 type="checkbox"
                 name="Favorite"
                 id="Favorite"

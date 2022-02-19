@@ -114,7 +114,6 @@ export default function AddBookPage() {
     seriesSelect = (
       <select
         onChange={(e) => {
-          console.log('e', e);
           setSeries(e.target.value);
         }}
         className="w-full border-2 py-1.5 px-2 rounded-md"

@@ -2,7 +2,6 @@ import React from 'react';
 
 const DropdownImage = ({ image }) => {
   let bookImage;
-  console.log('image', image);
   if (image && image.smallThumbnail) {
     bookImage = (
       <img

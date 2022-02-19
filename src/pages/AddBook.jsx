@@ -5,7 +5,7 @@ import Header from '../components/Header';
 import { loadAuthToken } from '../utils/local-storage';
 import API_BASE_URL from '../config';
 
-import CustomDropdown from '../components/CustomDropdown';
+import CustomDropdown from '../components/customDropdown/CustomDropdown';
 
 export default function AddBookPage() {
   const [title, setTitle] = useState('');
@@ -66,10 +66,21 @@ export default function AddBookPage() {
       });
   }
   function autofillBookInfo(book) {
-    console.log(book);
-    setAuthor(book.volumeInfo.authors.map((a) => a).join(', '));
-    setPages(book.volumeInfo.pageCount);
-    setBookImage(book.volumeInfo.imageLinks.thumbnail);
+    if (!book.volumeInfo.authors) {
+      setAuthor('');
+    } else {
+      setAuthor(book.volumeInfo.authors.map((a) => a).join(', '));
+    }
+    if (!book.volumeInfo.pageCount) {
+      setPages('');
+    } else {
+      setPages(book.volumeInfo.pageCount);
+    }
+    if (!book.volumeInfo.imageLinks.thumbnail) {
+      setBookImage(null);
+    } else {
+      setBookImage(book.volumeInfo.imageLinks.thumbnail);
+    }
     setTitle(book.volumeInfo.title);
   }
 
@@ -128,7 +139,7 @@ export default function AddBookPage() {
   } else {
     image = (
       <div className="flex justify-center py-4">
-        <img src={bookImage} alt="book cover" className="w-1/3" />
+        <img src={bookImage} alt="book cover" className="w-32" />
       </div>
     );
   }

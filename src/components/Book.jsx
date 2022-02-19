@@ -3,10 +3,17 @@ import bookImg from '../images/book.png';
 import bookmark from '../images/bookmark-icon.png';
 
 export default function Book({ book }) {
+  let image;
+  if (!book.image_url) {
+    image = bookImg;
+  } else {
+    image = book.image_url;
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center bg-white w-full  mt-7 mx-auto py-7 rounded-md shadow-md">
+    <div className="flex flex-col items-center justify-center bg-white w-full  mt-7 mx-auto py-7 px-4 text-center rounded-md shadow-md">
       <div className="inline">
-        <img className="max-h-40 my-3" src={bookImg} alt="book cover" />
+        <img className="w-32 m-3" src={image} alt="book cover" />
       </div>
       <h3 className="text-gray-900 font-extrabold mt-3">{book.title}</h3>
       <h4 className="text-gray-600 mt-2">{book.author}</h4>

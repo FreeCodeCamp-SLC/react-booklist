@@ -5,9 +5,9 @@ import bookmark from '../images/bookmark-icon.png';
 export default function Book({ book }) {
   return (
     <div className="relative flex flex-col items-center justify-center bg-white w-full  mt-7 mx-auto pt-6 pb-32 px-6 text-center rounded-md shadow-md">
-      <div className="max-h-48 overflow-hidden">
+      <div className="max-h-48 rounded-sm overflow-hidden">
         <img
-          className="w-32 m-3"
+          className="w-32 m-3 shadow"
           src={book.image_url || bookImg}
           alt="book cover"
         />

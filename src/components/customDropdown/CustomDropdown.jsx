@@ -41,8 +41,8 @@ function Select({ name, searchBooks, bookSelection, autofillBookInfo }) {
       <ul
         role="listbox"
         aria-labelledby="selectLabel"
-        style={{ top: '27px' }}
-        className={`absolute w-full pt-3 bg-white flex-col justify-center  items-center ${
+        style={{ top: '27px', maxHeight: '600px' }}
+        className={`absolute w-full pt-3 bg-white flex-col justify-center overflow-y-scroll  items-center ${
           toggle ? ' rounded-b-xl' : 'rounded-xl hidden'
         }`}
       >

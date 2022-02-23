@@ -1,7 +1,7 @@
 import React from 'react';
 
 const BookIcon = () => (
-  <div className="h-10 w-10 rounded-full shadow-md  border 	border-solid border-gray-200 flex justify-center items-center">
+  <div className="flex items-center justify-center w-10 h-10 border border-gray-200 border-solid rounded-full shadow-md">
     <svg
       version="1.1"
       id="Layer_1"

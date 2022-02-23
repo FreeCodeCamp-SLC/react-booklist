@@ -62,7 +62,7 @@ export default function AddListPage() {
         </h2>
         <div className="mx-5 overflow-hidden rounded-md shadow-md mt-7">
           <form className="flex flex-col px-5 pt-5 pb-2 bg-white" id="new book">
-            <label className="my-2.5" htmlFor="Book Title">
+            <label className="my-3" htmlFor="Book Title">
               Series / Collection Name
               <input
                 onChange={(e) => {

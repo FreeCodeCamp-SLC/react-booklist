@@ -5,6 +5,8 @@ import Header from '../components/Header';
 import { loadAuthToken } from '../utils/local-storage';
 import API_BASE_URL from '../config';
 
+import CustomDropdown from '../components/customDropdown/CustomDropdown';
+
 export default function AddBookPage() {
   const [title, setTitle] = useState('');
   const [pages, setPages] = useState('');
@@ -13,8 +15,7 @@ export default function AddBookPage() {
   const [series, setSeries] = useState('1');
   const [seriesOptions, setSeriesOptions] = useState([]);
   const [bookSelection, setBookSelection] = useState([]);
-  // const [bookChoice, setBookChoice] = useState({});
-  const [searchBookLoading, setSearchBookLoading] = useState(false);
+  const [bookImage, setBookImage] = useState(null);
 
   const history = useHistory();
 
@@ -38,14 +39,8 @@ export default function AddBookPage() {
   function addBook(e) {
     e.preventDefault();
     const authToken = loadAuthToken();
-
     const pagesNum = parseFloat(pages);
     const listNum = parseFloat(series);
-
-    const selectedBook = bookSelection.filter(
-      (val) => val.volumeInfo.title === title,
-    );
-    const coverPhoto = selectedBook[0].volumeInfo.imageLinks.thumbnail;
 
     axios
       .post(
@@ -55,7 +50,7 @@ export default function AddBookPage() {
           author,
           title,
           pages: pagesNum,
-          image_url: coverPhoto,
+          image_url: bookImage,
         },
         {
           headers: {
@@ -70,23 +65,44 @@ export default function AddBookPage() {
         console.log(err);
       });
   }
+  function autofillBookInfo(book) {
+    if (!book.volumeInfo.authors) {
+      setAuthor('');
+    } else {
+      setAuthor(book.volumeInfo.authors.map((a) => a).join(', '));
+    }
+    if (!book.volumeInfo.pageCount) {
+      setPages('');
+    } else {
+      setPages(book.volumeInfo.pageCount);
+    }
+    if (!book.volumeInfo.imageLinks.thumbnail) {
+      setBookImage(null);
+    } else {
+      setBookImage(book.volumeInfo.imageLinks.thumbnail);
+    }
+    setTitle(book.volumeInfo.title);
+  }
 
-  function searchBooks() {
-    setSearchBookLoading(true);
-    axios
-      .get(`https://www.googleapis.com/books/v1/volumes?q=${title}`)
-      .then((res) => {
-        setBookSelection(res.data.items);
-        setSearchBookLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  function searchBooks(query) {
+    if (query.length > 2) {
+      axios
+        .get(`https://www.googleapis.com/books/v1/volumes?q=${query}`)
+        .then((res) => {
+          setBookSelection(res.data.items);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      setBookSelection(null);
+    }
   }
 
   let seriesSelect;
-  let loading;
+  let image;
 
+  // this could probably be removed once this issue is resolved https://github.com/FreeCodeCamp-SLC/react-booklist/issues/12
   if (seriesOptions.length === 0) {
     seriesSelect = null;
   } else {
@@ -95,7 +111,7 @@ export default function AddBookPage() {
         onChange={(e) => {
           setSeries(e.target.value);
         }}
-        className="w-full border-2"
+        className="w-full border-2 py-1.5 px-2 rounded-md"
         name="Series"
         id="Series"
         value={series.list_id}
@@ -109,10 +125,14 @@ export default function AddBookPage() {
     );
   }
 
-  if (!searchBookLoading || title.length === 0) {
-    loading = null;
+  if (!bookImage) {
+    image = null;
   } else {
-    loading = <span>loading books...</span>;
+    image = (
+      <div className="flex justify-center py-4">
+        <img src={bookImage} alt="book cover" className="w-32" />
+      </div>
+    );
   }
 
   return (
@@ -120,45 +140,25 @@ export default function AddBookPage() {
       <Header />
       <div className="min-h-screen col-start-2 row-start-2 bg-gray-100 ">
         <h2 className="px-4 pt-5 text-3xl font-bold text-gray-900 ">Add New</h2>
-        <div className="mx-5 overflow-hidden rounded-md shadow-md mt-7">
+        <div className="mx-5 rounded-md shadow-md mt-7">
           <form className="flex flex-col px-5 pt-5 pb-2 bg-white" id="new book">
-            <label className="my-2.5" htmlFor="Book Title">
+            <label className="my-3" htmlFor="Book-Title">
               Book Title
-              <input
-                onChange={(e) => {
-                  setTitle(e.target.value);
-                  if (title.length > 2) {
-                    searchBooks(title);
-                  }
-                }}
-                onSelect={(e) => {
-                  console.log('value', e.target.value);
-                }}
-                className="w-full border-2"
-                type="text"
-                id="Book Title"
-                name="Book Title"
-                value={title}
-                list="bookTitle"
-                autoComplete="off"
-                required
+              <CustomDropdown
+                name="Book-Title"
+                searchBooks={searchBooks}
+                bookSelection={bookSelection}
+                autofillBookInfo={autofillBookInfo}
               />
-              <datalist id="bookTitle">
-                {bookSelection.map((book) => (
-                  <option value={book.volumeInfo.title} key={book.id}>
-                    {book.volumeInfo.title}
-                  </option>
-                ))}
-              </datalist>
-              {loading}
             </label>
-            <label className="my-2.5" htmlFor="Pages">
+
+            <label className="my-3 flex flex-col" htmlFor="Pages">
               Pages
               <input
                 onChange={(e) => {
                   setPages(e.target.value);
                 }}
-                className="w-full border-2"
+                className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
                 type="number"
                 id="pages"
                 name="Pages"
@@ -166,13 +166,13 @@ export default function AddBookPage() {
                 required
               />
             </label>
-            <label className="my-2.5" htmlFor="Author">
-              Author
+            <label className="my-3" htmlFor="Author">
+              Author(s)
               <input
                 onChange={(e) => {
                   setAuthor(e.target.value);
                 }}
-                className="w-full border-2"
+                className="w-full mt-1 border-2 py-1.5 px-2 rounded-md"
                 type="text"
                 name="Author"
                 id="Author"
@@ -180,7 +180,8 @@ export default function AddBookPage() {
                 required
               />
             </label>
-            <label className="flex flex-col my-2.5" htmlFor="Favorite">
+            {image}
+            <label className="flex flex-col my-3" htmlFor="Favorite">
               Favorite
               <div className="text-gray-500">
                 Add this book to your list of favorites
@@ -189,6 +190,7 @@ export default function AddBookPage() {
                 onChange={(e) => {
                   setFavorite(e.target.value);
                 }}
+                className="w-5 mt-1"
                 type="checkbox"
                 name="Favorite"
                 id="Favorite"

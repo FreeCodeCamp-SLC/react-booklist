@@ -1,12 +1,46 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import bookImg from '../images/book.png';
 import BookIcon from './BookIcon';
 import Rating from './Rating';
+import API_BASE_URL from '../config';
+import { loadAuthToken } from '../utils/local-storage';
 
-const List = ({ listName, booksInList }) => {
+const List = ({ id, listName, booksInList, getBooks, getLists }) => {
+  function deleteListHandler() {
+    const authToken = loadAuthToken();
+    Promise.all(
+      booksInList.map((book) =>
+        axios.delete(`${API_BASE_URL}/books/${book.book_id}`, {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }),
+      ),
+    )
+      .then(() => {
+        axios
+          .delete(`${API_BASE_URL}/lists/${id}`, {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          })
+          .then(() => {
+            getBooks();
+            getLists();
+          })
+          .catch((err) => {
+            console.log('list deletion err', err);
+          });
+      })
+      .catch((err) => {
+        console.log('books deletion err', err);
+      });
+  }
+
   const books = booksInList.map((book) => (
-    <div key={book.id}>
+    <div key={book.book_id}>
       <div className="border-b border-gray-200 border-solid" />
       <div className="p-6 flex items-center">
         <div className="w-16 mr-6">
@@ -29,7 +63,16 @@ const List = ({ listName, booksInList }) => {
   return (
     <div className="w-full bg-white rounded-bl-md rounded-br-md shadow-md">
       <div className="border-b border-red-300 border-solid">
-        <div className="p-6 flex justify-between items-center">
+        <div className="relative p-6 flex justify-between items-center">
+          <div
+            role="button"
+            tabIndex="0"
+            className="absolute top-0 left-0 mt-1 ml-3 cursor-pointer focus:border focus:bg-gray-900"
+            onClick={deleteListHandler}
+            onKeyPress={(e) => e.key === 'Enter' && deleteListHandler()}
+          >
+            X
+          </div>
           <h3 className="font-medium text-xl">{listName}</h3>
           <div className="flex items-center gap-2">
             add book{' '}

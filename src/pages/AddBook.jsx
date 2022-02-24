@@ -12,8 +12,8 @@ export default function AddBookPage() {
   const [pages, setPages] = useState('');
   const [author, setAuthor] = useState('');
   const [favorite, setFavorite] = useState(false);
-  const [series, setSeries] = useState('1');
   const [seriesOptions, setSeriesOptions] = useState([]);
+  const [series, setSeries] = useState(0);
   const [bookSelection, setBookSelection] = useState([]);
   const [bookImage, setBookImage] = useState(null);
 
@@ -30,6 +30,7 @@ export default function AddBookPage() {
       })
       .then((res) => {
         setSeriesOptions(res.data);
+        setSeries(res.data[0].list_id);
       })
       .catch((err) => {
         console.log(err);
@@ -39,17 +40,15 @@ export default function AddBookPage() {
   function addBook(e) {
     e.preventDefault();
     const authToken = loadAuthToken();
-    const pagesNum = parseFloat(pages);
-    const listNum = parseFloat(series);
 
     axios
       .post(
         `${API_BASE_URL}/books`,
         {
-          list_id: listNum,
+          list_id: series,
           author,
           title,
-          pages: pagesNum,
+          pages,
           image_url: bookImage,
         },
         {

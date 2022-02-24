@@ -64,15 +64,15 @@ const List = ({ id, listName, booksInList, getBooks, getLists }) => {
     <div className="w-full bg-white rounded-bl-md rounded-br-md shadow-md">
       <div className="border-b border-red-300 border-solid">
         <div className="relative p-6 flex justify-between items-center">
-          <div
-            role="button"
-            tabIndex="0"
-            className="absolute top-0 left-0 mt-1 ml-3 cursor-pointer focus:border focus:bg-gray-900"
+          <button
+            type="button"
+            className="absolute top-0 left-0 mt-1 ml-3 cursor-pointer"
             onClick={deleteListHandler}
             onKeyPress={(e) => e.key === 'Enter' && deleteListHandler()}
+            aria-label={`delete list ${listName}`}
           >
             X
-          </div>
+          </button>
           <h3 className="font-medium text-xl">{listName}</h3>
           <div className="flex items-center gap-2">
             add book{' '}

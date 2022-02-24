@@ -66,12 +66,25 @@ const List = ({ id, listName, booksInList, getBooks, getLists }) => {
         <div className="relative p-6 flex justify-between items-center">
           <button
             type="button"
-            className="absolute top-0 left-0 mt-1 ml-3 cursor-pointer"
+            className="absolute top-0 left-0 mt-1.5 ml-1.5"
             onClick={deleteListHandler}
             onKeyPress={(e) => e.key === 'Enter' && deleteListHandler()}
             aria-label={`delete list ${listName}`}
           >
-            X
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 text-booklistRed-dark"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
           </button>
           <h3 className="font-medium text-xl">{listName}</h3>
           <div className="flex items-center gap-2">

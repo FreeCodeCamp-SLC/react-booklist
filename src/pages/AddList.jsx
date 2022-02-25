@@ -16,7 +16,7 @@ export default function AddListPage() {
     e.preventDefault();
 
     const authToken = loadAuthToken();
-    const yearNum = parseFloat(listYear);
+    const yearNum = +listYear;
 
     if (yearNum < 0) {
       setYearValid(true);

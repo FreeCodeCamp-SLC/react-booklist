@@ -7,7 +7,7 @@ const useForm = (defaults) => {
     // check if its a number and convert
     let { value } = e.target;
     if (e.target.type === 'number') {
-      value = parseInt(e.target.value, 10);
+      value = +e.target.value
     }
     setValues({
       // copy the existing values into it

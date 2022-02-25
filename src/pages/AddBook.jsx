@@ -40,23 +40,23 @@ export default function AddBookPage() {
   function addBook(e) {
     e.preventDefault();
     const authToken = loadAuthToken();
+    const bookDetails = {
+      list_id: series,
+      author,
+      title,
+      image_url: bookImage,
+    };
+
+    if (pages) {
+      bookDetails.pages = pages;
+    }
 
     axios
-      .post(
-        `${API_BASE_URL}/books`,
-        {
-          list_id: series,
-          author,
-          title,
-          pages,
-          image_url: bookImage,
+      .post(`${API_BASE_URL}/books`, bookDetails, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        },
-      )
+      })
       .then(() => {
         history.push('/dashboard');
       })

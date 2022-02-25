@@ -14,6 +14,7 @@ module.exports = {
           DEFAULT: '#195885',
           dark: '#14496e',
         },
+        blackTransparent: 'rgba(0, 0, 0, 0.50)',
       },
       gridTemplateColumns: {
         layout: '250px auto',

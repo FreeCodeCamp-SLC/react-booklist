@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import bookImg from '../images/book.png';
@@ -6,37 +6,36 @@ import BookIcon from './BookIcon';
 import Rating from './Rating';
 import API_BASE_URL from '../config';
 import { loadAuthToken } from '../utils/local-storage';
+import ConfirmationModal from './ConfirmationModal';
 
 const List = ({ id, listName, booksInList, getBooks, getLists }) => {
-  function deleteListHandler() {
-    const authToken = loadAuthToken();
-    Promise.all(
-      booksInList.map((book) =>
-        axios.delete(`${API_BASE_URL}/books/${book.book_id}`, {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }),
-      ),
-    )
-      .then(() => {
-        axios
-          .delete(`${API_BASE_URL}/lists/${id}`, {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          })
-          .then(() => {
-            getBooks();
-            getLists();
-          })
-          .catch((err) => {
-            console.log('list deletion err', err);
-          });
-      })
-      .catch((err) => {
-        console.log('books deletion err', err);
-      });
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  async function deleteListHandler() {
+    const authObject = {
+      headers: {
+        Authorization: `Bearer ${loadAuthToken()}`,
+      },
+    };
+    try {
+      await Promise.all(
+        booksInList.map((book) =>
+          axios.delete(`${API_BASE_URL}/books/${book.book_id}`, authObject),
+        ),
+      );
+      await axios.delete(`${API_BASE_URL}/lists/${id}`, authObject);
+    } catch (err) {
+      console.log('list deletion err', err);
+    } finally {
+      getBooks();
+      getLists();
+      setModalIsOpen(false);
+    }
+  }
+
+  function showModal() {
+    setModalIsOpen(true);
+    // deleteListHandler();
   }
 
   const books = booksInList.map((book) => (
@@ -67,8 +66,8 @@ const List = ({ id, listName, booksInList, getBooks, getLists }) => {
           <button
             type="button"
             className="absolute top-0 left-0 mt-1.5 ml-1.5"
-            onClick={deleteListHandler}
-            onKeyPress={(e) => e.key === 'Enter' && deleteListHandler()}
+            onClick={showModal}
+            onKeyPress={(e) => e.key === 'Enter' && showModal}
             aria-label={`delete list ${listName}`}
           >
             <svg
@@ -99,6 +98,35 @@ const List = ({ id, listName, booksInList, getBooks, getLists }) => {
         </div>
       </div>
       <div className="">{books}</div>
+      {modalIsOpen && (
+        <ConfirmationModal
+          className="text-center"
+          setModalIsOpen={setModalIsOpen}
+        >
+          <h2 className="text-2xl">
+            Are you sure you want to delete list {listName}?
+          </h2>
+          <div>
+            <p className="text-xl my-4">
+              deleting this list will also remove the following books from your
+              collection:
+            </p>
+            <ul className="flex flex-col">
+              {booksInList.map((book) => (
+                <li key={book.book_id}>{book.title}</li>
+              ))}
+            </ul>
+          </div>
+          <button
+            className="bg-booklistRed-dark text-white font-semibold shadow-md rounded-xl py-1.5 px-4 mt-8"
+            onClick={deleteListHandler}
+            onKeyPress={(e) => e.key === 'Enter' && deleteListHandler}
+            type="button"
+          >
+            Delete List
+          </button>
+        </ConfirmationModal>
+      )}
     </div>
   );
 };

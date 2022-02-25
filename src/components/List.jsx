@@ -29,11 +29,13 @@ const List = ({ id, listName, booksInList, getBooks, getLists }) => {
     } finally {
       getBooks();
       getLists();
+      document.body.style.overflowY = 'visible';
       setModalIsOpen(false);
     }
   }
 
   function showModal() {
+    document.body.style.overflowY = 'hidden';
     setModalIsOpen(true);
     // deleteListHandler();
   }

@@ -2,6 +2,7 @@ import React from 'react';
 
 const ConfirmationModal = ({ children, setModalIsOpen }) => {
   const closeModal = () => {
+    document.body.style.overflowY = 'visible';
     setModalIsOpen(false);
   };
   return (

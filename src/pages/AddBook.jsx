@@ -36,6 +36,7 @@ export default function AddBookPage() {
           setSeries(res.data[0].list_id);
         } else {
           setModalIsOpen(true);
+          document.body.style.overflowY = 'hidden';
         }
       })
       .catch((err) => {
@@ -105,6 +106,7 @@ export default function AddBookPage() {
   }
 
   function goToListsPage() {
+    document.body.style.overflowY = 'visible';
     history.push('/lists');
   }
 

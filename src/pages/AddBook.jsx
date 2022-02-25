@@ -42,13 +42,15 @@ export default function AddBookPage() {
     const authToken = loadAuthToken();
     const bookDetails = {
       list_id: series,
-      author,
       title,
       image_url: bookImage,
     };
 
     if (pages) {
       bookDetails.pages = pages;
+    }
+    if (author) {
+      bookDetails.author = author;
     }
 
     axios

@@ -106,12 +106,12 @@ const List = ({ id, listName, booksInList, getBooks, getLists }) => {
           setModalIsOpen={setModalIsOpen}
         >
           <h2 className="text-2xl">
-            Are you sure you want to delete list {listName}?
+            Are you sure you want to delete collection {listName}?
           </h2>
           <div>
             <p className="text-xl my-4">
-              Deleting this list will also remove the following books from your
-              collection:
+              Deleting this collection will also remove the following books from
+              your collection:
             </p>
             <ul className="flex flex-col">
               {booksInList.map((book) => (
@@ -120,12 +120,12 @@ const List = ({ id, listName, booksInList, getBooks, getLists }) => {
             </ul>
           </div>
           <button
-            className="bg-booklistRed-dark text-white font-semibold shadow-md rounded-xl py-1.5 px-4 mt-8"
+            className="bg-booklistRed active:bg-booklistRed-dark hover:bg-booklistRed-light hover:-translate-y-0.5 text-white font-semibold shadow-md rounded-xl py-1.5 px-4 mt-8 transform transition"
             onClick={deleteListHandler}
             onKeyPress={(e) => e.key === 'Enter' && deleteListHandler}
             type="button"
           >
-            Delete List
+            Delete Collection
           </button>
         </ConfirmationModal>
       )}

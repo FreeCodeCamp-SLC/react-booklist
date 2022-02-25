@@ -6,6 +6,8 @@ import { loadAuthToken } from '../utils/local-storage';
 import API_BASE_URL from '../config';
 
 import CustomDropdown from '../components/customDropdown/CustomDropdown';
+import ConfirmationModal from '../components/ConfirmationModal';
+import logo from '../images/logo.png';
 
 export default function AddBookPage() {
   const [title, setTitle] = useState('');
@@ -16,12 +18,12 @@ export default function AddBookPage() {
   const [series, setSeries] = useState(0);
   const [bookSelection, setBookSelection] = useState([]);
   const [bookImage, setBookImage] = useState(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const history = useHistory();
 
   useEffect(() => {
     const authToken = loadAuthToken();
-
     axios
       .get(`${API_BASE_URL}/lists`, {
         headers: {
@@ -29,8 +31,12 @@ export default function AddBookPage() {
         },
       })
       .then((res) => {
-        setSeriesOptions(res.data);
-        setSeries(res.data[0].list_id);
+        if (res.data.length > 0) {
+          setSeriesOptions(res.data);
+          setSeries(res.data[0].list_id);
+        } else {
+          setModalIsOpen(true);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -98,14 +104,17 @@ export default function AddBookPage() {
     }
   }
 
-  let seriesSelect;
+  function goToListsPage() {
+    history.push('/lists');
+  }
+
+  let collection;
   let image;
 
-  // this could probably be removed once this issue is resolved https://github.com/FreeCodeCamp-SLC/react-booklist/issues/12
   if (seriesOptions.length === 0) {
-    seriesSelect = null;
+    collection = null;
   } else {
-    seriesSelect = (
+    collection = (
       <select
         onChange={(e) => {
           setSeries(e.target.value);
@@ -197,8 +206,8 @@ export default function AddBookPage() {
               />
             </label>
             <label className="my-3" htmlFor="Series">
-              Series / Collection
-              {seriesSelect}
+              Collection
+              {collection}
             </label>
           </form>
 
@@ -214,6 +223,27 @@ export default function AddBookPage() {
           </div>
         </div>
       </div>
+      {modalIsOpen && (
+        <ConfirmationModal setModalIsOpen={setModalIsOpen} modalCannotClose>
+          <div className="flex justify-center w-full pb-6">
+            {' '}
+            <img src={logo} alt="logo" />
+          </div>
+
+          <h2 className="text-2xl">
+            You must create at least one collection before you begin adding
+            books.
+          </h2>
+          <button
+            className="text-white font-semibold shadow-md rounded-xl hover:-translate-y-0.5 active:bg-booklistBlue-dark transform transition bg-booklistBlue hover:bg-booklistBlue-light py-1.5 px-4 mt-10 mb-4"
+            onClick={goToListsPage}
+            onKeyPress={(e) => e.key === 'Enter' && goToListsPage}
+            type="button"
+          >
+            Create Collection
+          </button>
+        </ConfirmationModal>
+      )}
     </section>
   );
 }

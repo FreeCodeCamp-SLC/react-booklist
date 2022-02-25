@@ -1,9 +1,11 @@
 import React from 'react';
 
-const ConfirmationModal = ({ children, setModalIsOpen }) => {
+const ConfirmationModal = ({ children, setModalIsOpen, modalCannotClose }) => {
   const closeModal = () => {
-    document.body.style.overflowY = 'visible';
-    setModalIsOpen(false);
+    if (!modalCannotClose) {
+      document.body.style.overflowY = 'visible';
+      setModalIsOpen(false);
+    }
   };
   return (
     <div
@@ -11,27 +13,30 @@ const ConfirmationModal = ({ children, setModalIsOpen }) => {
       className="fixed inset-0 z-50 bg-blackTransparent flex justify-center items-center px-6"
     >
       <div className="bg-white relative rounded-xl w-full md:w-3/5 lg:w-1/2 pt-12 text-center p-6">
-        <button
-          className="absolute right-0 top-0 mt-3 mr-4"
-          onClick={closeModal}
-          type="button"
-        >
-          {' '}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+        {modalCannotClose || (
+          <button
+            className="absolute right-0 top-0 mt-3 mr-4"
+            onClick={closeModal}
+            type="button"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
+            {' '}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        )}
+
         {children}
       </div>
     </div>

@@ -37,7 +37,6 @@ const List = ({ id, listName, booksInList, getBooks, getLists }) => {
   function showModal() {
     document.body.style.overflowY = 'hidden';
     setModalIsOpen(true);
-    // deleteListHandler();
   }
 
   const books = booksInList.map((book) => (

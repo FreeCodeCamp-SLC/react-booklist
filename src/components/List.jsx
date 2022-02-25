@@ -110,7 +110,7 @@ const List = ({ id, listName, booksInList, getBooks, getLists }) => {
           </h2>
           <div>
             <p className="text-xl my-4">
-              deleting this list will also remove the following books from your
+              Deleting this list will also remove the following books from your
               collection:
             </p>
             <ul className="flex flex-col">

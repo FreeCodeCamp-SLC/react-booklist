@@ -198,7 +198,7 @@ export default function AddBookPage() {
               />
             </label>
             <label className="my-3" htmlFor="Series">
-              Collections
+              Collection
               {collectionsSelect}
             </label>
           </form>

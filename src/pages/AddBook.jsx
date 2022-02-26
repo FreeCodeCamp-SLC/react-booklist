@@ -149,6 +149,7 @@ export default function AddBookPage() {
                 searchBooks={searchBooks}
                 bookSelection={bookSelection}
                 autofillBookInfo={autofillBookInfo}
+                setBookSelection={setBookSelection}
               />
             </label>
 

@@ -12,8 +12,8 @@ export default function AddBookPage() {
   const [pages, setPages] = useState('');
   const [author, setAuthor] = useState('');
   const [favorite, setFavorite] = useState(false);
-  const [seriesOptions, setSeriesOptions] = useState([]);
-  const [series, setSeries] = useState(0);
+  const [collections, setCollections] = useState([]);
+  const [collectionId, setCollectionId] = useState(0);
   const [bookSelection, setBookSelection] = useState([]);
   const [bookImage, setBookImage] = useState(null);
 
@@ -29,8 +29,8 @@ export default function AddBookPage() {
         },
       })
       .then((res) => {
-        setSeriesOptions(res.data);
-        setSeries(res.data[0].list_id);
+        setCollections(res.data);
+        setCollectionId(res.data[0].list_id);
       })
       .catch((err) => {
         console.log(err);
@@ -41,7 +41,7 @@ export default function AddBookPage() {
     e.preventDefault();
     const authToken = loadAuthToken();
     const bookDetails = {
-      list_id: series,
+      list_id: collectionId,
       title,
       image_url: bookImage,
     };
@@ -100,24 +100,23 @@ export default function AddBookPage() {
     }
   }
 
-  let seriesSelect;
+  let collectionsSelect;
   let image;
 
-  // this could probably be removed once this issue is resolved https://github.com/FreeCodeCamp-SLC/react-booklist/issues/12
-  if (seriesOptions.length === 0) {
-    seriesSelect = null;
+  if (collections.length === 0) {
+    collectionsSelect = null;
   } else {
-    seriesSelect = (
+    collectionsSelect = (
       <select
         onChange={(e) => {
-          setSeries(e.target.value);
+          setCollectionId(e.target.value);
         }}
         className="w-full border-2 py-1.5 px-2 rounded-md"
         name="Series"
         id="Series"
-        value={series.list_id}
+        value={collectionId}
       >
-        {seriesOptions.map((item) => (
+        {collections.map((item) => (
           <option value={item.list_id} key={item.list_id}>
             {item.name}
           </option>
@@ -199,8 +198,8 @@ export default function AddBookPage() {
               />
             </label>
             <label className="my-3" htmlFor="Series">
-              Series / Collection
-              {seriesSelect}
+              Collections
+              {collectionsSelect}
             </label>
           </form>
 

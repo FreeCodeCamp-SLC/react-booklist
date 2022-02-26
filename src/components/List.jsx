@@ -35,8 +35,14 @@ const List = ({ id, listName, booksInList, getBooks, getLists }) => {
   }
 
   function showModal() {
-    document.body.style.overflowY = 'hidden';
-    setModalIsOpen(true);
+    if (booksInList.length > 0) {
+      document.body.style.overflowY = 'hidden';
+      setModalIsOpen(true);
+    } else {
+      deleteListHandler();
+    }
+
+    // deleteListHandler();
   }
 
   const books = booksInList.map((book) => (
@@ -73,7 +79,7 @@ const List = ({ id, listName, booksInList, getBooks, getLists }) => {
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-booklistRed-dark"
+              className="h-6 w-6 text-booklistRed hover:text-booklistRed-light active:text-booklistRed-dark"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"

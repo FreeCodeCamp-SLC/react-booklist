@@ -115,7 +115,7 @@ export default function AddBookPage() {
   let collectionsSelect;
   let image;
 
-  if (seriesOptions.length === 0) {
+  if (collections.length === 0) {
     collectionsSelect = null;
   } else {
     collectionsSelect = (

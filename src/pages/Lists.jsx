@@ -11,54 +11,28 @@ export default function Lists() {
   const { getAllBooks } = useBooksApi();
   const [books, setBooks] = useState([]);
   const [lists, setLists] = useState([]);
-  const [loading, setLoading] = useState(true);
+
+  const getLists = async () => {
+    try {
+      const data = await getAllLists();
+      setLists(data);
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+  const getBooks = async () => {
+    try {
+      const data = await getAllBooks();
+      setBooks(data);
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
 
   useEffect(async () => {
-    const getLists = async () => {
-      try {
-        const data = await getAllLists();
-        setLists(data);
-      } catch (e) {
-        console.log(e.message);
-      }
-    };
     await getLists();
-  }, []);
-
-  useEffect(async () => {
-    const getBooks = async () => {
-      try {
-        const data = await getAllBooks();
-        setBooks(data);
-      } catch (e) {
-        console.log(e.message);
-      }
-    };
     await getBooks();
   }, []);
-
-  useEffect(() => {
-    if (lists) {
-      setLoading(false);
-    }
-  }, [lists]);
-
-  let series;
-  if (loading) {
-    series = null;
-  } else {
-    series = (
-      <div className="grid grid-cols-1 pb-6 mx-6 gap-6 lg:grid-cols-2 xl:grid-cols-3">
-        {lists.map((list) => (
-          <List
-            key={list.list_id}
-            listName={list.name}
-            booksInList={books.filter((book) => book.list_id === list.list_id)}
-          />
-        ))}
-      </div>
-    );
-  }
 
   return (
     <section className="sm:grid grid-cols-layout grid-rows-layout">
@@ -86,7 +60,20 @@ export default function Lists() {
             <span className="text-sm">new list</span>
           </div>
         </div>
-        {series}
+        <div className="grid grid-cols-1 pb-6 mx-6 gap-6 lg:grid-cols-2 xl:grid-cols-3">
+          {lists.map((list) => (
+            <List
+              key={list.list_id}
+              listName={list.name}
+              id={list.list_id}
+              booksInList={books.filter(
+                (book) => book.list_id === list.list_id,
+              )}
+              getBooks={getBooks}
+              getLists={getLists}
+            />
+          ))}
+        </div>
         <div className="mx-5 overflow-hidden rounded-md shadow-md mt-7" />
       </div>
     </section>

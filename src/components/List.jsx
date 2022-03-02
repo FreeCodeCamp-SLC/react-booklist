@@ -27,7 +27,7 @@ const List = ({ listName, booksInList }) => {
   ));
 
   return (
-    <div className="w-full bg-white rounded-bl-md rounded-br-md shadow-md">
+    <div className="h-fit w-full bg-white rounded-md shadow-md">
       <div className="border-b border-red-300 border-solid">
         <div className="p-6 flex justify-between items-center">
           <h3 className="font-medium text-xl">{listName}</h3>

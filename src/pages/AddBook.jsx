@@ -138,7 +138,7 @@ export default function AddBookPage() {
   return (
     <section className=" sm:grid grid-cols-layout grid-rows-layout">
       <Header />
-      <div className="min-h-screen col-start-2 row-start-2 bg-gray-100 ">
+      <div className="min-h-full col-start-2 row-start-2 bg-gray-100 ">
         <h2 className="px-4 pt-5 text-3xl font-bold text-gray-900 ">Add New</h2>
         <div className="mx-5 rounded-md shadow-md mt-7">
           <form className="flex flex-col px-5 pt-5 pb-2 bg-white" id="new book">

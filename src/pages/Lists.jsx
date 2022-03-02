@@ -63,7 +63,7 @@ export default function Lists() {
   return (
     <section className="sm:grid grid-cols-layout grid-rows-layout">
       <Header />
-      <div className="min-h-screen col-start-2 row-start-2 bg-gray-100 ">
+      <div className="min-h-full col-start-2 row-start-2 bg-gray-100 ">
         <div className="flex py-5 px-6 justify-between items-center">
           <h2 className="text-3xl font-bold text-gray-900">Lists</h2>
           <div className="flex flex-col items-center">

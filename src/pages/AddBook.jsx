@@ -6,6 +6,8 @@ import { loadAuthToken } from '../utils/local-storage';
 import API_BASE_URL from '../config';
 
 import CustomDropdown from '../components/customDropdown/CustomDropdown';
+import ConfirmationModal from '../components/ConfirmationModal';
+import logo from '../images/logo.png';
 
 export default function AddBookPage() {
   const [title, setTitle] = useState('');
@@ -16,12 +18,12 @@ export default function AddBookPage() {
   const [collectionId, setCollectionId] = useState(0);
   const [bookSelection, setBookSelection] = useState([]);
   const [bookImage, setBookImage] = useState(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const history = useHistory();
 
   useEffect(() => {
     const authToken = loadAuthToken();
-
     axios
       .get(`${API_BASE_URL}/lists`, {
         headers: {
@@ -29,8 +31,13 @@ export default function AddBookPage() {
         },
       })
       .then((res) => {
-        setCollections(res.data);
-        setCollectionId(res.data[0].list_id);
+        if (res.data.length > 0) {
+          setCollections(res.data);
+          setCollectionId(res.data[0].list_id);
+        } else {
+          setModalIsOpen(true);
+          document.body.style.overflowY = 'hidden';
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -100,10 +107,15 @@ export default function AddBookPage() {
     }
   }
 
+  function goToListsPage() {
+    document.body.style.overflowY = 'visible';
+    history.push('/lists');
+  }
+
   let collectionsSelect;
   let image;
 
-  if (collections.length === 0) {
+  if (seriesOptions.length === 0) {
     collectionsSelect = null;
   } else {
     collectionsSelect = (
@@ -216,6 +228,27 @@ export default function AddBookPage() {
           </div>
         </div>
       </div>
+      {modalIsOpen && (
+        <ConfirmationModal setModalIsOpen={setModalIsOpen} modalCannotClose>
+          <div className="flex justify-center w-full pb-6">
+            {' '}
+            <img src={logo} alt="logo" />
+          </div>
+
+          <h2 className="text-2xl">
+            You must create at least one collection before you begin adding
+            books.
+          </h2>
+          <button
+            className="text-white font-semibold shadow-md rounded-xl hover:-translate-y-0.5 active:bg-booklistBlue-dark transform transition bg-booklistBlue hover:bg-booklistBlue-light py-1.5 px-4 mt-10 mb-4"
+            onClick={goToListsPage}
+            onKeyPress={(e) => e.key === 'Enter' && goToListsPage}
+            type="button"
+          >
+            Create Collection
+          </button>
+        </ConfirmationModal>
+      )}
     </section>
   );
 }

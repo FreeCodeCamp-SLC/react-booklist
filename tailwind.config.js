@@ -21,6 +21,9 @@ module.exports = {
       gridTemplateRows: {
         layout: '75px auto',
       },
+      height: {
+        "fit": "fit-content"
+      },
     },
   },
   variants: {

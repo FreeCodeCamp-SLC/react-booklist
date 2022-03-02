@@ -58,7 +58,7 @@ export default function DashboardPage() {
   return (
     <section className="sm:grid grid-cols-layout grid-rows-layout">
       <Header />
-      <div className="min-h-screen col-start-2 row-start-2 bg-gray-100">
+      <div className="min-h-full col-start-2 row-start-2 bg-gray-100">
         <div>
           <h2 className="px-5 pt-5 text-3xl font-bold text-gray-900">Books</h2>
         </div>

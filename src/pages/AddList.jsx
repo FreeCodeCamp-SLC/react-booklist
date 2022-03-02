@@ -56,7 +56,7 @@ export default function AddListPage() {
   return (
     <section className=" sm:grid grid-cols-layout grid-rows-layout">
       <Header />
-      <div className="min-h-screen col-start-2 row-start-2 bg-gray-100 ">
+      <div className="min-h-full col-start-2 row-start-2 bg-gray-100 ">
         <h2 className="px-4 pt-5 text-3xl font-bold text-gray-900 ">
           Create New Collection
         </h2>

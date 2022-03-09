@@ -8,7 +8,7 @@ import API_BASE_URL from '../config';
 export default function AddListPage() {
   const [listName, setName] = useState('');
   const [listYear, setYear] = useState(0);
-  const [yearValid, setYearValid] = useState(false);
+  const [yearValid, setYearValid] = useState(true);
 
   const history = useHistory();
 
@@ -18,8 +18,8 @@ export default function AddListPage() {
     const authToken = loadAuthToken();
     const yearNum = +listYear;
 
-    if (yearNum < 0) {
-      setYearValid(true);
+    if (yearNum <= 0) {
+      setYearValid(false);
       return;
     }
     axios
@@ -41,16 +41,6 @@ export default function AddListPage() {
       .catch((err) => {
         console.log(err);
       });
-  }
-
-  let yearWarning;
-
-  if (!yearValid) {
-    yearWarning = null;
-  } else {
-    yearWarning = (
-      <span className="text-red-500">Year must be a positive integer</span>
-    );
   }
 
   return (
@@ -88,7 +78,11 @@ export default function AddListPage() {
                 id="Year"
                 value={listYear}
               />
-              {yearWarning}
+              {!yearValid && (
+                <span className="text-red-500">
+                  Year must be a positive integer
+                </span>
+              )}
             </label>
             <div className="flex items-center h-16 bg-gray-50 ">
               <button

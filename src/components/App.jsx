@@ -10,7 +10,7 @@ import AddBook from '../pages/AddBook';
 import Lists from '../pages/Lists';
 import AddList from '../pages/AddList';
 import FavoritesPage from '../pages/Favorites';
-
+import BookPage from '../pages/BookPage';
 
 function App() {
   const { isAuthenticated } = useAuth0();
@@ -34,6 +34,9 @@ function App() {
           </AuthenticateRoute>
           <AuthenticateRoute path="/favorites">
             <FavoritesPage />
+          </AuthenticateRoute>
+          <AuthenticateRoute path={`/lists/:book_id`}>
+            <BookPage />
           </AuthenticateRoute>
 
           <AuthenticateRoute path="/lists">

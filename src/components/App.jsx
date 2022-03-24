@@ -35,7 +35,7 @@ function App() {
           <AuthenticateRoute path="/favorites">
             <FavoritesPage />
           </AuthenticateRoute>
-          <AuthenticateRoute path={`/lists/:book_id`}>
+          <AuthenticateRoute path={`/book/:book_id`}>
             <BookPage />
           </AuthenticateRoute>
 

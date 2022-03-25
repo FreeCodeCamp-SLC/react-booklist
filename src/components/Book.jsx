@@ -1,17 +1,20 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import bookImg from '../images/book.png';
 import bookmark from '../images/bookmark-icon.png';
 
 export default function Book({ book }) {
   return (
     <div className="relative flex flex-col items-center justify-center bg-white w-full  mt-7 mx-auto pt-6 pb-32 px-6 text-center rounded-md shadow-md">
-      <div className="max-h-48 rounded-sm overflow-hidden">
-        <img
-          className="w-32 m-3 shadow"
-          src={book.image_url || bookImg}
-          alt="book cover"
-        />
-      </div>
+      <Link to={`/book/${book.book_id}`}>
+        <div className="max-h-48 rounded-sm overflow-hidden">
+          <img
+            className="w-32 m-3 shadow"
+            src={book.image_url || bookImg}
+            alt="book cover"
+          />
+        </div>
+      </Link>
       <h3 className="text-gray-900 font-extrabold mt-3">{book.title}</h3>
       <h4 className="text-gray-600 mt-2">{book.author}</h4>
       <div className="absolute bottom-0 w-full">

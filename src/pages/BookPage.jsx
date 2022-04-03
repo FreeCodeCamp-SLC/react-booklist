@@ -6,29 +6,18 @@ import Header from '../components/Header';
 export default function BookPage() {
   const book = useLocation().state.book;
   console.log(book);
-  const [title, setTitle] = useState(book.title);
-  const [author, setAuthor] = useState(book.author);
-  const [pages, setPages] = useState(book.pages);
+  const [title, setTitle] = useState(book.title ?? 'Missing Title');
+  const [author, setAuthor] = useState(book.author ?? 'Missing Author');
+  const [pages, setPages] = useState(book.pages ?? 0);
   const image = book.image_url;
-  const [readingState, setReadingState] = useState(book.reading_status_id);
-  const [dateStarted, setDateStarted] = useState(book.date_started);
-  const [dateFinished, setDateFinished] = useState(book.date_finished);
-  const [createdOn, setCreatedOn] = useState(book.created_on);
-  const [modifiedOn, setModifiedOn] = useState(book.modified_on);
+  const [readingState, setReadingState] = useState(
+    book.reading_status_id ?? 'To Read',
+  );
+  const [dateStarted, setDateStarted] = useState(book.date_started ?? '');
+  const [dateFinished, setDateFinished] = useState(book.date_finished ?? '');
+  const [createdOn, setCreatedOn] = useState(book.created_on ?? '');
+  const [modifiedOn, setModifiedOn] = useState(book.modified_on ?? '');
   const listId = book.list_id;
-  //author: "Brandon Sanderson"
-  // book_id: 5
-  // created_on: null
-  // date_finished: null
-  // date_started: null
-  // image_url: "http://books.google.com/books/content?id=QVn-CgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-  // list_id: 3
-  // modified_on: null
-  // name: null
-  // pages: 1007
-  // reading_status_id: null
-  // title: "The Way of Kings"
-  // user_id: "google-oauth2|10589951513725
 
   //all these "nulls" should have a way to be edited...
   // first lets just have it show the book title and image...
@@ -51,10 +40,6 @@ export default function BookPage() {
           <h2 className="px-4 text-3xl font-bold text-gray-900 ">Edit Book</h2>
         </div>
         <div className="mx-5 overflow-hidden rounded-md shadow-md mt-7 bg-white">
-          {/* <h2 className="px-4 text-3xl font-bold text-gray-900 ">{title}</h2>
-          
-          <h3>By {author}</h3>
-          <h3>{pages} pages</h3> */}
           <form className="flex flex-col px-5 pt-5 pb-2 bg-white" id="new book">
             <label className="flex flex-col my-3" htmlFor="title">
               Title
@@ -126,7 +111,7 @@ export default function BookPage() {
               type="date"
               id="date-started"
               name="Date Started"
-              // value={dateStarted}
+              value={dateStarted}
             />
             <label className="flex flex-col my-3" htmlFor="date-finished">
               Date Finished
@@ -169,23 +154,6 @@ export default function BookPage() {
             />
           </form>
         </div>
-
-        {/* <label className="flex flex-col my-3" htmlFor="Favorite">
-            Favorite
-            <div className="text-gray-500">
-              Add this book to your list of favorites
-            </div>
-            <input
-              onChange={(e) => {
-                // setFavorite(e.target.value);
-              }}
-              className="w-5 mt-1"
-              type="checkbox"
-              name="Favorite"
-              id="Favorite"
-              // value={favorite}
-            />
-          </label> */}
       </div>
     </section>
   );

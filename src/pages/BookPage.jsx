@@ -6,6 +6,11 @@ import { loadAuthToken } from '../utils/local-storage';
 import API_BASE_URL from '../config';
 import axios from 'axios';
 
+function convertDate(date) {
+  if (date) return date.substring(0, 10);
+  return;
+}
+
 export default function BookPage() {
   const book = useLocation().state.book;
   const [title, setTitle] = useState(book.title);
@@ -52,10 +57,6 @@ export default function BookPage() {
       });
   }
 
-  function convertDate(date) {
-    if (date) return date.substring(0, 10);
-  }
-
   return (
     <section className=" sm:grid grid-cols-layout grid-rows-layout">
       <Header />
@@ -67,93 +68,96 @@ export default function BookPage() {
           <form className="flex flex-col px-5 pt-5 pb-2 bg-white" id="new book">
             <label className="flex flex-col my-3" htmlFor="title">
               Title
+              <input
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                }}
+                className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
+                type="text"
+                id="title"
+                name="Title"
+                value={title ?? 'Missing Title'}
+                required
+              />
             </label>
-            <input
-              onChange={(e) => {
-                setTitle(e.target.value);
-              }}
-              className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
-              type="text"
-              id="title"
-              name="Title"
-              value={title ?? 'Missing Title'}
-              required
-            />
+
             <label className="flex flex-col my-3" htmlFor="author">
               Author
+              <input
+                onChange={(e) => {
+                  setAuthor(e.target.value);
+                }}
+                className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
+                type="text"
+                id="author"
+                name="Author"
+                value={author ?? 'Missing Author'}
+                required
+              />
             </label>
-            <input
-              onChange={(e) => {
-                setAuthor(e.target.value);
-              }}
-              className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
-              type="text"
-              id="author"
-              name="Author"
-              value={author ?? 'Missing Author'}
-              required
-            />
+
             <label className="flex flex-col my-3" htmlFor="pages">
               Pages
+              <input
+                onChange={(e) => {
+                  setPages(Number(e.target.value));
+                }}
+                className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
+                type="number"
+                id="pages"
+                name="Pages"
+                value={pages ?? 0}
+                required
+              />
             </label>
-            <input
-              onChange={(e) => {
-                setPages(Number(e.target.value));
-              }}
-              className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
-              type="number"
-              id="pages"
-              name="Pages"
-              value={pages ?? 0}
-              required
-            />
+
             <div className="flex justify-center py-4">
               <img src={image} alt="book cover" className="w-32" />
             </div>
             <label className="flex flex-col my-3" htmlFor="reading-status">
               Reading Status
+              <select
+                name="Reading Status Id"
+                id="reading-status"
+                className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
+                value={readingStatusId ?? 1}
+                onChange={(e) => {
+                  setReadingStatusId(Number(e.target.value));
+                }}
+              >
+                <option value={1}>To Read</option>
+                <option value={2}>Currently Reading</option>
+                <option value={3}>On Hold</option>
+                <option value={4}>Finished</option>
+                <option value={5}>Abandoned</option>
+              </select>
             </label>
-            <select
-              name="Reading Status Id"
-              id="reading-status"
-              className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
-              value={readingStatusId ?? 1}
-              onChange={(e) => {
-                setReadingStatusId(Number(e.target.value));
-              }}
-            >
-              <option value={1}>To Read</option>
-              <option value={2}>Currently Reading</option>
-              <option value={3}>On Hold</option>
-              <option value={4}>Finished</option>
-              <option value={5}>Abandoned</option>
-            </select>
             <label className="flex flex-col my-3" htmlFor="date-started">
               Date Started
+              <input
+                onChange={(e) => {
+                  setDateStarted(e.target.value);
+                }}
+                className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
+                type="date"
+                id="date-started"
+                name="Date Started"
+                value={dateStarted ?? ''}
+              />
             </label>
-            <input
-              onChange={(e) => {
-                setDateStarted(e.target.value);
-              }}
-              className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
-              type="date"
-              id="date-started"
-              name="Date Started"
-              value={dateStarted ?? ''}
-            />
             <label className="flex flex-col my-3" htmlFor="date-finished">
               Date Finished
+              <input
+                onChange={(e) => {
+                  setDateFinished(e.target.value);
+                }}
+                className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
+                type="date"
+                id="date-finished"
+                name="Date Finished"
+                value={dateFinished ?? ''}
+              />
             </label>
-            <input
-              onChange={(e) => {
-                setDateFinished(e.target.value);
-              }}
-              className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
-              type="date"
-              id="date-finished"
-              name="Date Finished"
-              value={dateFinished ?? ''}
-            />
           </form>
           <div className="flex items-center h-16 bg-gray-50 ">
             <button

@@ -4,9 +4,13 @@ import bookImg from '../images/book.png';
 import bookmark from '../images/bookmark-icon.png';
 
 export default function Book({ book }) {
+  const linkObj = {
+    pathname: `/book/${book.book_id}`,
+    state: { book: book },
+  };
   return (
     <div className="relative flex flex-col items-center justify-center bg-white w-full  mt-7 mx-auto pt-6 pb-32 px-6 text-center rounded-md shadow-md">
-      <Link to={`/book/${book.book_id}`}>
+      <Link to={linkObj}>
         <div className="max-h-48 rounded-sm overflow-hidden">
           <img
             className="w-32 m-3 shadow"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import useListsApi from '../hooks/useListsApi';
@@ -11,11 +11,13 @@ export default function Lists() {
     data: lists,
     isLoading: listsIsLoading,
     isError: listsIsError,
+    refetch: refetchLists,
   } = useListsApi();
   const {
     data: books,
     isLoading: booksIsLoading,
     isError: booksIsError,
+    refetch: refetchBooks,
   } = useBooksApi();
 
   return (
@@ -63,8 +65,8 @@ export default function Lists() {
               booksInList={books?.data.filter(
                 (book) => book.list_id === list.list_id,
               )}
-              // getBooks={getBooks}
-              // getLists={getLists}
+              refetchLists={refetchLists}
+              refetchBooks={refetchBooks}
             />
           ))}
         </div>

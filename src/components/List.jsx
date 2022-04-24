@@ -1,38 +1,26 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import bookImg from '../images/book.png';
 import BookIcon from './BookIcon';
 import Rating from './Rating';
-import API_BASE_URL from '../config';
-import { loadAuthToken } from '../utils/local-storage';
 import ConfirmationModal from './ConfirmationModal';
+import { useDeleteList, useDeleteAllBooks } from '../hooks/useListsApi';
 
-const List = ({ id, listName, booksInList }) => {
+const List = ({ id, listName, booksInList, refetchLists, refetchBooks }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const deleteList = useDeleteList(id, setModalIsOpen);
+  const deleteAllBooks = useDeleteAllBooks(booksInList);
 
-  async function deleteListHandler() {
-    const authObject = {
-      headers: {
-        Authorization: `Bearer ${loadAuthToken()}`,
-      },
-    };
+  const deleteListHandler = async () => {
     try {
-      await Promise.all(
-        booksInList.map((book) =>
-          axios.delete(`${API_BASE_URL}/books/${book.book_id}`, authObject),
-        ),
-      );
-      await axios.delete(`${API_BASE_URL}/lists/${id}`, authObject);
-    } catch (err) {
-      console.log('list deletion err', err);
-    } finally {
-      // getBooks();
-      // getLists();
-      document.body.style.overflowY = 'visible';
-      setModalIsOpen(false);
+      await deleteAllBooks.mutateAsync();
+      await deleteList.mutateAsync();
+      refetchLists();
+      refetchBooks();
+    } catch {
+      console.log('error deleting list in list');
     }
-  }
+  };
 
   function showModal() {
     if (booksInList.length > 0) {
@@ -41,8 +29,6 @@ const List = ({ id, listName, booksInList }) => {
     } else {
       deleteListHandler();
     }
-
-    // deleteListHandler();
   }
 
   const books = booksInList.map((book) => (

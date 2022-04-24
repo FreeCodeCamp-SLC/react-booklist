@@ -1,16 +1,13 @@
 import axios from 'axios';
 import { useQuery } from 'react-query';
 import API_BASE_URL from '../config';
-import { loadAuthToken } from '../utils/local-storage';
+import authHeaders from "../utils/axios-request-header";
+
 
 export default function useBooksApi() {
 
-  const getAllBooks = axios.get(`${API_BASE_URL}/books`, {
-      headers: {
-        Authorization: `Bearer ${loadAuthToken()}`,
-      },
-    }) 
+  const getAllBooks = axios.get(`${API_BASE_URL}/books`, authHeaders) 
 
-    return useQuery('getBooks', () => getAllBooks);
+    return useQuery('books', () => getAllBooks);
 }
 

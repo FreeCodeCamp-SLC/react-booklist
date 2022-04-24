@@ -1,6 +1,8 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 import AuthenticateRoute from './AuthenticateRoute';
 
 import LandingPage from '../pages/Landing';
@@ -12,12 +14,14 @@ import AddList from '../pages/AddList';
 import FavoritesPage from '../pages/Favorites';
 import BookPage from '../pages/BookPage';
 
+const queryClient = new QueryClient();
+
 function App() {
   const { isAuthenticated } = useAuth0();
   const authedRedirect = (Component) =>
     isAuthenticated ? <Redirect to="/dashboard" /> : <Component />;
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <main>
         <Switch>
           <Route path="/" exact>
@@ -35,10 +39,9 @@ function App() {
           <AuthenticateRoute path="/favorites">
             <FavoritesPage />
           </AuthenticateRoute>
-          <AuthenticateRoute path={`/book/:book_id`}>
+          <AuthenticateRoute path="/book/:book_id">
             <BookPage />
           </AuthenticateRoute>
-
           <AuthenticateRoute path="/lists">
             <Lists />
           </AuthenticateRoute>
@@ -47,7 +50,8 @@ function App() {
           </AuthenticateRoute>
         </Switch>
       </main>
-    </>
+      <ReactQueryDevtools InitialIsOpen={false} position="bottom-right" />
+    </QueryClientProvider>
   );
 }
 

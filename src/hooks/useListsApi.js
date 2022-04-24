@@ -1,35 +1,15 @@
-import { useState } from 'react';
+import axios from 'axios';
+import { useQuery } from 'react-query';
 import API_BASE_URL from '../config';
 import { loadAuthToken } from '../utils/local-storage';
 
-export default function useBooksApi() {
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
+export default function useListsApi() {
 
-  function getAllLists() {
-    setLoading(true);
-    setError(false);
-
-    const authToken = loadAuthToken();
-
-    return fetch(`${API_BASE_URL}/lists`, {
-      method: 'GET',
+  const getAllLists = axios.get(`${API_BASE_URL}/lists`, {
       headers: {
-        'content-type': 'application/json',
-        Authorization: `Bearer ${authToken}`,
+        Authorization: `Bearer ${loadAuthToken()}`,
       },
-    })
-      .then((res) => res.json())
-      .catch((err) => {
-        setLoading(false);
-        setError(true);
-        return err;
-      });
-  }
+    }) 
 
-  return {
-    error,
-    loading,
-    getAllLists,
-  };
+    return useQuery('getLists', () => getAllLists);
 }

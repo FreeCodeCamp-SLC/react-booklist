@@ -8,7 +8,7 @@ import API_BASE_URL from '../config';
 import { loadAuthToken } from '../utils/local-storage';
 import ConfirmationModal from './ConfirmationModal';
 
-const List = ({ id, listName, booksInList, getBooks, getLists }) => {
+const List = ({ id, listName, booksInList }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   async function deleteListHandler() {
@@ -27,8 +27,8 @@ const List = ({ id, listName, booksInList, getBooks, getLists }) => {
     } catch (err) {
       console.log('list deletion err', err);
     } finally {
-      getBooks();
-      getLists();
+      // getBooks();
+      // getLists();
       document.body.style.overflowY = 'visible';
       setModalIsOpen(false);
     }

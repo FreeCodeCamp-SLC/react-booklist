@@ -7,32 +7,16 @@ import useBooksApi from '../hooks/useBooksApi';
 import List from '../components/List';
 
 export default function Lists() {
-  const { getAllLists } = useListsApi();
-  const { getAllBooks } = useBooksApi();
-  const [books, setBooks] = useState([]);
-  const [lists, setLists] = useState([]);
-
-  const getLists = async () => {
-    try {
-      const data = await getAllLists();
-      setLists(data);
-    } catch (e) {
-      console.log(e.message);
-    }
-  };
-  const getBooks = async () => {
-    try {
-      const data = await getAllBooks();
-      setBooks(data);
-    } catch (e) {
-      console.log(e.message);
-    }
-  };
-
-  useEffect(async () => {
-    await getLists();
-    await getBooks();
-  }, []);
+  const {
+    data: lists,
+    isLoading: listsIsLoading,
+    isError: listsIsError,
+  } = useListsApi();
+  const {
+    data: books,
+    isLoading: booksIsLoading,
+    isError: booksIsError,
+  } = useBooksApi();
 
   return (
     <section className="sm:grid grid-cols-layout grid-rows-layout">
@@ -60,17 +44,27 @@ export default function Lists() {
             <span className="text-sm">new list</span>
           </div>
         </div>
+        {(listsIsLoading || booksIsLoading) && (
+          <h2 className="px-5 pt-5 text-3xl font-bold text-gray-900">
+            Loading Collections...
+          </h2>
+        )}
+        {(listsIsError || booksIsError) && (
+          <h2 className="px-5 pt-5 text-3xl font-bold text-gray-900">
+            Error Fetching Books
+          </h2>
+        )}
         <div className="grid grid-cols-1 pb-6 mx-6 gap-6 lg:grid-cols-2 xl:grid-cols-3">
-          {lists.map((list) => (
+          {lists?.data.map((list) => (
             <List
               key={list.list_id}
               listName={list.name}
               id={list.list_id}
-              booksInList={books.filter(
+              booksInList={books?.data.filter(
                 (book) => book.list_id === list.list_id,
               )}
-              getBooks={getBooks}
-              getLists={getLists}
+              // getBooks={getBooks}
+              // getLists={getLists}
             />
           ))}
         </div>

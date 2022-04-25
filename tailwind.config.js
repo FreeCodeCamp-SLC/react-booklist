@@ -26,6 +26,22 @@ module.exports = {
         "fit": "fit-content"
       },
     },
+    screens: {
+      'sm': '640px',
+      // => @media (min-width: 640px) { ... }
+
+      'md': '850px',
+      // => @media (min-width: 768px) { ... }
+
+      'lg': '1130px',
+      // => @media (min-width: 1024px) { ... }
+
+      'xl': '1400px',
+      // => @media (min-width: 1280px) { ... }
+
+      '2xl': '1536px',
+      // => @media (min-width: 1536px) { ... }
+    },
   },
   variants: {
     extend: {

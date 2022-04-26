@@ -4,10 +4,7 @@ import API_BASE_URL from '../config';
 import authHeaders from "../utils/axios-request-header";
 
 export default function useListsApi() {
-
   const getAllLists = () => axios.get(`${API_BASE_URL}/lists`, authHeaders) 
-
-
     return useQuery('collections', getAllLists);
 }
 

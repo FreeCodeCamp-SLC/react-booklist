@@ -18,7 +18,7 @@ const List = ({ id, listName, booksInList, refetchLists, refetchBooks }) => {
       refetchLists();
       refetchBooks();
     } catch {
-      console.log('error deleting list in list');
+      console.log('error deleting list');
     }
   };
 

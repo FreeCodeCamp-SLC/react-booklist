@@ -4,45 +4,28 @@ import axios from 'axios';
 import Header from '../components/Header';
 import { loadAuthToken } from '../utils/local-storage';
 import API_BASE_URL from '../config';
+import useListsApi from '../hooks/useListsApi';
 
 import CustomDropdown from '../components/customDropdown/CustomDropdown';
 import ConfirmationModal from '../components/ConfirmationModal';
 import logo from '../images/logo.png';
 
 export default function AddBookPage() {
+  const history = useHistory();
+  const { data: collections } = useListsApi();
+
   const [title, setTitle] = useState('');
   const [pages, setPages] = useState('');
   const [author, setAuthor] = useState('');
   const [favorite, setFavorite] = useState(false);
-  const [collections, setCollections] = useState([]);
   const [collectionId, setCollectionId] = useState(0);
   const [bookSelection, setBookSelection] = useState([]);
   const [bookImage, setBookImage] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const history = useHistory();
-
   useEffect(() => {
-    const authToken = loadAuthToken();
-    axios
-      .get(`${API_BASE_URL}/lists`, {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      })
-      .then((res) => {
-        if (res.data.length > 0) {
-          setCollections(res.data);
-          setCollectionId(res.data[0].list_id);
-        } else {
-          setModalIsOpen(true);
-          document.body.style.overflowY = 'hidden';
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+    setCollectionId(collections?.data[0].list_id);
+  }, [collections]);
 
   function addBook(e) {
     e.preventDefault();
@@ -112,41 +95,6 @@ export default function AddBookPage() {
     history.push('/lists');
   }
 
-  let collectionsSelect;
-  let image;
-
-  if (collections.length === 0) {
-    collectionsSelect = null;
-  } else {
-    collectionsSelect = (
-      <select
-        onChange={(e) => {
-          setCollectionId(e.target.value);
-        }}
-        className="w-full border-2 py-1.5 px-2 rounded-md"
-        name="Series"
-        id="Series"
-        value={collectionId}
-      >
-        {collections.map((item) => (
-          <option value={item.list_id} key={item.list_id}>
-            {item.name}
-          </option>
-        ))}
-      </select>
-    );
-  }
-
-  if (!bookImage) {
-    image = null;
-  } else {
-    image = (
-      <div className="flex justify-center py-4">
-        <img src={bookImage} alt="book cover" className="w-32" />
-      </div>
-    );
-  }
-
   return (
     <section className=" sm:grid grid-cols-layout grid-rows-layout">
       <Header />
@@ -193,7 +141,11 @@ export default function AddBookPage() {
                 required
               />
             </label>
-            {image}
+            {bookImage && (
+              <div className="flex justify-center py-4">
+                <img src={bookImage} alt="book cover" className="w-32" />
+              </div>
+            )}
             <label className="flex flex-col my-3" htmlFor="Favorite">
               Favorite
               <div className="text-gray-500">
@@ -212,7 +164,24 @@ export default function AddBookPage() {
             </label>
             <label className="my-3" htmlFor="Series">
               Collection
-              {collectionsSelect}
+              {collections?.data.length > 0 && (
+                <select
+                  onChange={(e) => {
+                    console.log('e', e.target.value);
+                    setCollectionId(e.target.value);
+                  }}
+                  className="w-full border-2 py-1.5 px-2 rounded-md"
+                  name="Series"
+                  id="Series"
+                  value={collectionId}
+                >
+                  {collections?.data.map((item) => (
+                    <option value={item.list_id} key={item.list_id}>
+                      {item.name}
+                    </option>
+                  ))}
+                </select>
+              )}
             </label>
           </form>
 

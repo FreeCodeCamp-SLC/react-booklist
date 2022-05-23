@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../components/Header';
-import { loadAuthToken } from '../utils/local-storage';
-import API_BASE_URL from '../config';
+import api from '../config';
 import useListsApi from '../hooks/useListsApi';
 
 import CustomDropdown from '../components/customDropdown/CustomDropdown';
@@ -29,7 +28,6 @@ export default function AddBookPage() {
 
   function addBook(e) {
     e.preventDefault();
-    const authToken = loadAuthToken();
     const bookDetails = {
       list_id: collectionId,
       title,
@@ -43,12 +41,8 @@ export default function AddBookPage() {
       bookDetails.author = author;
     }
 
-    axios
-      .post(`${API_BASE_URL}/books`, bookDetails, {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      })
+    api
+      .post(`/books`, bookDetails)
       .then(() => {
         history.push('/dashboard');
       })

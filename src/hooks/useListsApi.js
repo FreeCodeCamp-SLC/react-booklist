@@ -1,15 +1,13 @@
-import axios from 'axios';
 import { useQuery, useMutation } from 'react-query';
-import API_BASE_URL from '../config';
-import authHeaders from "../utils/axios-request-header";
+import api from '../config'
 
 export default function useListsApi() {
-  const getAllLists = () => axios.get(`${API_BASE_URL}/lists`, authHeaders) 
+  const getAllLists = () => api.get(`/lists`) 
     return useQuery('collections', getAllLists);
 }
 
 export const useDeleteList = (id, setModalIsOpen) => {
-const deleteList = () => axios.delete(`${API_BASE_URL}/lists/${id}`, authHeaders);
+const deleteList = () => api.delete(`/lists/${id}`);
 return useMutation(deleteList, {
   onSuccess: () => {
     document.body.style.overflowY = 'visible';
@@ -23,7 +21,7 @@ return useMutation(deleteList, {
 export const useDeleteAllBooks = (booksInList) => {
   const deleteAllBooks = () => Promise.all(
     booksInList.map((book) =>
-      axios.delete(`${API_BASE_URL}/books/${book.book_id}`, authHeaders),
+      api.delete(`/books/${book.book_id}`),
     ),
   );
   return  useMutation(deleteAllBooks, {

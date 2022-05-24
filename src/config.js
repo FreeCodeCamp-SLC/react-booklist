@@ -8,9 +8,10 @@ const api = axios.create({
 })
 
 api.interceptors.request.use((config) => {
+  const configuration = config;
   const authToken = loadAuthToken()
-  config.headers.Authorization =  authToken ? `Bearer ${authToken}` : '';
-  return config;
+  configuration.headers.Authorization =  authToken ? `Bearer ${authToken}` : null;
+  return configuration;
 });
 
 export default api

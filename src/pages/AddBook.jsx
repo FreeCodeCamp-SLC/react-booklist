@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../components/Header';
-import api from '../config';
 import useListsApi from '../hooks/useListsApi';
+import { useAddBook } from '../hooks/useBooksApi';
 
 import CustomDropdown from '../components/customDropdown/CustomDropdown';
 import ConfirmationModal from '../components/ConfirmationModal';
@@ -12,7 +12,7 @@ import logo from '../images/logo.png';
 export default function AddBookPage() {
   const history = useHistory();
   const { data: collections } = useListsApi();
-
+  const { mutate: addBook, isLoading, isError } = useAddBook(history);
   const [title, setTitle] = useState('');
   const [pages, setPages] = useState('');
   const [author, setAuthor] = useState('');
@@ -26,7 +26,7 @@ export default function AddBookPage() {
     setCollectionId(collections?.data[0].list_id);
   }, [collections]);
 
-  function addBook(e) {
+  function addBookHandler(e) {
     e.preventDefault();
     const bookDetails = {
       list_id: collectionId,
@@ -40,15 +40,7 @@ export default function AddBookPage() {
     if (author) {
       bookDetails.author = author;
     }
-
-    api
-      .post(`/books`, bookDetails)
-      .then(() => {
-        history.push('/dashboard');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    addBook(bookDetails);
   }
   function autofillBookInfo(book) {
     if (!book.volumeInfo.authors) {
@@ -92,105 +84,114 @@ export default function AddBookPage() {
   return (
     <section className=" sm:grid grid-cols-layout grid-rows-layout">
       <Header />
-      <div className="min-h-full col-start-2 row-start-2 bg-gray-100 ">
-        <h2 className="px-4 pt-5 text-3xl font-bold text-gray-900 ">Add New</h2>
-        <div className="mx-5 rounded-md shadow-md mt-7">
-          <form className="flex flex-col px-5 pt-5 pb-2 bg-white" id="new book">
-            <label className="my-3" htmlFor="Book-Title">
-              Book Title
-              <CustomDropdown
-                name="Book-Title"
-                searchBooks={searchBooks}
-                bookSelection={bookSelection}
-                autofillBookInfo={autofillBookInfo}
-                setBookSelection={setBookSelection}
-              />
-            </label>
-
-            <label className="my-3 flex flex-col" htmlFor="Pages">
-              Pages
-              <input
-                onChange={(e) => {
-                  setPages(e.target.value);
-                }}
-                className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
-                type="number"
-                id="pages"
-                name="Pages"
-                value={pages}
-                required
-              />
-            </label>
-            <label className="my-3" htmlFor="Author">
-              Author(s)
-              <input
-                onChange={(e) => {
-                  setAuthor(e.target.value);
-                }}
-                className="w-full mt-1 border-2 py-1.5 px-2 rounded-md"
-                type="text"
-                name="Author"
-                id="Author"
-                value={author}
-                required
-              />
-            </label>
-            {bookImage && (
-              <div className="flex justify-center py-4">
-                <img src={bookImage} alt="book cover" className="w-32" />
-              </div>
-            )}
-            <label className="flex flex-col my-3" htmlFor="Favorite">
-              Favorite
-              <div className="text-gray-500">
-                Add this book to your list of favorites
-              </div>
-              <input
-                onChange={(e) => {
-                  setFavorite(e.target.value);
-                }}
-                className="w-5 mt-1"
-                type="checkbox"
-                name="Favorite"
-                id="Favorite"
-                value={favorite}
-              />
-            </label>
-            <label className="my-3" htmlFor="Series">
-              Collection
-              {collections?.data.length > 0 && (
-                <select
-                  onChange={(e) => {
-                    console.log('e', e.target.value);
-                    setCollectionId(e.target.value);
-                  }}
-                  className="w-full border-2 py-1.5 px-2 rounded-md"
-                  name="Series"
-                  id="Series"
-                  value={collectionId}
-                >
-                  {collections?.data.map((item) => (
-                    <option value={item.list_id} key={item.list_id}>
-                      {item.name}
-                    </option>
-                  ))}
-                </select>
-              )}
-            </label>
-          </form>
-
-          <div className="flex items-center h-16 bg-gray-50 ">
-            <button
-              className="h-10 ml-4 font-semibold text-white rounded-md bg-booklistBlue-dark w-28"
-              type="submit"
-              form="new book"
-              onClick={addBook}
+      {!isLoading && !isError && (
+        <div className="min-h-full col-start-2 row-start-2 bg-gray-100 ">
+          <h2 className="px-4 pt-5 text-3xl font-bold text-gray-900 ">
+            Add New
+          </h2>
+          <div className="mx-5 rounded-md shadow-md mt-7">
+            <form
+              className="flex flex-col px-5 pt-5 pb-2 bg-white"
+              id="new book"
             >
-              Save
-            </button>
+              <label className="my-3" htmlFor="Book-Title">
+                Book Title
+                <CustomDropdown
+                  name="Book-Title"
+                  searchBooks={searchBooks}
+                  bookSelection={bookSelection}
+                  autofillBookInfo={autofillBookInfo}
+                  setBookSelection={setBookSelection}
+                />
+              </label>
+
+              <label className="my-3 flex flex-col" htmlFor="Pages">
+                Pages
+                <input
+                  onChange={(e) => {
+                    setPages(e.target.value);
+                  }}
+                  className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
+                  type="number"
+                  id="pages"
+                  name="Pages"
+                  value={pages}
+                  required
+                />
+              </label>
+              <label className="my-3" htmlFor="Author">
+                Author(s)
+                <input
+                  onChange={(e) => {
+                    setAuthor(e.target.value);
+                  }}
+                  className="w-full mt-1 border-2 py-1.5 px-2 rounded-md"
+                  type="text"
+                  name="Author"
+                  id="Author"
+                  value={author}
+                  required
+                />
+              </label>
+              {bookImage && (
+                <div className="flex justify-center py-4">
+                  <img src={bookImage} alt="book cover" className="w-32" />
+                </div>
+              )}
+              <label className="flex flex-col my-3" htmlFor="Favorite">
+                Favorite
+                <div className="text-gray-500">
+                  Add this book to your list of favorites
+                </div>
+                <input
+                  onChange={(e) => {
+                    setFavorite(e.target.value);
+                  }}
+                  className="w-5 mt-1"
+                  type="checkbox"
+                  name="Favorite"
+                  id="Favorite"
+                  value={favorite}
+                />
+              </label>
+              <label className="my-3" htmlFor="Series">
+                Collection
+                {collections?.data.length > 0 && (
+                  <select
+                    onChange={(e) => {
+                      console.log('e', e.target.value);
+                      setCollectionId(e.target.value);
+                    }}
+                    className="w-full border-2 py-1.5 px-2 rounded-md"
+                    name="Series"
+                    id="Series"
+                    value={collectionId}
+                  >
+                    {collections?.data.map((item) => (
+                      <option value={item.list_id} key={item.list_id}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </label>
+            </form>
+
+            <div className="flex items-center h-16 bg-gray-50 ">
+              <button
+                className="h-10 ml-4 font-semibold text-white rounded-md bg-booklistBlue-dark w-28"
+                type="submit"
+                form="new book"
+                onClick={addBookHandler}
+              >
+                Save
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
+      {isLoading && <h2 className="px-6 py-4">Loading...</h2>}
+      {isError && <h2 className="px-6 py-4">Error Adding Book</h2>}
       {modalIsOpen && (
         <ConfirmationModal setModalIsOpen={setModalIsOpen} modalCannotClose>
           <div className="flex justify-center w-full pb-6">

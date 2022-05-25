@@ -1,38 +1,26 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import bookImg from '../images/book.png';
 import BookIcon from './BookIcon';
 import Rating from './Rating';
-import API_BASE_URL from '../config';
-import { loadAuthToken } from '../utils/local-storage';
 import ConfirmationModal from './ConfirmationModal';
+import { useDeleteList, useDeleteAllBooks } from '../hooks/useListsApi';
 
-const List = ({ id, listName, booksInList, getBooks, getLists }) => {
+const List = ({ id, listName, booksInList, refetchLists, refetchBooks }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const deleteList = useDeleteList(id, setModalIsOpen);
+  const deleteAllBooks = useDeleteAllBooks(booksInList);
 
-  async function deleteListHandler() {
-    const authObject = {
-      headers: {
-        Authorization: `Bearer ${loadAuthToken()}`,
-      },
-    };
+  const deleteListHandler = async () => {
     try {
-      await Promise.all(
-        booksInList.map((book) =>
-          axios.delete(`${API_BASE_URL}/books/${book.book_id}`, authObject),
-        ),
-      );
-      await axios.delete(`${API_BASE_URL}/lists/${id}`, authObject);
-    } catch (err) {
-      console.log('list deletion err', err);
-    } finally {
-      getBooks();
-      getLists();
-      document.body.style.overflowY = 'visible';
-      setModalIsOpen(false);
+      await deleteAllBooks.mutateAsync();
+      await deleteList.mutateAsync();
+      refetchLists();
+      refetchBooks();
+    } catch {
+      console.log('error deleting list');
     }
-  }
+  };
 
   function showModal() {
     if (booksInList.length > 0) {
@@ -41,8 +29,6 @@ const List = ({ id, listName, booksInList, getBooks, getLists }) => {
     } else {
       deleteListHandler();
     }
-
-    // deleteListHandler();
   }
 
   const books = booksInList.map((book) => (
@@ -110,28 +96,33 @@ const List = ({ id, listName, booksInList, getBooks, getLists }) => {
           className="text-center"
           setModalIsOpen={setModalIsOpen}
         >
-          <h2 className="text-2xl">
-            Are you sure you want to delete collection {listName}?
-          </h2>
-          <div>
-            <p className="text-xl my-4">
-              Deleting this collection will also remove the following books from
-              your collection:
-            </p>
-            <ul className="flex flex-col">
-              {booksInList.map((book) => (
-                <li key={book.book_id}>{book.title}</li>
-              ))}
-            </ul>
-          </div>
-          <button
-            className="bg-booklistRed active:bg-booklistRed-dark hover:bg-booklistRed-light hover:-translate-y-0.5 text-white font-semibold shadow-md rounded-xl py-1.5 px-4 mt-8 transform transition"
-            onClick={deleteListHandler}
-            onKeyPress={(e) => e.key === 'Enter' && deleteListHandler}
-            type="button"
-          >
-            Delete Collection
-          </button>
+          {deleteList.isLoading && <h2>Deleting List...</h2>}
+          {!deleteList.isLoading && (
+            <>
+              <h2 className="text-2xl">
+                Are you sure you want to delete collection {listName}?
+              </h2>
+              <div>
+                <p className="text-xl my-4">
+                  Deleting this collection will also remove the following books
+                  from your collection:
+                </p>
+                <ul className="flex flex-col">
+                  {booksInList.map((book) => (
+                    <li key={book.book_id}>{book.title}</li>
+                  ))}
+                </ul>
+              </div>
+              <button
+                className="bg-booklistRed active:bg-booklistRed-dark hover:bg-booklistRed-light hover:-translate-y-0.5 text-white font-semibold shadow-md rounded-xl py-1.5 px-4 mt-8 transform transition"
+                onClick={deleteListHandler}
+                onKeyPress={(e) => e.key === 'Enter' && deleteListHandler}
+                type="button"
+              >
+                Delete Collection
+              </button>
+            </>
+          )}
         </ConfirmationModal>
       )}
     </div>

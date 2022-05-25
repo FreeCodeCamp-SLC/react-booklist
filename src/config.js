@@ -1,2 +1,17 @@
+import axios from 'axios'
+import { loadAuthToken } from "./utils/local-storage";
+
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080/api';
-export default API_BASE_URL;
+
+const api = axios.create({
+    baseURL: API_BASE_URL,
+})
+
+api.interceptors.request.use((config) => {
+  const configuration = config;
+  const authToken = loadAuthToken()
+  configuration.headers.Authorization =  authToken ? `Bearer ${authToken}` : null;
+  return configuration;
+});
+
+export default api

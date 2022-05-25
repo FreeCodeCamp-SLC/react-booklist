@@ -1,18 +1,14 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import Header from '../components/Header';
-import { loadAuthToken } from '../utils/local-storage';
-import API_BASE_URL from '../config';
-import axios from 'axios';
+import api from '../config';
 
 function convertDate(date) {
   if (date) return date.substring(0, 10);
-  return;
 }
 
 export default function BookPage() {
-  const book = useLocation().state.book;
+  const { book } = useLocation().state;
   const [title, setTitle] = useState(book.title);
   const [author, setAuthor] = useState(book.author);
   const [pages, setPages] = useState(book.pages);
@@ -32,7 +28,6 @@ export default function BookPage() {
 
   function editBook(e) {
     e.preventDefault();
-    const authToken = loadAuthToken();
     const bookDetails = {
       list_id: listId,
       title,
@@ -43,12 +38,8 @@ export default function BookPage() {
     };
     if (dateStarted) bookDetails.date_started = dateStarted;
     if (dateFinished) bookDetails.date_finished = dateFinished;
-    axios
-      .put(`${API_BASE_URL}/books/${bookId}`, bookDetails, {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      })
+    api
+      .put(`/books/${bookId}`, bookDetails)
       .then(() => {
         history.push('/dashboard');
       })

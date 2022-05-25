@@ -1,35 +1,32 @@
-import { useState } from 'react';
-import API_BASE_URL from '../config';
-import { loadAuthToken } from '../utils/local-storage';
+import { useQuery, useMutation } from 'react-query';
+import api from '../config'
 
-export default function useBooksApi() {
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
+export default function useListsApi() {
+  const getAllLists = () => api.get(`/lists`) 
+    return useQuery('collections', getAllLists);
+}
 
-  function getAllLists() {
-    setLoading(true);
-    setError(false);
+export const useDeleteList = (id, setModalIsOpen) => {
+const deleteList = () => api.delete(`/lists/${id}`);
+return useMutation(deleteList, {
+  onSuccess: () => {
+    document.body.style.overflowY = 'visible';
+    setModalIsOpen(false)
+  },
+  onError: (err) => {
+    console.log('error deleting lists', err)
+}})
+}
 
-    const authToken = loadAuthToken();
-
-    return fetch(`${API_BASE_URL}/lists`, {
-      method: 'GET',
-      headers: {
-        'content-type': 'application/json',
-        Authorization: `Bearer ${authToken}`,
-      },
-    })
-      .then((res) => res.json())
-      .catch((err) => {
-        setLoading(false);
-        setError(true);
-        return err;
-      });
-  }
-
-  return {
-    error,
-    loading,
-    getAllLists,
-  };
+export const useDeleteAllBooks = (booksInList) => {
+  const deleteAllBooks = () => Promise.all(
+    booksInList.map((book) =>
+      api.delete(`/books/${book.book_id}`),
+    ),
+  );
+  return  useMutation(deleteAllBooks, {
+    onError: (err) => {
+      console.log('error deleting books', err)
+    }
+  })
 }

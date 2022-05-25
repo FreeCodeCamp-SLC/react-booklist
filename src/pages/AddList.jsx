@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
 import Header from '../components/Header';
-import { loadAuthToken } from '../utils/local-storage';
-import API_BASE_URL from '../config';
+import api from '../config';
 
 export default function AddListPage() {
   const [listName, setName] = useState('');
@@ -15,26 +13,17 @@ export default function AddListPage() {
   function addList(e) {
     e.preventDefault();
 
-    const authToken = loadAuthToken();
     const yearNum = +listYear;
 
     if (yearNum <= 0) {
       setYearValid(false);
       return;
     }
-    axios
-      .post(
-        `${API_BASE_URL}/lists`,
-        {
-          name: listName,
-          year: yearNum,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        },
-      )
+    api
+      .post(`/lists`, {
+        name: listName,
+        year: yearNum,
+      })
       .then(() => {
         history.push('/lists');
       })

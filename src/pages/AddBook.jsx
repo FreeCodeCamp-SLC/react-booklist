@@ -11,25 +11,21 @@ import logo from '../images/logo.png';
 
 export default function AddBookPage() {
   const history = useHistory();
-  const { data: collections } = useListsApi();
+  const { data: lists } = useListsApi();
   const { mutate: addBook, isLoading, isError } = useAddBook(history);
   const [title, setTitle] = useState('');
   const [pages, setPages] = useState('');
   const [author, setAuthor] = useState('');
   const [favorite, setFavorite] = useState(false);
-  const [collectionId, setCollectionId] = useState(0);
+  const [listId, setListId] = useState(0);
   const [bookSelection, setBookSelection] = useState([]);
   const [bookImage, setBookImage] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  useEffect(() => {
-    setCollectionId(collections?.data[0].list_id);
-  }, [collections]);
-
   function addBookHandler(e) {
     e.preventDefault();
     const bookDetails = {
-      list_id: collectionId,
+      list_id: +listId || +lists?.data[0].list_id,
       title,
       image_url: bookImage,
     };
@@ -156,18 +152,17 @@ export default function AddBookPage() {
               </label>
               <label className="my-3" htmlFor="Series">
                 Collection
-                {collections?.data.length > 0 && (
+                {lists?.data.length > 0 && (
                   <select
                     onChange={(e) => {
-                      console.log('e', e.target.value);
-                      setCollectionId(e.target.value);
+                      setListId(e.target.value);
                     }}
                     className="w-full border-2 py-1.5 px-2 rounded-md"
                     name="Series"
                     id="Series"
-                    value={collectionId}
+                    value={listId}
                   >
-                    {collections?.data.map((item) => (
+                    {lists?.data.map((item) => (
                       <option value={item.list_id} key={item.list_id}>
                         {item.name}
                       </option>

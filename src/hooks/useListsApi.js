@@ -3,7 +3,7 @@ import api from '../config'
 
 export default function useListsApi() {
   const getAllLists = () => api.get(`/lists`) 
-    return useQuery('collections', getAllLists);
+    return useQuery('lists', getAllLists);
 }
 
 export const useDeleteList = (id, setModalIsOpen) => {

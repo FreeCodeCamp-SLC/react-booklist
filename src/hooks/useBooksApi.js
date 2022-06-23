@@ -8,8 +8,10 @@ export default function useBooksApi() {
     return useQuery('books', () => getAllBooks);
 }
 
-export function useAddBook(history){
-  const addBook = (book)=> api.post('/books', book)
+export function useAddBook(history,){
+
+  const addBook = (book)=>  api.post('/books', book);
+  
 
   return useMutation('books', addBook, {
     onSuccess: () => {

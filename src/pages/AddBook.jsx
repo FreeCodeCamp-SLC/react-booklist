@@ -151,7 +151,7 @@ export default function AddBookPage() {
                 />
               </label>
               <label className="my-3" htmlFor="Series">
-                Lists
+                List
                 {lists?.data.length > 0 && (
                   <select
                     onChange={(e) => {

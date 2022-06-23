@@ -6,7 +6,7 @@ import Rating from './Rating';
 import ConfirmationModal from './ConfirmationModal';
 import { useDeleteList, useDeleteAllBooks } from '../hooks/useListsApi';
 
-const List = ({ id, listName, booksInList, refetchLists, refetchBooks }) => {
+const List = ({ id, list, booksInList, refetchLists, refetchBooks }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const deleteList = useDeleteList(id, setModalIsOpen);
   const deleteAllBooks = useDeleteAllBooks(booksInList);
@@ -61,7 +61,7 @@ const List = ({ id, listName, booksInList, refetchLists, refetchBooks }) => {
             className="absolute top-0 left-0 mt-1.5 ml-1.5"
             onClick={showModal}
             onKeyPress={(e) => e.key === 'Enter' && showModal}
-            aria-label={`delete list ${listName}`}
+            aria-label={`delete list ${list.name}`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -78,7 +78,12 @@ const List = ({ id, listName, booksInList, refetchLists, refetchBooks }) => {
               />
             </svg>
           </button>
-          <h3 className="font-medium text-xl">{listName}</h3>
+
+          <h3 className="font-medium text-xl">
+            {list.name}
+            <span className="text-gray-500 font-medium"> - {list.year}</span>
+          </h3>
+
           <div className="flex items-center gap-2">
             add book{' '}
             <Link
@@ -100,7 +105,7 @@ const List = ({ id, listName, booksInList, refetchLists, refetchBooks }) => {
           {!deleteList.isLoading && (
             <>
               <h2 className="text-2xl">
-                Are you sure you want to delete collection {listName}?
+                Are you sure you want to delete collection {list.name}?
               </h2>
               <div>
                 <p className="text-xl my-4">

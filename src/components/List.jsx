@@ -53,7 +53,7 @@ const List = ({ id, list, booksInList, refetchLists, refetchBooks }) => {
   ));
 
   return (
-    <div className="h-fit w-full bg-white rounded-md shadow-md">
+    <div id={id} className="h-fit w-full bg-white rounded-md shadow-md">
       <div className="border-b border-red-300 border-solid">
         <div className="relative p-6 flex justify-between items-center">
           <button

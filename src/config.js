@@ -9,8 +9,10 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
   const configuration = config;
-  const authToken = loadAuthToken()
+const authToken = loadAuthToken()
   configuration.headers.Authorization =  authToken ? `Bearer ${authToken}` : null;
+  configuration.params = {...config.params, pageItems :config.pageItems, page: config.page}
+console.log('configuration', configuration)
   return configuration;
 });
 

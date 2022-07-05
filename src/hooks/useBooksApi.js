@@ -1,11 +1,14 @@
 import { useQuery, useMutation } from 'react-query';
 import api from '../config'
+import { loadAuthToken } from '../utils/local-storage';
 
 
 export default function useBooksApi() {
-  const getAllBooks = api.get(`/books`) 
+  const getAllBooks = api.get(`/books`, {pageItems: 6, page: 2}) 
   
-    return useQuery('books', () => getAllBooks);
+    return useQuery('books', () => getAllBooks, {
+      enabled: !!loadAuthToken
+    });
 }
 
 export function useAddBook(history,){

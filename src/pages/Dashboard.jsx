@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import useBooksApi from '../hooks/useBooksApi';
-import { saveAuthToken } from '../utils/local-storage';
+import { saveAuthToken, loadAuthToken } from '../utils/local-storage';
 import Book from '../components/Book';
 import Header from '../components/Header';
 import SortOptions from '../components/SortOptions';
@@ -10,6 +10,9 @@ export default function DashboardPage() {
   const { getAccessTokenSilently } = useAuth0();
 
   useEffect(async () => {
+    if (loadAuthToken) {
+      return;
+    }
     const getAccessToken = async () => {
       try {
         const retrievedAccessToken = await getAccessTokenSilently({

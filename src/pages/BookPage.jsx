@@ -48,6 +48,18 @@ export default function BookPage() {
       });
   }
 
+  function deleteBook(e) {
+    e.preventDefault();
+    api
+      .delete(`/books/${bookId}`)
+      .then(() => {
+        history.push('/dashboard');
+      })
+      .catch((err) => {
+        console.warn(err);
+      });
+  }
+
   return (
     <section className=" sm:grid grid-cols-layout grid-rows-layout">
       <Header />
@@ -158,6 +170,14 @@ export default function BookPage() {
               onClick={editBook}
             >
               Save
+            </button>
+            <button
+              className="h-10 ml-4 font-semibold text-white rounded-md bg-booklistRed-dark w-28"
+              type="submit"
+              form="new book"
+              onClick={deleteBook}
+            >
+              Delete
             </button>
           </div>
         </div>

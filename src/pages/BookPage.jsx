@@ -63,7 +63,7 @@ export default function BookPage() {
                 onChange={(e) => {
                   setTitle(e.target.value);
                 }}
-                className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
+                className="w-full mt-1 border-2 py-1.5 px-2 rounded-md"
                 type="text"
                 id="title"
                 name="Title"
@@ -78,7 +78,7 @@ export default function BookPage() {
                 onChange={(e) => {
                   setAuthor(e.target.value);
                 }}
-                className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
+                className="w-full mt-1 border-2 py-1.5 px-2 rounded-md"
                 type="text"
                 id="author"
                 name="Author"

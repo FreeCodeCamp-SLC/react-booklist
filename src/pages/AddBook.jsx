@@ -101,20 +101,6 @@ export default function AddBookPage() {
                 />
               </label>
 
-              <label className="my-3 flex flex-col" htmlFor="Pages">
-                Pages
-                <input
-                  onChange={(e) => {
-                    setPages(e.target.value);
-                  }}
-                  className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
-                  type="number"
-                  id="pages"
-                  name="Pages"
-                  value={pages}
-                  required
-                />
-              </label>
               <label className="my-3" htmlFor="Author">
                 Author(s)
                 <input
@@ -129,6 +115,22 @@ export default function AddBookPage() {
                   required
                 />
               </label>
+
+              <label className="my-3 flex flex-col" htmlFor="Pages">
+                Pages
+                <input
+                  onChange={(e) => {
+                    setPages(e.target.value);
+                  }}
+                  className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
+                  type="number"
+                  id="pages"
+                  name="Pages"
+                  value={pages}
+                  required
+                />
+              </label>
+
               {bookImage && (
                 <div className="flex justify-center py-4">
                   <img src={bookImage} alt="book cover" className="w-32" />

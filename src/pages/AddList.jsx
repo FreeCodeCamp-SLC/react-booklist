@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Header from '../components/Header';
 import api from '../config';
@@ -7,6 +7,12 @@ export default function AddListPage() {
   const [listName, setName] = useState('');
   const [listYear, setYear] = useState(0);
   const [yearValid, setYearValid] = useState(true);
+
+  const getYear = () => setYear(new Date().getFullYear());
+
+  useEffect(() => {
+    getYear();
+  }, []);
 
   const history = useHistory();
 

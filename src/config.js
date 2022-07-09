@@ -11,7 +11,7 @@ api.interceptors.request.use((config) => {
   const configuration = config;
 const authToken = loadAuthToken()
   configuration.headers.Authorization =  authToken ? `Bearer ${authToken}` : null;
-  configuration.params = {...config.params, pageItems :config.pageItems, page: config.page}
+  configuration.params = {...config.params, itemCount :config.itemCount, pageNumber: config.pageNumber}
 console.log('configuration', configuration)
   return configuration;
 });

@@ -1,22 +1,17 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useState } from 'react';
 
-const PageContext = createContext({ pageNumber: 1 });
+const PageContext = createContext();
 
 export const PageProvider = ({ children }) => {
-  const [itemCount, setItemCount] = useState(10);
+  const [itemCount, setItemCount] = useState(3);
   const [pageNumber, setPageNumber] = useState(1);
-
-  const updateItemCount = (newItemCount) => {
-    setItemCount(newItemCount);
-  };
-
-  const updatePageNumber = (newPageNumber) => {
-    setPageNumber(newPageNumber);
-  };
+  const [sortBy, setSortBy] = useState('Title: Ascending');
 
   return (
     <PageContext.Provider
       value={{
+        sortBy,
+        setSortBy,
         itemCount,
         pageNumber,
         setItemCount,

@@ -3,11 +3,13 @@ import api from '../config'
 import { loadAuthToken } from '../utils/local-storage';
 
 
-export default function useBooksApi() {
-  const getAllBooks = api.get(`/books`) 
-  
+export default function useBooksApi(itemCount, pageNumber, sortBy) {
+
+  const getAllBooks = api.get(`/books`, {itemCount, pageNumber, sortBy}) 
+  // const getAllBooks = api.get(`/books`,) 
+
     return useQuery('books', () => getAllBooks, {
-      enabled: !!loadAuthToken
+      enabled: !!loadAuthToken,
     });
 }
 

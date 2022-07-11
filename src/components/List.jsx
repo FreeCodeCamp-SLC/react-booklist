@@ -31,26 +31,34 @@ const List = ({ id, list, booksInList, refetchLists, refetchBooks }) => {
     }
   }
 
-  const books = booksInList.map((book) => (
-    <div key={book.book_id}>
-      <div className="border-b border-gray-200 border-solid" />
-      <div className="p-6 flex items-center">
-        <div className="w-16 mr-6">
-          <img
-            className="object-cover w-full"
-            src={book.image_url || bookImg}
-            alt={book.title}
-          />
+  const books = booksInList.map((book) => {
+    let isFavorite = 'false';
+    if (book.favorite) {
+      isFavorite = 'true';
+    }
+    return (
+      <div key={book.book_id}>
+        <div className="border-b border-gray-200 border-solid" />
+        <div className="p-6 flex items-center">
+          <div className="w-16 mr-6">
+            <img
+              className="object-cover w-full"
+              src={book.image_url || bookImg}
+              alt={book.title}
+            />
+          </div>
+          <div className="w-full text-sm">
+            <span className="font-medium">{book.title}</span>
+            <br />
+            <span className="text-gray-500">{book.author}</span>
+            <br />
+            <span>Favorite: {isFavorite}</span>
+          </div>
+          <Rating placeholderRating="4/5" />
         </div>
-        <div className="w-full text-sm">
-          <span className="font-medium">{book.title}</span>
-          <br />
-          <span className="text-gray-500">{book.author}</span>
-        </div>
-        <Rating placeholderRating="4/5" />
       </div>
-    </div>
-  ));
+    );
+  });
 
   return (
     <div id={id} className="h-fit w-full bg-white rounded-md shadow-md">
@@ -85,7 +93,7 @@ const List = ({ id, list, booksInList, refetchLists, refetchBooks }) => {
           </h3>
 
           <div className="flex items-center gap-2">
-            add book{' '}
+            add book
             <Link
               to="/add-book"
               className="rounded-full bg-white shadow-md border-solid border-gray-200"

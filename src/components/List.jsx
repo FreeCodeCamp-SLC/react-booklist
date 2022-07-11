@@ -31,26 +31,36 @@ const List = ({ id, list, booksInList, refetchLists, refetchBooks }) => {
     }
   }
 
-  const books = booksInList.map((book) => (
-    <div key={book.book_id}>
-      <div className="border-b border-gray-200 border-solid" />
-      <div className="p-6 flex items-center">
-        <div className="w-16 mr-6">
-          <img
-            className="object-cover w-full"
-            src={book.image_url || bookImg}
-            alt={book.title}
-          />
+  const books = booksInList.map((book) => {
+    const linkObj = {
+      pathname: `/book/${book.book_id}`,
+      state: { book },
+    };
+    return (
+      <div key={book.book_id}>
+        <div className="border-b border-gray-200 border-solid" />
+        <div className="p-6 flex items-center">
+          <Link to={linkObj}>
+            <div className="w-16 mr-6">
+              <img
+                className="object-cover w-full"
+                src={book.image_url || bookImg}
+                alt={book.title}
+              />
+            </div>
+          </Link>
+          <div className="w-full text-sm">
+            <Link to={linkObj}>
+              <span className="font-medium">{book.title}</span>
+            </Link>
+            <br />
+            <span className="text-gray-500">{book.author}</span>
+          </div>
+          <Rating placeholderRating="4/5" />
         </div>
-        <div className="w-full text-sm">
-          <span className="font-medium">{book.title}</span>
-          <br />
-          <span className="text-gray-500">{book.author}</span>
-        </div>
-        <Rating placeholderRating="4/5" />
       </div>
-    </div>
-  ));
+    );
+  });
 
   return (
     <div id={id} className="h-fit w-full bg-white rounded-md shadow-md">

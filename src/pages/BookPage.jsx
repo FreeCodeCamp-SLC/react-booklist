@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
+import useListsApi from '../hooks/useListsApi';
 import Header from '../components/Header';
 import api from '../config';
 
@@ -15,13 +16,14 @@ export default function BookPage() {
   const [readingStatusId, setReadingStatusId] = useState(
     book.reading_status_id,
   );
+  const [listId, setListId] = useState(book.list_id);
   const [dateStarted, setDateStarted] = useState(
     convertDate(book.date_started),
   );
   const [dateFinished, setDateFinished] = useState(
     convertDate(book.date_finished),
   );
-  const listId = book.list_id;
+  const { data: lists } = useListsApi();
   const bookId = book.book_id;
   const image = book.image_url;
   const history = useHistory();
@@ -134,6 +136,26 @@ export default function BookPage() {
                 <option value={4}>Finished</option>
                 <option value={5}>Abandoned</option>
               </select>
+            </label>
+            <label className="flex flex-col my-3" htmlFor="Series">
+              List
+              {lists?.data.length > 0 && (
+                <select
+                  onChange={(e) => {
+                    setListId(parseInt(e.target.value));
+                  }}
+                  className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
+                  name="Series"
+                  id="Series"
+                  value={listId}
+                >
+                  {lists?.data.map((item) => (
+                    <option value={item.list_id} key={item.list_id}>
+                      {item.name}
+                    </option>
+                  ))}
+                </select>
+              )}
             </label>
             <label className="flex flex-col my-3" htmlFor="date-started">
               Date Started

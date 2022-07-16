@@ -1,7 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { data } from 'autoprefixer';
 import useListsApi from '../hooks/useListsApi';
 import Header from '../components/Header';
 import useBooksApi from '../hooks/useBooksApi';
@@ -25,13 +24,17 @@ export default function Lists() {
     refetch: refetchBooks,
   } = useBooksApi();
   const {
-    itemCount,
+    listsItemCount,
     pageNumber,
-    setItemCount,
+    setListsItemCount,
     setPageNumber,
-    sortBy,
     setSortBy,
   } = useContext(PageContext);
+
+  useEffect(() => {
+    setPageNumber(1);
+  }, []);
+
   // const [sortBy, setSortBy] = useState('Recently Added - Ascending');
 
   // const sortHandler = () => {
@@ -176,7 +179,7 @@ export default function Lists() {
           </h2>
         )}
         <div className="grid grid-cols-1 pb-6 mx-6 gap-6 lg:grid-cols-2 xl:grid-cols-3">
-          {lists?.data.map((list) => (
+          {lists?.data[0].map((list) => (
             <List
               key={list.list_id}
               list={list}
@@ -194,10 +197,12 @@ export default function Lists() {
         <PageSelectors
           setPageNumber={setPageNumber}
           pageNumber={pageNumber}
-          itemCount={itemCount}
-          totalPages={books.data[1]}
+          listsItemCount={listsItemCount}
+          totalBooksPages={books.data[1]}
+          totalListsPages={lists.data[1]}
+          isLists
         />
-        <PaginationOptions setItemCount={setItemCount} isLists />
+        <PaginationOptions setListsItemCount={setListsItemCount} isLists />
       </div>
     </section>
   );

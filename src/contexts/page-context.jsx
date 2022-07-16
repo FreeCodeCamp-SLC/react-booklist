@@ -3,7 +3,8 @@ import React, { createContext, useState } from 'react';
 const PageContext = createContext();
 
 export const PageProvider = ({ children }) => {
-  const [itemCount, setItemCount] = useState(3);
+  const [booksItemCount, setBooksItemCount] = useState(10);
+  const [listsItemCount, setListsItemCount] = useState(5);
   const [pageNumber, setPageNumber] = useState(1);
   const [sortBy, setSortBy] = useState('Title: Ascending');
 
@@ -12,9 +13,11 @@ export const PageProvider = ({ children }) => {
       value={{
         sortBy,
         setSortBy,
-        itemCount,
+        booksItemCount,
+        listsItemCount,
         pageNumber,
-        setItemCount,
+        setBooksItemCount,
+        setListsItemCount,
         setPageNumber,
       }}
     >

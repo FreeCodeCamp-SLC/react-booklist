@@ -1,20 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function PageSelectors({
   setPageNumber,
   pageNumber,
-  itemCount,
-  totalPages,
+  listsItemCount,
+  booksItemCount,
+  totalBooksPages,
+  totalListsPages,
+  isLists,
 }) {
-  const maxPage = Math.ceil(totalPages.totalBookCount / itemCount);
-  const [pageInput, setPageInput] = useState(maxPage);
+  console.log(
+    'totalBooksPages?.totalBookCount ',
+    totalBooksPages?.totalBookCount,
+  );
+
+  const booksMaxPage = Math.ceil(
+    totalBooksPages?.totalBookCount / booksItemCount,
+  );
+  const listsMaxPage = Math.ceil(
+    totalListsPages?.totalListCount / listsItemCount,
+  );
+  const [pageInput, setPageInput] = useState(0);
+
+  useEffect(() => {
+    if (isLists) {
+      setPageInput(listsMaxPage);
+    } else {
+      setPageInput(booksMaxPage);
+    }
+    console.log('pageInput', pageInput);
+  }, []);
 
   const pageInputHandler = (_pageNumber) => {
-    if (_pageNumber <= maxPage && _pageNumber > 0) {
-      console.log('max Page', maxPage);
-      console.log('_pageNumber', _pageNumber);
-
+    if (
+      _pageNumber <= isLists ? listsMaxPage : booksMaxPage && _pageNumber > 0
+    ) {
       setPageNumber(_pageNumber);
     }
   };
@@ -68,7 +89,7 @@ export default function PageSelectors({
       <div>
         <div> {pageNumber}</div>
       </div>
-      {pageNumber !== maxPage && (
+      {pageNumber < booksMaxPage && (
         <>
           <button
             className="border-1 border-gray-500 p-2"
@@ -111,7 +132,55 @@ export default function PageSelectors({
             value={pageInput}
             type="number"
             maxLength={3}
-            max={maxPage}
+            max={booksMaxPage}
+            onChange={(e) => setPageInput(e.target.value)}
+          />
+        </>
+      )}
+      {isLists && pageNumber < listsMaxPage && (
+        <>
+          <button
+            className="border-1 border-gray-500 p-2"
+            onClick={() => setPageNumber(pageNumber++)}
+            role="button"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>{' '}
+          </button>
+          <button onClick={() => pageInputHandler(pageInput)}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M13 5l7 7-7 7M5 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+          <input
+            className="w-10"
+            value={pageInput}
+            type="number"
+            maxLength={3}
+            max={listsMaxPage}
             onChange={(e) => setPageInput(e.target.value)}
           />
         </>

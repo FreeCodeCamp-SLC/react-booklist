@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import useBooksApi from '../hooks/useBooksApi';
-import { saveAuthToken, loadAuthToken } from '../utils/local-storage';
+import { saveAuthToken } from '../utils/local-storage';
 import Book from '../components/Book';
 import Header from '../components/Header';
 import SortOptions from '../components/SortOptions';
@@ -12,17 +12,17 @@ import PaginationOptions from '../components/PaginationOptions';
 export default function DashboardPage() {
   const { getAccessTokenSilently } = useAuth0();
   const {
-    itemCount,
+    booksItemCount,
     pageNumber,
-    setItemCount,
+    setBooksItemCount,
+    setListsItemCount,
+    listsItemCount,
     setPageNumber,
     sortBy,
     setSortBy,
   } = useContext(PageContext);
   useEffect(async () => {
-    if (loadAuthToken) {
-      return;
-    }
+    setPageNumber(1);
     const getAccessToken = async () => {
       try {
         const retrievedAccessToken = await getAccessTokenSilently({
@@ -42,12 +42,12 @@ export default function DashboardPage() {
     isLoading,
     isError,
     refetch,
-  } = useBooksApi(itemCount, pageNumber, sortBy);
+  } = useBooksApi(booksItemCount, pageNumber, sortBy);
 
   console.log('books', books);
   useEffect(() => {
     refetch();
-  }, [itemCount, pageNumber, sortBy]);
+  }, [booksItemCount, pageNumber, sortBy]);
 
   return (
     <section className="sm:grid grid-cols-layout grid-rows-layout">
@@ -78,10 +78,14 @@ export default function DashboardPage() {
             <PageSelectors
               setPageNumber={setPageNumber}
               pageNumber={pageNumber}
-              itemCount={itemCount}
-              totalPages={books.data[1]}
+              listsItemCount={listsItemCount}
+              booksItemCount={booksItemCount}
+              totalBooksPages={books.data[1]}
             />
-            <PaginationOptions setItemCount={setItemCount} />
+            <PaginationOptions
+              setBooksItemCount={setBooksItemCount}
+              setListsItemCount={setListsItemCount}
+            />
           </>
         )}
       </div>

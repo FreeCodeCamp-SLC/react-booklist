@@ -7,6 +7,7 @@ import Header from '../components/Header';
 import SortOptions from '../components/SortOptions';
 import PageContext from '../contexts/page-context';
 import PageSelectors from '../components/PageSelectors';
+import PaginationOptions from '../components/PaginationOptions';
 
 export default function DashboardPage() {
   const { getAccessTokenSilently } = useAuth0();
@@ -80,6 +81,7 @@ export default function DashboardPage() {
               itemCount={itemCount}
               totalPages={books.data[1]}
             />
+            <PaginationOptions setItemCount={setItemCount} />
           </>
         )}
       </div>

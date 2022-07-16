@@ -1,22 +1,18 @@
 import React from 'react';
 
-export default function PaginationOptions({
-  updateItemCount,
-  updatePageNumber,
-  isLists,
-}) {
+export default function PaginationOptions({ setItemCount, isLists }) {
   return (
     <div className="flex space-x-2 items-center">
       <label htmlFor="paginationOptions">Show</label>
       <select
         id="paginationOptions"
         name="paginationOptions"
-        onChange={(e) => updateItemCount(e.target.value)}
+        onChange={(e) => setItemCount(e.target.value)}
       >
-        <option>10</option>
-        <option>25</option>
-        <option>50</option>
-        <option>100</option>
+        <option>{isLists ? 5 : 10}</option>
+        <option>{isLists ? 10 : 25}</option>
+        <option>{isLists ? 15 : 50}</option>
+        <option>{isLists ? 20 : 100}</option>
       </select>
       <span>{isLists ? 'lists' : 'books'} per page</span>
     </div>

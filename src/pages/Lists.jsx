@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 
+import { data } from 'autoprefixer';
 import useListsApi from '../hooks/useListsApi';
 import Header from '../components/Header';
 import useBooksApi from '../hooks/useBooksApi';
 import List from '../components/List';
 import SortOptions from '../components/SortOptions';
+import PageSelectors from '../components/PageSelectors';
+import PaginationOptions from '../components/PaginationOptions';
+import PageContext from '../contexts/page-context';
 
 export default function Lists() {
   const {
@@ -20,111 +24,120 @@ export default function Lists() {
     isError: booksIsError,
     refetch: refetchBooks,
   } = useBooksApi();
-  const [sortBy, setSortBy] = useState('Recently Added - Ascending');
+  const {
+    itemCount,
+    pageNumber,
+    setItemCount,
+    setPageNumber,
+    sortBy,
+    setSortBy,
+  } = useContext(PageContext);
+  // const [sortBy, setSortBy] = useState('Recently Added - Ascending');
 
-  const sortHandler = () => {
-    const sortedLists = [...lists.data];
-    switch (sortBy) {
-      case 'By Year - Ascending':
-        sortedLists.sort((a, b) => {
-          if (a.year < b.year) {
-            return -1;
-          }
-          if (a.year > b.year) {
-            return 1;
-          }
-          return 0;
-        });
-        break;
-      case 'By Year - Descending':
-        sortedLists.sort((a, b) => {
-          if (a.year < b.year) {
-            return 1;
-          }
-          if (a.year > b.year) {
-            return -1;
-          }
-          return 0;
-        });
-        break;
-      case 'Alphabetically - Ascending':
-        sortedLists.sort((a, b) => {
-          const aLowerCase = a.name.toLowerCase();
-          const bLowerCase = b.name.toLowerCase();
-          if (aLowerCase < bLowerCase) {
-            return -1;
-          }
-          if (aLowerCase > bLowerCase) {
-            return 1;
-          }
-          return 0;
-        });
-        break;
-      case 'Alphabetically - Descending':
-        sortedLists.sort((a, b) => {
-          const aLowerCase = a.name.toLowerCase();
-          const bLowerCase = b.name.toLowerCase();
-          if (aLowerCase < bLowerCase) {
-            return 1;
-          }
-          if (aLowerCase > bLowerCase) {
-            return -1;
-          }
-          return 0;
-        });
-        break;
-      case 'Recently Added - Ascending':
-        sortedLists.sort((a, b) => {
-          if (a.list_id < b.list_id) {
-            return 1;
-          }
-          if (a.list_id > b.list_id) {
-            return -1;
-          }
-          return 0;
-        });
-        break;
-      case 'Recently Added - Descending':
-        sortedLists.sort((a, b) => {
-          if (a.list_id < b.list_id) {
-            return -1;
-          }
-          if (a.list_id > b.list_id) {
-            return 1;
-          }
-          return 0;
-        });
-        break;
-      default:
-        sortedLists.sort((a, b) => {
-          if (a.list_id < b.list_id) {
-            return -1;
-          }
-          if (a.list_id > b.list_id) {
-            return 1;
-          }
-          return 0;
-        });
-        break;
-    }
-    return (
-      <div className="grid grid-cols-1 pb-6 mx-6 gap-6 lg:grid-cols-2 xl:grid-cols-3">
-        {sortedLists?.map((list) => (
-          <List
-            key={list.list_id}
-            list={list}
-            id={list.list_id}
-            booksInList={books?.data.filter(
-              (book) => book.list_id === list.list_id,
-            )}
-            refetchLists={refetchLists}
-            refetchBooks={refetchBooks}
-          />
-        ))}
-      </div>
-    );
-  };
-
+  // const sortHandler = () => {
+  //   const sortedLists = [...lists.data];
+  //   switch (sortBy) {
+  //     case 'By Year - Ascending':
+  //       sortedLists.sort((a, b) => {
+  //         if (a.year < b.year) {
+  //           return -1;
+  //         }
+  //         if (a.year > b.year) {
+  //           return 1;
+  //         }
+  //         return 0;
+  //       });
+  //       break;
+  //     case 'By Year - Descending':
+  //       sortedLists.sort((a, b) => {
+  //         if (a.year < b.year) {
+  //           return 1;
+  //         }
+  //         if (a.year > b.year) {
+  //           return -1;
+  //         }
+  //         return 0;
+  //       });
+  //       break;
+  //     case 'Alphabetically - Ascending':
+  //       sortedLists.sort((a, b) => {
+  //         const aLowerCase = a.name.toLowerCase();
+  //         const bLowerCase = b.name.toLowerCase();
+  //         if (aLowerCase < bLowerCase) {
+  //           return -1;
+  //         }
+  //         if (aLowerCase > bLowerCase) {
+  //           return 1;
+  //         }
+  //         return 0;
+  //       });
+  //       break;
+  //     case 'Alphabetically - Descending':
+  //       sortedLists.sort((a, b) => {
+  //         const aLowerCase = a.name.toLowerCase();
+  //         const bLowerCase = b.name.toLowerCase();
+  //         if (aLowerCase < bLowerCase) {
+  //           return 1;
+  //         }
+  //         if (aLowerCase > bLowerCase) {
+  //           return -1;
+  //         }
+  //         return 0;
+  //       });
+  //       break;
+  //     case 'Recently Added - Ascending':
+  //       sortedLists.sort((a, b) => {
+  //         if (a.list_id < b.list_id) {
+  //           return 1;
+  //         }
+  //         if (a.list_id > b.list_id) {
+  //           return -1;
+  //         }
+  //         return 0;
+  //       });
+  //       break;
+  //     case 'Recently Added - Descending':
+  //       sortedLists.sort((a, b) => {
+  //         if (a.list_id < b.list_id) {
+  //           return -1;
+  //         }
+  //         if (a.list_id > b.list_id) {
+  //           return 1;
+  //         }
+  //         return 0;
+  //       });
+  //       break;
+  //     default:
+  //       sortedLists.sort((a, b) => {
+  //         if (a.list_id < b.list_id) {
+  //           return -1;
+  //         }
+  //         if (a.list_id > b.list_id) {
+  //           return 1;
+  //         }
+  //         return 0;
+  //       });
+  //       break;
+  //   }
+  //   return (
+  //     <div className="grid grid-cols-1 pb-6 mx-6 gap-6 lg:grid-cols-2 xl:grid-cols-3">
+  //       {lists?.map((list) => (
+  //         <List
+  //           key={list.list_id}
+  //           list={list}
+  //           id={list.list_id}
+  //           booksInList={books?.data.filter(
+  //             (book) => book.list_id === list.list_id,
+  //           )}
+  //           refetchLists={refetchLists}
+  //           refetchBooks={refetchBooks}
+  //         />
+  //       ))}
+  //     </div>
+  //   );
+  // };
+  console.log('lists', lists);
+  console.log('books', books);
   return (
     <section className="sm:grid grid-cols-layout grid-rows-layout">
       <Header />
@@ -162,8 +175,29 @@ export default function Lists() {
             Error Fetching Books
           </h2>
         )}
-        {lists?.data && sortHandler(setSortBy)}
+        <div className="grid grid-cols-1 pb-6 mx-6 gap-6 lg:grid-cols-2 xl:grid-cols-3">
+          {lists?.data.map((list) => (
+            <List
+              key={list.list_id}
+              list={list}
+              id={list.list_id}
+              booksInList={books?.data[0].filter(
+                (book) => book.list_id === list.list_id,
+              )}
+              refetchLists={refetchLists}
+              refetchBooks={refetchBooks}
+            />
+          ))}
+        </div>
+
         <div className="mx-5 overflow-hidden rounded-md shadow-md mt-7" />
+        <PageSelectors
+          setPageNumber={setPageNumber}
+          pageNumber={pageNumber}
+          itemCount={itemCount}
+          totalPages={books.data[1]}
+        />
+        <PaginationOptions setItemCount={setItemCount} isLists />
       </div>
     </section>
   );

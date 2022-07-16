@@ -10,18 +10,14 @@ export default function PageSelectors({
   totalListsPages,
   isLists,
 }) {
-  console.log(
-    'totalBooksPages?.totalBookCount ',
-    totalBooksPages?.totalBookCount,
-  );
-
   const booksMaxPage = Math.ceil(
     totalBooksPages?.totalBookCount / booksItemCount,
   );
+
   const listsMaxPage = Math.ceil(
     totalListsPages?.totalListCount / listsItemCount,
   );
-  const [pageInput, setPageInput] = useState(0);
+  const [pageInput, setPageInput] = useState(1);
 
   useEffect(() => {
     if (isLists) {
@@ -29,13 +25,14 @@ export default function PageSelectors({
     } else {
       setPageInput(booksMaxPage);
     }
-    console.log('pageInput', pageInput);
   }, []);
 
   const pageInputHandler = (_pageNumber) => {
-    if (
-      _pageNumber <= isLists ? listsMaxPage : booksMaxPage && _pageNumber > 0
-    ) {
+    if (isLists) {
+      if (_pageNumber <= listsMaxPage && _pageNumber > 0) {
+        setPageNumber(_pageNumber);
+      }
+    } else if (_pageNumber <= booksMaxPage && _pageNumber > 0) {
       setPageNumber(_pageNumber);
     }
   };

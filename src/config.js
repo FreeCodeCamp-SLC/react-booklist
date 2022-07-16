@@ -10,8 +10,17 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
   const configuration = config;
 const authToken = loadAuthToken()
+let itemCount;
+const {booksItemCount} = config;
+const {listsItemCount} = config;
+if(booksItemCount){
+itemCount = booksItemCount
+} else {
+  itemCount = listsItemCount
+}
+
   configuration.headers.Authorization =  authToken ? `Bearer ${authToken}` : null;
-  configuration.params = {...config.params, itemCount :config.itemCount, pageNumber: config.pageNumber, sortBy: config.sortBy}
+  configuration.params = {...config.params, itemCount, pageNumber: config.pageNumber, sortBy: config.sortBy, allBooks: config.allBooks}
   return configuration;
 });
 

@@ -1,8 +1,8 @@
 import { useQuery, useMutation } from 'react-query';
 import api from '../config'
 
-export default function useListsApi() {
-  const getAllLists = () => api.get(`/lists`) 
+export default function useListsApi(booksItemCount, pageNumber, sortBy) {
+  const getAllLists = () => api.get(`/lists`, {booksItemCount, pageNumber, sortBy}) 
     return useQuery('lists', getAllLists);
 }
 

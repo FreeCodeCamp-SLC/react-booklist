@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import useListsApi from '../hooks/useListsApi';
 import Header from '../components/Header';
-import useBooksApi from '../hooks/useBooksApi';
+import { useGetAllBooks } from '../hooks/useBooksApi';
 import List from '../components/List';
 import SortOptions from '../components/SortOptions';
 import PageSelectors from '../components/PageSelectors';
@@ -12,142 +12,40 @@ import PageContext from '../contexts/page-context';
 
 export default function Lists() {
   const {
-    data: lists,
-    isLoading: listsIsLoading,
-    isError: listsIsError,
-    refetch: refetchLists,
-  } = useListsApi();
-  const {
-    data: books,
-    isLoading: booksIsLoading,
-    isError: booksIsError,
-    refetch: refetchBooks,
-  } = useBooksApi();
-  const {
     listsItemCount,
     pageNumber,
     setListsItemCount,
     setPageNumber,
     setSortBy,
+    sortBy,
   } = useContext(PageContext);
-
+  const {
+    data: lists,
+    isLoading: listsIsLoading,
+    isError: listsIsError,
+    refetch: refetchLists,
+  } = useListsApi(listsItemCount, pageNumber, sortBy);
+  const {
+    data: books,
+    isLoading: booksIsLoading,
+    isError: booksIsError,
+    refetch: refetchBooks,
+  } = useGetAllBooks();
   useEffect(() => {
     setPageNumber(1);
   }, []);
+  useEffect(() => {
+    refetchLists();
+    refetchBooks();
+  }, [listsItemCount, pageNumber, sortBy]);
 
-  // const [sortBy, setSortBy] = useState('Recently Added - Ascending');
-
-  // const sortHandler = () => {
-  //   const sortedLists = [...lists.data];
-  //   switch (sortBy) {
-  //     case 'By Year - Ascending':
-  //       sortedLists.sort((a, b) => {
-  //         if (a.year < b.year) {
-  //           return -1;
-  //         }
-  //         if (a.year > b.year) {
-  //           return 1;
-  //         }
-  //         return 0;
-  //       });
-  //       break;
-  //     case 'By Year - Descending':
-  //       sortedLists.sort((a, b) => {
-  //         if (a.year < b.year) {
-  //           return 1;
-  //         }
-  //         if (a.year > b.year) {
-  //           return -1;
-  //         }
-  //         return 0;
-  //       });
-  //       break;
-  //     case 'Alphabetically - Ascending':
-  //       sortedLists.sort((a, b) => {
-  //         const aLowerCase = a.name.toLowerCase();
-  //         const bLowerCase = b.name.toLowerCase();
-  //         if (aLowerCase < bLowerCase) {
-  //           return -1;
-  //         }
-  //         if (aLowerCase > bLowerCase) {
-  //           return 1;
-  //         }
-  //         return 0;
-  //       });
-  //       break;
-  //     case 'Alphabetically - Descending':
-  //       sortedLists.sort((a, b) => {
-  //         const aLowerCase = a.name.toLowerCase();
-  //         const bLowerCase = b.name.toLowerCase();
-  //         if (aLowerCase < bLowerCase) {
-  //           return 1;
-  //         }
-  //         if (aLowerCase > bLowerCase) {
-  //           return -1;
-  //         }
-  //         return 0;
-  //       });
-  //       break;
-  //     case 'Recently Added - Ascending':
-  //       sortedLists.sort((a, b) => {
-  //         if (a.list_id < b.list_id) {
-  //           return 1;
-  //         }
-  //         if (a.list_id > b.list_id) {
-  //           return -1;
-  //         }
-  //         return 0;
-  //       });
-  //       break;
-  //     case 'Recently Added - Descending':
-  //       sortedLists.sort((a, b) => {
-  //         if (a.list_id < b.list_id) {
-  //           return -1;
-  //         }
-  //         if (a.list_id > b.list_id) {
-  //           return 1;
-  //         }
-  //         return 0;
-  //       });
-  //       break;
-  //     default:
-  //       sortedLists.sort((a, b) => {
-  //         if (a.list_id < b.list_id) {
-  //           return -1;
-  //         }
-  //         if (a.list_id > b.list_id) {
-  //           return 1;
-  //         }
-  //         return 0;
-  //       });
-  //       break;
-  //   }
-  //   return (
-  //     <div className="grid grid-cols-1 pb-6 mx-6 gap-6 lg:grid-cols-2 xl:grid-cols-3">
-  //       {lists?.map((list) => (
-  //         <List
-  //           key={list.list_id}
-  //           list={list}
-  //           id={list.list_id}
-  //           booksInList={books?.data.filter(
-  //             (book) => book.list_id === list.list_id,
-  //           )}
-  //           refetchLists={refetchLists}
-  //           refetchBooks={refetchBooks}
-  //         />
-  //       ))}
-  //     </div>
-  //   );
-  // };
-  console.log('lists', lists);
-  console.log('books', books);
   return (
     <section className="sm:grid grid-cols-layout grid-rows-layout">
       <Header />
       <div className="min-h-full col-start-2 row-start-2 bg-gray-100 ">
         <div className="flex py-5 px-6 justify-between items-center">
           <h2 className="text-3xl font-bold text-gray-900">Lists</h2>
-          <SortOptions setSortBy={setSortBy} isLists />
+          <SortOptions setSortBy={setSortBy} sortBy={sortBy} isLists />
           <div className="flex flex-col items-center">
             <Link className="text-booklistBlue-dark" to="add-list">
               <svg
@@ -178,31 +76,35 @@ export default function Lists() {
             Error Fetching Books
           </h2>
         )}
-        <div className="grid grid-cols-1 pb-6 mx-6 gap-6 lg:grid-cols-2 xl:grid-cols-3">
-          {lists?.data[0].map((list) => (
-            <List
-              key={list.list_id}
-              list={list}
-              id={list.list_id}
-              booksInList={books?.data[0].filter(
-                (book) => book.list_id === list.list_id,
-              )}
-              refetchLists={refetchLists}
-              refetchBooks={refetchBooks}
-            />
-          ))}
-        </div>
+        {lists?.data && books?.data && (
+          <>
+            <div className="grid grid-cols-1 pb-6 mx-6 gap-6 lg:grid-cols-2 xl:grid-cols-3">
+              {lists?.data[0].map((list) => (
+                <List
+                  key={list.list_id}
+                  list={list}
+                  id={list.list_id}
+                  booksInList={books?.data.filter(
+                    (book) => book.list_id === list.list_id,
+                  )}
+                  refetchLists={refetchLists}
+                  refetchBooks={refetchBooks}
+                />
+              ))}
+            </div>
 
-        <div className="mx-5 overflow-hidden rounded-md shadow-md mt-7" />
-        <PageSelectors
-          setPageNumber={setPageNumber}
-          pageNumber={pageNumber}
-          listsItemCount={listsItemCount}
-          totalBooksPages={books.data[1]}
-          totalListsPages={lists.data[1]}
-          isLists
-        />
-        <PaginationOptions setListsItemCount={setListsItemCount} isLists />
+            <div className="mx-5 overflow-hidden rounded-md shadow-md mt-7" />
+            <PageSelectors
+              setPageNumber={setPageNumber}
+              pageNumber={pageNumber}
+              listsItemCount={listsItemCount}
+              totalBooksPages={books.data.length}
+              totalListsPages={lists.data[1]}
+              isLists
+            />
+            <PaginationOptions setListsItemCount={setListsItemCount} isLists />
+          </>
+        )}
       </div>
     </section>
   );

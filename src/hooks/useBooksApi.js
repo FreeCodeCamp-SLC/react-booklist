@@ -3,20 +3,24 @@ import api from '../config'
 import { loadAuthToken } from '../utils/local-storage';
 
 
-export default function useBooksApi(itemCount, pageNumber, sortBy) {
+export default function useGetBooks(booksItemCount, pageNumber, sortBy) {
 
-  const getAllBooks = api.get(`/books`, {itemCount, pageNumber, sortBy}) 
-  // const getAllBooks = api.get(`/books`,) 
-    return useQuery('books', () => getAllBooks, {
+
+  const getAllBooks = api.get(`/books`,{booksItemCount, pageNumber, sortBy}) 
+
+    return useQuery('books', () => getAllBooks,{
       enabled: !!loadAuthToken(),
     });
 }
 
-export function useAddBook(history,){
+export function useGetAllBooks(){
+const getAllBooks = api.get(`/books`,{allBooks:true} ) 
+  return useQuery('allBooks', () => getAllBooks);
+}
 
+export function useAddBook(history,){
   const addBook = (book)=>  api.post('/books', book);
   
-
   return useMutation('books', addBook, {
     onSuccess: () => {
       history.push('/dashboard');

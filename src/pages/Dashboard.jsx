@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import useBooksApi from '../hooks/useBooksApi';
+import useGetBooks from '../hooks/useBooksApi';
 import { saveAuthToken } from '../utils/local-storage';
 import Book from '../components/Book';
 import Header from '../components/Header';
@@ -42,9 +42,8 @@ export default function DashboardPage() {
     isLoading,
     isError,
     refetch,
-  } = useBooksApi(booksItemCount, pageNumber, sortBy);
+  } = useGetBooks(booksItemCount, pageNumber, sortBy);
 
-  console.log('books', books);
   useEffect(() => {
     refetch();
   }, [booksItemCount, pageNumber, sortBy]);
@@ -56,7 +55,7 @@ export default function DashboardPage() {
         <div className="px-5 pt-5 flex justify-between">
           <h2 className=" text-3xl font-bold text-gray-900">Books</h2>
 
-          <SortOptions setSortBy={setSortBy} />
+          <SortOptions setSortBy={setSortBy} sortBy={sortBy} />
         </div>
         {isLoading && (
           <h2 className="px-5 pt-5 text-3xl font-bold text-gray-900">

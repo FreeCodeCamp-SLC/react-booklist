@@ -7,9 +7,8 @@ export default function useBooksApi(itemCount, pageNumber, sortBy) {
 
   const getAllBooks = api.get(`/books`, {itemCount, pageNumber, sortBy}) 
   // const getAllBooks = api.get(`/books`,) 
-
     return useQuery('books', () => getAllBooks, {
-      enabled: !!loadAuthToken,
+      enabled: !!loadAuthToken(),
     });
 }
 

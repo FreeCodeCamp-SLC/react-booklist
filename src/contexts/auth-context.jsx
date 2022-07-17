@@ -1,3 +1,5 @@
+// looks like we aren't using an auth-context - just auth-0
+
 import { createContext, useContext, useState } from 'react';
 import { loadAuthToken } from '../utils/local-storage';
 

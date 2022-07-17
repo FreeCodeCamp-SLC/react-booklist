@@ -23,8 +23,13 @@ export default function Book({ book }) {
     pathname: `/book/${book.book_id}`,
     state: { book },
   };
+
+  let isFavorite = 'false';
+  if (book.favorite) {
+    isFavorite = 'true';
+  }
   return (
-    <div className="relative flex flex-col items-center justify-center bg-white w-full  mt-7 mx-auto pt-6 pb-32 px-6 text-center rounded-md shadow-md">
+    <div className="flex flex-col items-center justify-center bg-white w-full  mt-7 mx-auto pt-6 pb-4 px-6 text-center rounded-md shadow-md">
       <Link to={linkObj}>
         <div className="max-h-48 rounded-sm overflow-hidden">
           <img
@@ -36,19 +41,19 @@ export default function Book({ book }) {
       </Link>
       <h3 className="text-gray-900 font-extrabold mt-3">{book.title}</h3>
       <h4 className="text-gray-600 mt-2">{book.author}</h4>
-      <div className="absolute bottom-0 w-full">
+      <div className="w-full">
         {list && (
           <HashLink to={`/lists#${list.list_id}`}>
             <button
               type="button"
-              className="bg-booklistRed text-white py-1 px-3 rounded-3xl font-semibold mt-3.5 mb-10 shadow-md hover:bg-booklistRed-light hover:-translate-y-0.5 transform transition focus:outline-none focus:ring focus:ring-offset-2 focus:ring-booklistRed focus:ring-opacity-50 active:bg-booklistRed-dark"
+              className="bg-booklistRed text-white py-1 px-3 rounded-3xl font-semibold mt-4 shadow-md hover:bg-booklistRed-light hover:-translate-y-0.5 transform transition focus:outline-none focus:ring focus:ring-offset-2 focus:ring-booklistRed focus:ring-opacity-50 active:bg-booklistRed-dark"
             >
               {list.name}
             </button>
           </HashLink>
         )}
-
-        <div className=" pb-4 px-8  flex items-center justify-between font-bold">
+        <p className="mt-4">Favorite: {isFavorite}</p>
+        <div className=" mt-4 pb-4 px-8  flex items-center justify-between font-bold">
           <div className="flex items-center">
             <img className="h-4 mr-1" src={bookmark} alt="bookmark icon" />
             Bookmark

@@ -12,6 +12,7 @@ export default function BookPage() {
   const [title, setTitle] = useState(book.title);
   const [author, setAuthor] = useState(book.author);
   const [pages, setPages] = useState(book.pages);
+  const [favorite, setFavorite] = useState(book.favorite);
   const [readingStatusId, setReadingStatusId] = useState(
     book.reading_status_id,
   );
@@ -33,6 +34,7 @@ export default function BookPage() {
       title,
       author,
       pages,
+      favorite,
       image_url: image,
       reading_status_id: readingStatusId ?? 1,
     };
@@ -117,6 +119,22 @@ export default function BookPage() {
             <div className="flex justify-center py-4">
               <img src={image} alt="book cover" className="w-32" />
             </div>
+            <label className="flex flex-col my-3" htmlFor="Favorite">
+              Favorite
+              <div className="text-gray-500">
+                Add this book to your list of favorites
+              </div>
+              <input
+                onChange={(e) => {
+                  setFavorite(e.target.checked);
+                }}
+                className="w-5 mt-1"
+                checked={favorite}
+                type="checkbox"
+                name="Favorite"
+                id="Favorite"
+              />
+            </label>
             <label className="flex flex-col my-3" htmlFor="reading-status">
               Reading Status
               <select

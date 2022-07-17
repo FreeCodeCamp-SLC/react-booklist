@@ -36,6 +36,9 @@ export default function AddBookPage() {
     if (author) {
       bookDetails.author = author;
     }
+    if (favorite) {
+      bookDetails.favorite = favorite;
+    }
     addBook(bookDetails);
   }
   function autofillBookInfo(book) {
@@ -143,13 +146,13 @@ export default function AddBookPage() {
                 </div>
                 <input
                   onChange={(e) => {
-                    setFavorite(e.target.value);
+                    setFavorite(e.target.checked);
                   }}
                   className="w-5 mt-1"
+                  checked={favorite}
                   type="checkbox"
                   name="Favorite"
                   id="Favorite"
-                  value={favorite}
                 />
               </label>
               <label className="my-3" htmlFor="Series">

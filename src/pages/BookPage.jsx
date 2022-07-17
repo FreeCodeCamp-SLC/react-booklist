@@ -180,7 +180,7 @@ export default function BookPage() {
                     id="Series"
                     value={listId}
                   >
-                    {lists?.data.map((item) => (
+                    {lists?.data[0].map((item) => (
                       <option value={item.list_id} key={item.list_id}>
                         {item.name}
                       </option>

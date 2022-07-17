@@ -14,7 +14,11 @@ export default function Book({ book }) {
       return;
     }
     const getList = () => {
-      setList(lists?.data.filter((list) => list.list_id === book.list_id)[0]);
+      setList(
+        lists?.data.filter(
+          (singleList) => singleList.list_id === book.list_id,
+        )[0],
+      );
     };
     getList();
   }, [lists, book]);

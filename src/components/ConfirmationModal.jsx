@@ -18,7 +18,7 @@ const ConfirmationModal = ({ children, setModalIsOpen, modalCannotClose }) => {
             className="absolute right-0 top-0 mt-3 mr-4 closeModal"
             onClick={closeModal}
             type="button"
-            aria-label={`close modal`}
+            aria-label="close modal"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

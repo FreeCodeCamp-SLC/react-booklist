@@ -32,6 +32,10 @@ const List = ({ id, list, booksInList, refetchLists, refetchBooks }) => {
   }
 
   const books = booksInList.map((book) => {
+    const linkObj = {
+      pathname: `/book/${book.book_id}`,
+      state: { book },
+    };
     let isFavorite = 'false';
     if (book.favorite) {
       isFavorite = 'true';
@@ -40,13 +44,15 @@ const List = ({ id, list, booksInList, refetchLists, refetchBooks }) => {
       <div key={book.book_id}>
         <div className="border-b border-gray-200 border-solid" />
         <div className="p-6 flex items-center">
-          <div className="w-16 mr-6">
-            <img
-              className="object-cover w-full"
-              src={book.image_url || bookImg}
-              alt={book.title}
-            />
-          </div>
+          <Link to={linkObj}>
+            <div className="w-16 mr-6">
+              <img
+                className="object-cover w-full"
+                src={book.image_url || bookImg}
+                alt={book.title}
+              />
+            </div>
+          </Link>
           <div className="w-full text-sm">
             <span className="font-medium">{book.title}</span>
             <br />

@@ -36,6 +36,10 @@ const List = ({ id, list, booksInList, refetchLists, refetchBooks }) => {
       pathname: `/book/${book.book_id}`,
       state: { book },
     };
+    let isFavorite = 'false';
+    if (book.favorite) {
+      isFavorite = 'true';
+    }
     return (
       <div key={book.book_id}>
         <div className="border-b border-gray-200 border-solid" />
@@ -50,11 +54,11 @@ const List = ({ id, list, booksInList, refetchLists, refetchBooks }) => {
             </div>
           </Link>
           <div className="w-full text-sm">
-            <Link to={linkObj}>
-              <span className="font-medium">{book.title}</span>
-            </Link>
+            <span className="font-medium">{book.title}</span>
             <br />
             <span className="text-gray-500">{book.author}</span>
+            <br />
+            <span>Favorite: {isFavorite}</span>
           </div>
           <Rating placeholderRating="4/5" />
         </div>
@@ -95,7 +99,7 @@ const List = ({ id, list, booksInList, refetchLists, refetchBooks }) => {
           </h3>
 
           <div className="flex items-center gap-2">
-            add book{' '}
+            add book
             <Link
               to="/add-book"
               className="rounded-full bg-white shadow-md border-solid border-gray-200"

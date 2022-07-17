@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../components/Header';
@@ -35,6 +35,9 @@ export default function AddBookPage() {
     }
     if (author) {
       bookDetails.author = author;
+    }
+    if (favorite) {
+      bookDetails.favorite = favorite;
     }
     addBook(bookDetails);
   }
@@ -143,13 +146,13 @@ export default function AddBookPage() {
                 </div>
                 <input
                   onChange={(e) => {
-                    setFavorite(e.target.value);
+                    setFavorite(e.target.checked);
                   }}
                   className="w-5 mt-1"
+                  checked={favorite}
                   type="checkbox"
                   name="Favorite"
                   id="Favorite"
-                  value={favorite}
                 />
               </label>
               <label className="my-3" htmlFor="Series">

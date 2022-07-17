@@ -14,6 +14,7 @@ export default function BookPage() {
   const [author, setAuthor] = useState(book.author);
   const [pages, setPages] = useState(book.pages);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [favorite, setFavorite] = useState(book.favorite);
   const [readingStatusId, setReadingStatusId] = useState(
     book.reading_status_id,
   );
@@ -35,6 +36,7 @@ export default function BookPage() {
       title,
       author,
       pages,
+      favorite,
       image_url: image,
       reading_status_id: readingStatusId ?? 1,
     };
@@ -125,10 +127,26 @@ export default function BookPage() {
                   required
                 />
               </label>
-
               <div className="flex justify-center py-4">
                 <img src={image} alt="book cover" className="w-32" />
               </div>
+              <label className="flex flex-col my-3" htmlFor="Favorite">
+                Favorite
+                <div className="text-gray-500">
+                  Add this book to your list of favorites
+                </div>
+                <input
+                  onChange={(e) => {
+                    setFavorite(e.target.checked);
+                  }}
+                  className="w-5 mt-1"
+                  checked={favorite}
+                  type="checkbox"
+                  name="Favorite"
+                  id="Favorite"
+                />
+              </label>
+
               <label className="flex flex-col my-3" htmlFor="reading-status">
                 Reading Status
                 <select
@@ -147,6 +165,7 @@ export default function BookPage() {
                   <option value={5}>Abandoned</option>
                 </select>
               </label>
+
               <label className="flex flex-col my-3" htmlFor="date-started">
                 Date Started
                 <input
@@ -160,6 +179,7 @@ export default function BookPage() {
                   value={dateStarted ?? ''}
                 />
               </label>
+
               <label className="flex flex-col my-3" htmlFor="date-finished">
                 Date Finished
                 <input

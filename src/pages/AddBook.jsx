@@ -157,7 +157,7 @@ export default function AddBookPage() {
               </label>
               <label className="my-3" htmlFor="Series">
                 List
-                {lists?.data.length > 0 && (
+                {lists?.data[0].length > 0 && (
                   <select
                     onChange={(e) => {
                       setListId(e.target.value);
@@ -167,7 +167,7 @@ export default function AddBookPage() {
                     id="Series"
                     value={listId}
                   >
-                    {lists?.data.map((item) => (
+                    {lists?.data[0].map((item) => (
                       <option value={item.list_id} key={item.list_id}>
                         {item.name}
                       </option>

@@ -13,9 +13,12 @@ export default function useGetBooks(booksItemCount, pageNumber, sortBy) {
     });
 }
 
-export function useGetAllBooks(){
-const getAllBooks = api.get(`/books`,{allBooks:true} ) 
-  return useQuery('allBooks', () => getAllBooks);
+export function useGetBooksByList(listIds){
+  console.log('listIds',listIds)
+  const getAllBooks = api.get(`/booksByList`,{listIds} ) 
+  return useQuery('booksByList', () => getAllBooks, {
+    enabled: !!listIds
+  });
 }
 
 export function useAddBook(history,){

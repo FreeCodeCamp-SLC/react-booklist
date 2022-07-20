@@ -9,19 +9,19 @@ export default function Book({ book }) {
   const { data: lists } = useListsApi();
   const [list, setList] = useState(null);
 
-  useEffect(() => {
-    if (!lists) {
-      return;
-    }
-    const getList = () => {
-      setList(
-        lists?.data.filter(
-          (singleList) => singleList.list_id === book.list_id,
-        )[0],
-      );
-    };
-    getList();
-  }, [lists, book]);
+  // useEffect(() => {
+  //   if (!lists) {
+  //     return;
+  //   }
+  //   const getList = () => {
+  //     setList(
+  //       lists?.data.filter(
+  //         (singleList) => singleList.list_id === book.list_id,
+  //       )[0],
+  //     );
+  //   };
+  //   getList();
+  // }, [lists, book]);
 
   const linkObj = {
     pathname: `/book/${book.book_id}`,

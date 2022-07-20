@@ -26,23 +26,23 @@ export default function Lists() {
     refetch: refetchLists,
   } = useListsApi(listsItemCount, pageNumber, sortBy);
   console.log('lists', lists);
-  const {
-    data: books,
-    isLoading: booksIsLoading,
-    isError: booksIsError,
-    refetch: refetchBooks,
-  } = useGetBooksByList(lists.data[0].map((list) => list.list_id));
+  // const {
+  //   data: books,
+  //   isLoading: booksIsLoading,
+  //   isError: booksIsError,
+  //   refetch: refetchBooks,
+  // } = useGetBooksByList(lists.data[0].map((list) => list.list_id));
 
   // this is not being returned in expected order
   // try setting up break points to see where its going from - it looks like proper id is being sent
 
-  console.log('book in lists', books);
+  // console.log('book in lists', books);
   useEffect(() => {
     setPageNumber(1);
   }, []);
   useEffect(async () => {
     await refetchLists();
-    await refetchBooks(lists.data[0].map((list) => list.list_id));
+    // await refetchBooks(lists.data[0].map((list) => list.list_id));
   }, [listsItemCount, pageNumber, sortBy]);
 
   return (
@@ -72,29 +72,28 @@ export default function Lists() {
             <span className="text-sm">new list</span>
           </div>
         </div>
-        {(listsIsLoading || booksIsLoading) && (
+        {listsIsLoading && (
           <h2 className="px-5 pt-5 text-3xl font-bold text-gray-900">
             Loading Lists...
           </h2>
         )}
-        {(listsIsError || booksIsError) && (
+        {listsIsError && (
           <h2 className="px-5 pt-5 text-3xl font-bold text-gray-900">
             Error Fetching Books
           </h2>
         )}
-        {lists?.data && books?.data && (
+        {lists && (
           <>
             <div className="grid grid-cols-1 pb-6 mx-6 gap-6 lg:grid-cols-2 xl:grid-cols-3">
-              {lists?.data[0].map((list) => (
+              {lists?.lists.map((list) => (
                 <List
                   key={list.list_id}
                   list={list}
                   id={list.list_id}
-                  booksInList={books?.data.filter(
+                  booksInList={lists?.books.filter(
                     (book) => book.list_id === list.list_id,
                   )}
                   refetchLists={refetchLists}
-                  refetchBooks={refetchBooks}
                 />
               ))}
             </div>
@@ -104,8 +103,8 @@ export default function Lists() {
               setPageNumber={setPageNumber}
               pageNumber={pageNumber}
               listsItemCount={listsItemCount}
-              totalBooksPages={books.data.length}
-              totalListsPages={lists.data[1]}
+              totalBooksPages={lists.books.length}
+              totalListsPages={lists.totalListCount}
               isLists
             />
             <PaginationOptions setListsItemCount={setListsItemCount} isLists />

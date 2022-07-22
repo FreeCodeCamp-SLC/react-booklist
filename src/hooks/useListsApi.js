@@ -9,8 +9,11 @@ export default function useListsApi(booksItemCount, pageNumber, sortBy) {
   const getAllLists = async () => {
 try {
   const lists = await api.get(`/lists`, {booksItemCount, pageNumber, sortBy}) 
-  const listIds =  lists.data[0].map((list) => list.list_id)
+  console.log('lists in hook', lists)
+  const listIds =  lists.data.map((list) => list.list_id)
   const booksByList = await getbooksByList(listIds)
+  console.log('books in hook', booksByList)
+
 
    return{
      lists: lists.data[0],

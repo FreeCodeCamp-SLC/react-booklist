@@ -1,9 +1,36 @@
 import { useQuery, useMutation } from 'react-query';
 import api from '../config'
 
+const getbooksByList = (listIds) => api.get(`/booksByList`,  {listIds})
+
 export default function useListsApi(booksItemCount, pageNumber, sortBy) {
-  const getAllLists = () => api.get(`/lists`, {booksItemCount, pageNumber, sortBy}) 
-    return useQuery('lists', getAllLists);
+
+  const getLists = async () => {
+try {
+  const lists = await api.get(`/lists`, {booksItemCount, pageNumber, sortBy}) 
+  const listIds =  lists.data[0].map((list) => list.list_id)
+  const booksByList = await getbooksByList(listIds)
+
+  return{
+    lists: lists.data[0],
+    ...lists.data[1],
+    books: booksByList.data
+  }
+} catch(err){
+console.log('err', err)
+return {
+  lists: [],
+  booksByList: []
+  }
+}
+} 
+    return useQuery(['lists', pageNumber], getLists);
+}
+
+export const useGetAllLists = () => {
+  const getLists = api.get(`/allLists`) 
+
+  return useQuery('allLists', () => getLists)
 }
 
 export const useDeleteList = (id, setModalIsOpen) => {

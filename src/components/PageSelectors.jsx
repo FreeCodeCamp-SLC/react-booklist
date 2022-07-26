@@ -13,9 +13,7 @@ export default function PageSelectors({
     totalBooksPages?.totalBookCount / booksItemCount,
   );
 
-  const listsMaxPage = Math.ceil(
-    totalListsPages?.totalListCount / listsItemCount,
-  );
+  const listsMaxPage = Math.ceil(totalListsPages / listsItemCount);
   const [pageInput, setPageInput] = useState(1);
 
   useEffect(() => {

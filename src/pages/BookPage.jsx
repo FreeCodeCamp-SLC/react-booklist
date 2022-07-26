@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
-import useListsApi from '../hooks/useListsApi';
+import { useGetAllLists } from '../hooks/useListsApi';
 import Header from '../components/Header';
 import api from '../config';
 import ConfirmationModal from '../components/ConfirmationModal';
@@ -26,7 +26,7 @@ export default function BookPage() {
   const [dateFinished, setDateFinished] = useState(
     convertDate(book.date_finished),
   );
-  const { data: lists } = useListsApi();
+  const { data: lists } = useGetAllLists();
   const bookId = book.book_id;
   const image = book.image_url;
   const history = useHistory();
@@ -180,7 +180,7 @@ export default function BookPage() {
                     id="Series"
                     value={listId}
                   >
-                    {lists?.data[0].map((item) => (
+                    {lists?.data.map((item) => (
                       <option value={item.list_id} key={item.list_id}>
                         {item.name}
                       </option>

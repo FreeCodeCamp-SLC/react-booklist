@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 
 import useListsApi from '../hooks/useListsApi';
 import Header from '../components/Header';
-import { useGetBooksByList } from '../hooks/useBooksApi';
 import List from '../components/List';
 import SortOptions from '../components/SortOptions';
 import PageSelectors from '../components/PageSelectors';
@@ -25,24 +24,12 @@ export default function Lists() {
     isError: listsIsError,
     refetch: refetchLists,
   } = useListsApi(listsItemCount, pageNumber, sortBy);
-  console.log('lists', lists);
-  // const {
-  //   data: books,
-  //   isLoading: booksIsLoading,
-  //   isError: booksIsError,
-  //   refetch: refetchBooks,
-  // } = useGetBooksByList(lists.data[0].map((list) => list.list_id));
 
-  // this is not being returned in expected order
-  // try setting up break points to see where its going from - it looks like proper id is being sent
-
-  // console.log('book in lists', books);
   useEffect(() => {
     setPageNumber(1);
   }, []);
   useEffect(async () => {
     await refetchLists();
-    // await refetchBooks(lists.data[0].map((list) => list.list_id));
   }, [listsItemCount, pageNumber, sortBy]);
 
   return (

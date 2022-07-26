@@ -1,28 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
-import useListsApi from '../hooks/useListsApi';
 import bookImg from '../images/book.png';
 import bookmark from '../images/bookmark-icon.png';
 
-export default function Book({ book }) {
-  const { data: lists } = useListsApi();
-  const [list, setList] = useState(null);
-
-  // useEffect(() => {
-  //   if (!lists) {
-  //     return;
-  //   }
-  //   const getList = () => {
-  //     setList(
-  //       lists?.data.filter(
-  //         (singleList) => singleList.list_id === book.list_id,
-  //       )[0],
-  //     );
-  //   };
-  //   getList();
-  // }, [lists, book]);
-
+export default function Book({ book, lists }) {
+  const list = lists.data.filter(
+    (singleList) => singleList.list_id === book.list_id,
+  );
   const linkObj = {
     pathname: `/book/${book.book_id}`,
     state: { book },
@@ -47,12 +32,12 @@ export default function Book({ book }) {
       <h4 className="text-gray-600 mt-2">{book.author}</h4>
       <div className="w-full">
         {list && (
-          <HashLink to={`/lists#${list.list_id}`}>
+          <HashLink to={`/lists#${list[0].list_id}`}>
             <button
               type="button"
               className="bg-booklistRed text-white py-1 px-3 rounded-3xl font-semibold mt-4 shadow-md hover:bg-booklistRed-light hover:-translate-y-0.5 transform transition focus:outline-none focus:ring focus:ring-offset-2 focus:ring-booklistRed focus:ring-opacity-50 active:bg-booklistRed-dark"
             >
-              {list.name}
+              {list[0].name}
             </button>
           </HashLink>
         )}

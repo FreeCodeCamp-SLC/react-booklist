@@ -8,6 +8,7 @@ import SortOptions from '../components/SortOptions';
 import PageContext from '../contexts/page-context';
 import PageSelectors from '../components/PageSelectors';
 import PaginationOptions from '../components/PaginationOptions';
+import { useGetAllLists } from '../hooks/useListsApi';
 
 export default function DashboardPage() {
   const { getAccessTokenSilently } = useAuth0();
@@ -36,14 +37,13 @@ export default function DashboardPage() {
     };
     await getAccessToken();
   }, []);
-
+  const { data: lists } = useGetAllLists();
   const {
     data: books,
     isLoading,
     isError,
     refetch,
   } = useGetBooks(booksItemCount, pageNumber, sortBy);
-
   useEffect(() => {
     refetch();
   }, [booksItemCount, pageNumber, sortBy]);
@@ -67,11 +67,11 @@ export default function DashboardPage() {
             Error Fetching Books
           </h2>
         )}
-        {books?.data && (
+        {books?.data && lists && (
           <>
             <div className="grid grid-cols-1 pb-6 mx-6 gap-x-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {books.data[0].map((book) => (
-                <Book book={book} key={book.book_id} />
+                <Book book={book} key={book.book_id} lists={lists} />
               ))}
             </div>
             <PageSelectors

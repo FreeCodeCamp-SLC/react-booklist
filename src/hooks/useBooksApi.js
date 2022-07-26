@@ -8,23 +8,17 @@ export default function useGetBooks(booksItemCount, pageNumber, sortBy) {
 
   const getAllBooks = api.get(`/books`,{booksItemCount, pageNumber, sortBy}) 
 
-    return useQuery('books', () => getAllBooks,{
+    return useQuery(['books', pageNumber], () => getAllBooks,{
       enabled: !!loadAuthToken(),
     });
 }
 
-// export function useGetBooksByList(listIds){
-//   console.log('listIds',listIds)
-//   const getAllBooks = api.get(`/booksByList`,{listIds} ) 
-//   return useQuery('booksByList', () => getAllBooks, {
-//     enabled: !!listIds
-//   });
-// }
-
 export function useAddBook(history,){
   const addBook = (book)=>  api.post('/books', book);
   
-  return useMutation('books', addBook, {
+  // double check this works
+  // clear query data on sorting change
+  return useMutation( addBook, {
     onSuccess: () => {
       history.push('/dashboard');
     },

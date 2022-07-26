@@ -12,8 +12,6 @@ export default function PageSelectors({
   const booksMaxPage = Math.ceil(
     totalBooksPages?.totalBookCount / booksItemCount,
   );
-  console.log('totalListsPages?.totalListCount', totalListsPages);
-  console.log('listsItemCount', listsItemCount);
 
   const listsMaxPage = Math.ceil(totalListsPages / listsItemCount);
   const [pageInput, setPageInput] = useState(1);

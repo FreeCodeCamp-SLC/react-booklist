@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../components/Header';
-import useListsApi from '../hooks/useListsApi';
+import { useGetAllLists } from '../hooks/useListsApi';
 import { useAddBook } from '../hooks/useBooksApi';
 
 import CustomDropdown from '../components/customDropdown/CustomDropdown';
@@ -11,7 +11,7 @@ import logo from '../images/logo.png';
 
 export default function AddBookPage() {
   const history = useHistory();
-  const { data: lists } = useListsApi();
+  const { data: lists } = useGetAllLists();
   const { mutate: addBook, isLoading, isError } = useAddBook(history);
   const [title, setTitle] = useState('');
   const [pages, setPages] = useState('');
@@ -157,7 +157,7 @@ export default function AddBookPage() {
               </label>
               <label className="my-3" htmlFor="Series">
                 List
-                {lists?.data[0].length > 0 && (
+                {lists?.data.length > 0 && (
                   <select
                     onChange={(e) => {
                       setListId(e.target.value);
@@ -167,7 +167,7 @@ export default function AddBookPage() {
                     id="Series"
                     value={listId}
                   >
-                    {lists?.data[0].map((item) => (
+                    {lists?.data.map((item) => (
                       <option value={item.list_id} key={item.list_id}>
                         {item.name}
                       </option>

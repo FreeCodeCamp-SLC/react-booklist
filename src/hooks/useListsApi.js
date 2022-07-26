@@ -4,33 +4,33 @@ import api from '../config'
 const getbooksByList = (listIds) => api.get(`/booksByList`,  {listIds})
 
 export default function useListsApi(booksItemCount, pageNumber, sortBy) {
-  // make getalllists a funtion where we try both the endpoits and returns both values on return
 
-  const getAllLists = async () => {
+  const getLists = async () => {
 try {
   const lists = await api.get(`/lists`, {booksItemCount, pageNumber, sortBy}) 
-  console.log('lists in hook', lists)
-  const listIds =  lists.data.map((list) => list.list_id)
+  const listIds =  lists.data[0].map((list) => list.list_id)
   const booksByList = await getbooksByList(listIds)
-  console.log('books in hook', booksByList)
 
-
-   return{
-     lists: lists.data[0],
-     ...lists.data[1],
-     books: booksByList.data
-   }
-
+  return{
+    lists: lists.data[0],
+    ...lists.data[1],
+    books: booksByList.data
+  }
 } catch(err){
 console.log('err', err)
 return {
   lists: [],
   booksByList: []
+  }
 }
+} 
+    return useQuery(['lists', pageNumber], getLists);
 }
 
-  } 
-    return useQuery('lists', getAllLists);
+export const useGetAllLists = () => {
+  const getLists = api.get(`/allLists`) 
+
+  return useQuery('allLists', () => getLists)
 }
 
 export const useDeleteList = (id, setModalIsOpen) => {

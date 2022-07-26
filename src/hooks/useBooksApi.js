@@ -15,9 +15,6 @@ export default function useGetBooks(booksItemCount, pageNumber, sortBy) {
 
 export function useAddBook(history,){
   const addBook = (book)=>  api.post('/books', book);
-  
-  // double check this works
-  // clear query data on sorting change
   return useMutation( addBook, {
     onSuccess: () => {
       history.push('/dashboard');

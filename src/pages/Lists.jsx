@@ -25,6 +25,11 @@ export default function Lists() {
     refetch: refetchLists,
   } = useListsApi(listsItemCount, pageNumber, sortBy);
 
+  let totalBookPages = 0;
+  if (lists && lists.books) {
+    totalBookPages = lists.books.length;
+  }
+
   useEffect(() => {
     setPageNumber(1);
   }, []);
@@ -90,7 +95,7 @@ export default function Lists() {
               setPageNumber={setPageNumber}
               pageNumber={pageNumber}
               listsItemCount={listsItemCount}
-              totalBooksPages={lists.books.length}
+              totalBooksPages={totalBookPages}
               totalListsPages={lists.totalListCount}
               isLists
             />

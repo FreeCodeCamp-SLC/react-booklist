@@ -6,7 +6,7 @@ import { loadAuthToken } from '../utils/local-storage';
 export default function useGetBooks(booksItemCount, pageNumber, sortBy) {
 
 
-  const getAllBooks = api.get(`/books`,{booksItemCount, pageNumber, sortBy}) 
+  const getAllBooks = !localStorage.authToken ? {data: []} : api.get(`/books`,{booksItemCount, pageNumber, sortBy}) 
 
     return useQuery(['books', pageNumber], () => getAllBooks,{
       enabled: !!loadAuthToken(),

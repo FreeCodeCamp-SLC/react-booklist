@@ -28,7 +28,7 @@ return {
 }
 
 export const useGetAllLists = () => {
-  const getLists = api.get(`/allLists`) 
+  const getLists = !localStorage.authToken ? {data: []} : api.get(`/allLists`) 
 
   return useQuery('allLists', () => getLists)
 }

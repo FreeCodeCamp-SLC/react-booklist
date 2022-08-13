@@ -73,17 +73,19 @@ export default function DashboardPage () {
                 <Book book={book} key={book.book_id} lists={lists} />
               ))}
             </div>
-            <PageSelectors
-              setPageNumber={setPageNumber}
-              pageNumber={pageNumber}
-              listsItemCount={listsItemCount}
-              booksItemCount={booksItemCount}
-              totalBooksPages={books.data[1]}
-            />
-            <PaginationOptions
-              setBooksItemCount={setBooksItemCount}
-              setListsItemCount={setListsItemCount}
-            />
+            <div className='grid place-items-center'>
+              <PageSelectors
+                setPageNumber={setPageNumber}
+                pageNumber={pageNumber}
+                listsItemCount={listsItemCount}
+                booksItemCount={booksItemCount}
+                totalBooksPages={books.data[1]}
+              />
+              <PaginationOptions
+                setBooksItemCount={setBooksItemCount}
+                setListsItemCount={setListsItemCount}
+              />
+            </div>
           </>
         )}
       </div>

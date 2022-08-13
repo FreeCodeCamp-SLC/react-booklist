@@ -1,21 +1,21 @@
-import React from 'react';
+import React from 'react'
 
-export default function PaginationOptions({
+export default function PaginationOptions ({
   setListsItemCount,
   setBooksItemCount,
   isLists,
 }) {
   return (
-    <div className="flex space-x-2 items-center">
-      <label htmlFor="paginationOptions">Show</label>
+    <div className='flex space-x-2 items-center'>
+      <label htmlFor='paginationOptions'>Show</label>
       <select
-        id="paginationOptions"
-        name="paginationOptions"
-        onChange={(e) => {
+        id='paginationOptions'
+        name='paginationOptions'
+        onChange={e => {
           if (isLists) {
-            setListsItemCount(e.target.value);
+            setListsItemCount(e.target.value)
           } else {
-            setBooksItemCount(e.target.value);
+            setBooksItemCount(e.target.value)
           }
         }}
       >
@@ -26,5 +26,5 @@ export default function PaginationOptions({
       </select>
       <span>{isLists ? 'lists' : 'books'} per page</span>
     </div>
-  );
+  )
 }

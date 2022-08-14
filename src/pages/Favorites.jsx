@@ -31,7 +31,6 @@ export default function FavoritesPage() {
     setPageNumber(1);
   }, []);
 
-  console.log('favorite page', favorites);
   return (
     <section className=" sm:grid grid-cols-layout grid-rows-layout">
       <Header />

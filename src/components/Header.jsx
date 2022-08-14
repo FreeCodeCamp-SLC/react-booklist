@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
+import api from '../config';
 import LoginButton from './LoginButton';
 import LogoutButton from './LogoutButton';
 
@@ -8,7 +9,26 @@ export default function Header() {
   const { isAuthenticated } = useAuth0();
 
   const [toggle, setToggle] = useState(false);
-  const [searchValue, setSearchValue] = useState('Search');
+  const [bookSelection, setBookSelection] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
+  function searchHandler(query) {
+    setSearchValue(query);
+    if (query.length > 2) {
+      api
+        .get(`/searchBooks`, {
+          bookQuery: query,
+        })
+        .then((res) => {
+          console.log('res', res);
+          setBookSelection(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      setBookSelection(null);
+    }
+  }
 
   let homeButton = (
     <Link to="/">
@@ -166,14 +186,24 @@ export default function Header() {
               <input
                 className="text-lg text-booklistBlue-dark focus:outline-none"
                 onChange={(e) => {
-                  setSearchValue(e.target.value);
+                  searchHandler(e.target.value);
                 }}
                 type="text"
                 name="search"
                 id="search"
+                placeholder="Search"
                 value={searchValue}
               />
             </label>
+            {bookSelection?.length > 0 && (
+              <select>
+                {bookSelection[0]?.map((book) => (
+                  <option key={book.book_id} value={book.title}>
+                    {book.title}
+                  </option>
+                ))}
+              </select>
+            )}
           </form>
         </div>
         <div className="z-10 flex min-w-max">

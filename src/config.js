@@ -10,10 +10,10 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
   const configuration = config;
 const authToken = loadAuthToken()
-const {booksItemCount, listsItemCount, pageNumber, sortBy, listIds} = config;
+const {booksItemCount, listsItemCount, pageNumber, sortBy, listIds, bookQuery} = config;
 
   configuration.headers.Authorization =  authToken ? `Bearer ${authToken}` : null;
-  configuration.params = {...config.params, booksItemCount, listsItemCount, pageNumber, sortBy, listIds}
+  configuration.params = {...config.params, booksItemCount, listsItemCount, pageNumber, sortBy, listIds, bookQuery}
   return configuration;
 });
 

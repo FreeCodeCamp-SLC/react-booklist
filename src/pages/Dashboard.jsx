@@ -77,14 +77,10 @@ export default function DashboardPage() {
             <PageSelectors
               setPageNumber={setPageNumber}
               pageNumber={pageNumber}
-              listsItemCount={listsItemCount}
               booksItemCount={booksItemCount}
               totalBooksPages={books.data[1]}
             />
-            <PaginationOptions
-              setBooksItemCount={setBooksItemCount}
-              setListsItemCount={setListsItemCount}
-            />
+            <PaginationOptions setBooksItemCount={setBooksItemCount} />
           </>
         )}
       </div>

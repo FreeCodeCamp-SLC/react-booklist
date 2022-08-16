@@ -5,30 +5,29 @@ import api from '../config';
 import LoginButton from './LoginButton';
 import LogoutButton from './LogoutButton';
 
-export default function Header() {
+export default function Header({ searchHandler }) {
   const { isAuthenticated } = useAuth0();
 
   const [toggle, setToggle] = useState(false);
-  const [bookSelection, setBookSelection] = useState([]);
-  const [searchValue, setSearchValue] = useState('');
-  function searchHandler(query) {
-    setSearchValue(query);
-    if (query.length > 2) {
-      api
-        .get(`/searchBooks`, {
-          bookQuery: query,
-        })
-        .then((res) => {
-          console.log('res', res);
-          setBookSelection(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      setBookSelection(null);
-    }
-  }
+
+  // function searchHandler(query) {
+  //   setSearchValue(query);
+  //   if (query.length > 2) {
+  //     api
+  //       .get(`/searchBooks`, {
+  //         bookQuery: query,
+  //       })
+  //       .then((res) => {
+  //         console.log('res', res);
+  //         setBookSelection(res.data);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   } else {
+  //     setBookSelection(null);
+  //   }
+  // }
 
   let homeButton = (
     <Link to="/">

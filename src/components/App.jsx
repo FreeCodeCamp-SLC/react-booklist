@@ -13,14 +13,24 @@ import Lists from '../pages/Lists';
 import AddList from '../pages/AddList';
 import FavoritesPage from '../pages/Favorites';
 import BookPage from '../pages/BookPage';
+import AuthPage from '../pages/Auth';
 import { PageProvider } from '../contexts/page-context';
+import { loadAuthToken } from '../utils/local-storage';
 
 const queryClient = new QueryClient();
 
 function App() {
   const { isAuthenticated } = useAuth0();
+  const authToken = loadAuthToken();
+
   const authedRedirect = (Component) =>
-    isAuthenticated ? <Redirect to="/dashboard" /> : <Component />;
+    isAuthenticated && !authToken ? (
+      <Redirect to="/auth" />
+    ) : isAuthenticated ? (
+      <Redirect to="/dashboard" />
+    ) : (
+      <Component />
+    );
   return (
     <QueryClientProvider client={queryClient}>
       <PageProvider>
@@ -29,6 +39,9 @@ function App() {
             <Route path="/" exact>
               {authedRedirect(LandingPage)}
             </Route>
+            <AuthenticateRoute path="/auth">
+              <AuthPage />
+            </AuthenticateRoute>
             <AuthenticateRoute path="/dashboard">
               <DashboardPage />
             </AuthenticateRoute>

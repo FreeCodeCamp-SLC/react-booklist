@@ -45,6 +45,7 @@ export default function FavoritesPage() {
           setSearchResults(res.data);
         })
         .catch((err) => {
+          setSearchResults(null);
           console.log(err);
         });
     } else {

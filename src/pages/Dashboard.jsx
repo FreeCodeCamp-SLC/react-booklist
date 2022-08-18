@@ -65,6 +65,7 @@ export default function DashboardPage() {
           setSearchResults(res.data);
         })
         .catch((err) => {
+          setSearchResults(null);
           console.log(err);
         });
     } else {

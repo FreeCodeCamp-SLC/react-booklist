@@ -53,21 +53,20 @@ export default function Lists() {
           if (listIds.length > 0) {
             booksByList = await getbooksByList(listIds);
           }
-
           setSearchResults({
-            lists: res.data[0],
+            lists: res.data,
             books: booksByList?.data,
           });
         })
         .catch((err) => {
+          setSearchResults(null);
           console.log(err);
         });
     } else {
       setSearchResults(null);
     }
   }
-  console.log('lists', lists);
-  console.log('searchResults', searchResults);
+
   return (
     <section className="sm:grid grid-cols-layout grid-rows-layout">
       <Header searchHandler={searchHandler} />

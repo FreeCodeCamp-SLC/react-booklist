@@ -44,7 +44,7 @@ export default function Lists() {
     if (query.length > 2) {
       api
         .get(`/searchLists`, {
-          listQuery: query,
+          query,
           sortBy,
         })
         .then(async (res) => {

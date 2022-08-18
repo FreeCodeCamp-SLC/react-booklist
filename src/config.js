@@ -17,8 +17,7 @@ api.interceptors.request.use((config) => {
     pageNumber,
     sortBy,
     listIds,
-    bookQuery,
-    listQuery,
+    query,
   } = config;
 
   configuration.headers.Authorization = authToken
@@ -31,8 +30,7 @@ api.interceptors.request.use((config) => {
     pageNumber,
     sortBy,
     listIds,
-    bookQuery,
-    listQuery
+    query,
   };
   return configuration;
 });

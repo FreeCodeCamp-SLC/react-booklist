@@ -58,7 +58,7 @@ export default function DashboardPage() {
     if (query.length > 2) {
       api
         .get(`/searchBooks`, {
-          bookQuery: query,
+          query,
           sortBy,
         })
         .then((res) => {

@@ -38,7 +38,7 @@ export default function FavoritesPage() {
     if (query.length > 2) {
       api
         .get(`/searchFavorites`, {
-          bookQuery: query,
+          query,
           sortBy,
         })
         .then((res) => {

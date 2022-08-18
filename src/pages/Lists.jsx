@@ -48,8 +48,7 @@ export default function Lists() {
           sortBy,
         })
         .then(async (res) => {
-          console.log('hitting this', res);
-          const listIds = res.data[0].map((list) => list.list_id);
+          const listIds = res.data.map((list) => list.list_id);
           let booksByList;
           if (listIds.length > 0) {
             booksByList = await getbooksByList(listIds);
@@ -57,7 +56,6 @@ export default function Lists() {
 
           setSearchResults({
             lists: res.data[0],
-            totalListCount: res.data[1].totalListCount,
             books: booksByList?.data,
           });
         })

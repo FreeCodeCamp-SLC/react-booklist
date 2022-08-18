@@ -62,7 +62,6 @@ export default function DashboardPage() {
           sortBy,
         })
         .then((res) => {
-          console.log('res.data', res.data);
           setSearchResults(res.data);
         })
         .catch((err) => {
@@ -100,7 +99,7 @@ export default function DashboardPage() {
                   <Book book={book} key={book.book_id} lists={lists} />
                 ))}
               {searchResults?.length > 0 &&
-                searchResults[0].map((book) => (
+                searchResults.map((book) => (
                   <Book book={book} key={book.book_id} lists={lists} />
                 ))}
             </div>

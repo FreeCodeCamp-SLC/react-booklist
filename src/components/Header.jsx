@@ -9,25 +9,7 @@ export default function Header({ searchHandler }) {
   const { isAuthenticated } = useAuth0();
 
   const [toggle, setToggle] = useState(false);
-
-  // function searchHandler(query) {
-  //   setSearchValue(query);
-  //   if (query.length > 2) {
-  //     api
-  //       .get(`/searchBooks`, {
-  //         bookQuery: query,
-  //       })
-  //       .then((res) => {
-  //         console.log('res', res);
-  //         setBookSelection(res.data);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   } else {
-  //     setBookSelection(null);
-  //   }
-  // }
+  const [searchValue, setSearchValue] = useState('');
 
   let homeButton = (
     <Link to="/">
@@ -186,6 +168,7 @@ export default function Header({ searchHandler }) {
                 className="text-lg text-booklistBlue-dark focus:outline-none"
                 onChange={(e) => {
                   searchHandler(e.target.value);
+                  setSearchValue(e.target.value);
                 }}
                 type="text"
                 name="search"
@@ -194,15 +177,6 @@ export default function Header({ searchHandler }) {
                 value={searchValue}
               />
             </label>
-            {bookSelection?.length > 0 && (
-              <select>
-                {bookSelection[0]?.map((book) => (
-                  <option key={book.book_id} value={book.title}>
-                    {book.title}
-                  </option>
-                ))}
-              </select>
-            )}
           </form>
         </div>
         <div className="z-10 flex min-w-max">

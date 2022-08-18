@@ -26,8 +26,6 @@ export default function BookPage() {
   const [dateFinished, setDateFinished] = useState(
     convertDate(book.date_finished),
   );
-  const [searchResults, setSearchResults] = useState([]);
-  const [searchValue, setSearchValue] = useState('');
   const { data: lists } = useGetAllLists();
   const bookId = book.book_id;
   const image = book.image_url;
@@ -72,29 +70,10 @@ export default function BookPage() {
     setModalIsOpen(true);
   }
 
-  function searchHandler(query) {
-    setSearchValue(query);
-    if (query.length > 2) {
-      api
-        .get(`/searchBooks`, {
-          bookQuery: query,
-        })
-        .then((res) => {
-          console.log('res', res);
-          setSearchResults(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      setSearchResults(null);
-    }
-  }
-
   return (
     <>
       <section className=" sm:grid grid-cols-layout grid-rows-layout">
-        <Header searchHandler={searchHandler} />
+        <Header />
         <div className="min-h-full col-start-2 row-start-2 bg-gray-100 ">
           <div className="flex pt-5 justify-between items-center">
             <h2 className="px-4 text-3xl font-bold text-gray-900 ">

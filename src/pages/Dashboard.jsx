@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
 import useGetBooks from '../hooks/useBooksApi';
-import { saveAuthToken } from '../utils/local-storage';
 import Book from '../components/Book';
 import Header from '../components/Header';
 import SortOptions from '../components/SortOptions';
@@ -12,7 +10,6 @@ import { useGetAllLists } from '../hooks/useListsApi';
 import api from '../config';
 
 export default function DashboardPage() {
-  const { getAccessTokenSilently } = useAuth0();
   const {
     booksItemCount,
     pageNumber,
@@ -36,18 +33,6 @@ export default function DashboardPage() {
 
   useEffect(async () => {
     setPageNumber(1);
-    const getAccessToken = async () => {
-      try {
-        const retrievedAccessToken = await getAccessTokenSilently({
-          audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-          scope: 'read:current_user',
-        });
-        saveAuthToken(retrievedAccessToken);
-      } catch (e) {
-        console.log(e.message);
-      }
-    };
-    await getAccessToken();
   }, []);
 
   useEffect(() => {

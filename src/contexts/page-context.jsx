@@ -6,7 +6,7 @@ export const PageProvider = ({ children }) => {
   const [booksItemCount, setBooksItemCount] = useState(10);
   const [listsItemCount, setListsItemCount] = useState(5);
   const [pageNumber, setPageNumber] = useState(1);
-  const [sortBy, setSortBy] = useState('Title: Ascending');
+  const [sortBy, setSortBy] = useState('');
 
   return (
     <PageContext.Provider

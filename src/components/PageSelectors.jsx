@@ -60,7 +60,7 @@ export default function PageSelectors({
             </button>
             <button
               className="border-1 border-gray-500 p-2"
-              onClick={() => setPageNumber(pageNumber--)}
+              onClick={() => setPageNumber(--pageNumber)}
               role="button"
             >
               <svg
@@ -88,7 +88,7 @@ export default function PageSelectors({
           <>
             <button
               className="border-1 border-gray-500 p-2"
-              onClick={() => setPageNumber(pageNumber++)}
+              onClick={() => setPageNumber(++pageNumber)}
               role="button"
             >
               <svg

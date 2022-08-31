@@ -22,9 +22,9 @@ export default function Book({ book, lists }) {
   return (
     <div
       onClick={(e) => {
-        if (e.target === e.currentTarget) push(linkObj);
+        if (e.target.getAttribute('type') !== 'button') push(linkObj);
       }}
-      className="flex flex-col items-center justify-center bg-white w-full  mt-7 mx-auto pt-6 pb-4 px-6 text-center rounded-md shadow-md"
+      className="flex flex-col items-center justify-center bg-white w-full  mt-7 mx-auto pt-6 pb-4 px-6 text-center rounded-md shadow-md cursor-pointer"
     >
       <Link to={linkObj}>
         <div className="max-h-48 rounded-sm overflow-hidden">

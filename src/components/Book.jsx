@@ -1,10 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import bookImg from '../images/book.png';
 import bookmark from '../images/bookmark-icon.png';
 
 export default function Book({ book, lists }) {
+  const { push } = useHistory();
+
   const list = lists.data.filter(
     (singleList) => singleList.list_id === book.list_id,
   );
@@ -18,7 +20,12 @@ export default function Book({ book, lists }) {
     isFavorite = 'true';
   }
   return (
-    <div className="flex flex-col items-center justify-center bg-white w-full  mt-7 mx-auto pt-6 pb-4 px-6 text-center rounded-md shadow-md">
+    <div
+      onClick={(e) => {
+        if (e.target.getAttribute('type') !== 'button') push(linkObj);
+      }}
+      className="flex flex-col items-center justify-center bg-white w-full  mt-7 mx-auto pt-6 pb-4 px-6 text-center rounded-md shadow-md cursor-pointer"
+    >
       <Link to={linkObj}>
         <div className="max-h-48 rounded-sm overflow-hidden">
           <img

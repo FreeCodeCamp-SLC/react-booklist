@@ -1,13 +1,14 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import useListsApi from '../hooks/useListsApi';
+import useListsApi, { getbooksByList } from '../hooks/useListsApi';
 import Header from '../components/Header';
 import List from '../components/List';
 import SortOptions from '../components/SortOptions';
 import PageSelectors from '../components/PageSelectors';
 import PaginationOptions from '../components/PaginationOptions';
 import PageContext from '../contexts/page-context';
+import api from '../config';
 
 export default function Lists() {
   const {
@@ -25,6 +26,8 @@ export default function Lists() {
     refetch: refetchLists,
   } = useListsApi(listsItemCount, pageNumber, sortBy);
 
+  const [searchResults, setSearchResults] = useState(null);
+
   let totalBookPages = 0;
   if (lists && lists.books) {
     totalBookPages = lists.books.length;
@@ -37,9 +40,36 @@ export default function Lists() {
     await refetchLists();
   }, [listsItemCount, pageNumber, sortBy]);
 
+  function searchHandler(query) {
+    if (query.length > 2) {
+      api
+        .get(`/searchLists`, {
+          query,
+          sortBy,
+        })
+        .then(async (res) => {
+          const listIds = res.data.map((list) => list.list_id);
+          let booksByList;
+          if (listIds.length > 0) {
+            booksByList = await getbooksByList(listIds);
+          }
+          setSearchResults({
+            lists: res.data,
+            books: booksByList?.data,
+          });
+        })
+        .catch((err) => {
+          setSearchResults(null);
+          console.log(err);
+        });
+    } else {
+      setSearchResults(null);
+    }
+  }
+
   return (
     <section className="sm:grid grid-cols-layout grid-rows-layout">
-      <Header />
+      <Header searchHandler={searchHandler} />
       <div className="min-h-full col-start-2 row-start-2 bg-gray-100 ">
         <div className="flex py-5 px-6 justify-between items-center">
           <h2 className="text-3xl font-bold text-gray-900">Lists</h2>
@@ -77,29 +107,50 @@ export default function Lists() {
         {lists && (
           <>
             <div className="grid grid-cols-1 pb-6 mx-6 gap-6 lg:grid-cols-2 xl:grid-cols-3">
-              {lists?.lists.map((list) => (
-                <List
-                  key={list.list_id}
-                  list={list}
-                  id={list.list_id}
-                  booksInList={lists?.books.filter(
-                    (book) => book.list_id === list.list_id,
-                  )}
-                  refetchLists={refetchLists}
-                />
-              ))}
+              {!searchResults &&
+                lists?.lists.map((list) => (
+                  <List
+                    key={list.list_id}
+                    list={list}
+                    id={list.list_id}
+                    booksInList={lists?.books.filter(
+                      (book) => book.list_id === list.list_id,
+                    )}
+                    refetchLists={refetchLists}
+                  />
+                ))}
+              {searchResults &&
+                searchResults?.lists.length > 0 &&
+                searchResults?.lists.map((list) => (
+                  <List
+                    key={list.list_id}
+                    list={list}
+                    id={list.list_id}
+                    booksInList={searchResults?.books.filter(
+                      (book) => book.list_id === list.list_id,
+                    )}
+                    refetchLists={refetchLists}
+                  />
+                ))}
             </div>
 
             <div className="mx-5 overflow-hidden rounded-md shadow-md mt-7" />
-            <PageSelectors
-              setPageNumber={setPageNumber}
-              pageNumber={pageNumber}
-              listsItemCount={listsItemCount}
-              totalBooksPages={totalBookPages}
-              totalListsPages={lists.totalListCount}
-              isLists
-            />
-            <PaginationOptions setListsItemCount={setListsItemCount} isLists />
+            {!searchResults && (
+              <>
+                <PageSelectors
+                  setPageNumber={setPageNumber}
+                  pageNumber={pageNumber}
+                  listsItemCount={listsItemCount}
+                  totalBooksPages={totalBookPages}
+                  totalListsPages={lists.totalListCount}
+                  isLists
+                />
+                <PaginationOptions
+                  setListsItemCount={setListsItemCount}
+                  isLists
+                />
+              </>
+            )}
           </>
         )}
       </div>

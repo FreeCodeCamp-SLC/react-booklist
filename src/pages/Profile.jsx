@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { loadAuthToken } from '../utils/local-storage';
+import Header from '../components/Header';
 
 const Profile = () => {
   const { user, isAuthenticated } = useAuth0();
@@ -28,16 +29,19 @@ const Profile = () => {
 
   return (
     isAuthenticated && (
-      <section className="p-10 bg-gray-100">
-        <img src={user.picture} alt={user.name} />
-        <h2>{user.name}</h2>
-        <p>{user.email}</p>
-        <h3>User Metadata</h3>
-        {userMetadata ? (
-          <pre>{JSON.stringify(userMetadata, null, 2)}</pre>
-        ) : (
-          'No user metadata defined'
-        )}
+      <section className="sm:grid grid-cols-layout grid-rows-layout">
+        <Header />
+        <section className="p-10 bg-gray-100">
+          <img src={user.picture} alt={user.name} />
+          <h2>{user.name}</h2>
+          <p>{user.email}</p>
+          <h3>User Metadata</h3>
+          {userMetadata ? (
+            <pre>{JSON.stringify(userMetadata, null, 2)}</pre>
+          ) : (
+            'No user metadata defined'
+          )}
+        </section>
       </section>
     )
   );

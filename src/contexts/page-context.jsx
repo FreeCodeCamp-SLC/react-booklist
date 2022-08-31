@@ -7,7 +7,6 @@ export const PageProvider = ({ children }) => {
   const [listsItemCount, setListsItemCount] = useState(5);
   const [pageNumber, setPageNumber] = useState(1);
   const [sortBy, setSortBy] = useState('Title: Ascending');
-  const [idOfListClicked, setList] = useState('1')
 
   return (
     <PageContext.Provider

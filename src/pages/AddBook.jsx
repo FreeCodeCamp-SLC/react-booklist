@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../components/Header';
@@ -8,6 +8,7 @@ import { useAddBook } from '../hooks/useBooksApi';
 import CustomDropdown from '../components/customDropdown/CustomDropdown';
 import ConfirmationModal from '../components/ConfirmationModal';
 import logo from '../images/logo.png';
+import PageContext from '../contexts/page-context';
 
 export default function AddBookPage() {
   const history = useHistory();
@@ -17,10 +18,18 @@ export default function AddBookPage() {
   const [pages, setPages] = useState('');
   const [author, setAuthor] = useState('');
   const [favorite, setFavorite] = useState(false);
-  const [listId, setListId] = useState(0);
+  const [listId, setListId] = useState(1);
   const [bookSelection, setBookSelection] = useState([]);
   const [bookImage, setBookImage] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const {
+    idOfListClicked
+  } = useContext(PageContext);
+
+
+  useEffect(() => {
+    setListId(parseInt(idOfListClicked))
+  }, []);
 
   function addBookHandler(e) {
     e.preventDefault();
@@ -168,7 +177,7 @@ export default function AddBookPage() {
                     value={listId}
                   >
                     {lists?.data.map((item) => (
-                      <option value={item.list_id} key={item.list_id}>
+                      <option value={item.list_id} key={item.list_id} >
                         {item.name}
                       </option>
                     ))}

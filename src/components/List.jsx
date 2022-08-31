@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import bookImg from '../images/book.png';
 import BookIcon from './BookIcon';
@@ -6,10 +6,16 @@ import Rating from './Rating';
 import ConfirmationModal from './ConfirmationModal';
 import { useDeleteList, useDeleteAllBooks } from '../hooks/useListsApi';
 
+import PageContext from '../contexts/page-context';
+
 const List = ({ id, list, booksInList, refetchLists, refetchBooks }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const deleteList = useDeleteList(id, setModalIsOpen);
   const deleteAllBooks = useDeleteAllBooks(booksInList);
+
+  const {
+    setList
+  } = useContext(PageContext);
 
   const deleteListHandler = async () => {
     try {
@@ -29,6 +35,11 @@ const List = ({ id, list, booksInList, refetchLists, refetchBooks }) => {
     } else {
       deleteListHandler();
     }
+  }
+
+  function getListName(e) {
+    const elementClickedId = e.currentTarget.parentElement.parentElement.parentElement.parentElement.id;
+    setList(elementClickedId)
   }
 
   const books = booksInList.map((book) => {
@@ -65,6 +76,8 @@ const List = ({ id, list, booksInList, refetchLists, refetchBooks }) => {
       </div>
     );
   });
+
+
 
   return (
     <div id={id} className="h-fit w-full bg-white rounded-md shadow-md">
@@ -103,6 +116,7 @@ const List = ({ id, list, booksInList, refetchLists, refetchBooks }) => {
             <Link
               to="/add-book"
               className="rounded-full bg-white shadow-md border-solid border-gray-200"
+              onClick={getListName}
             >
               <BookIcon />
             </Link>
@@ -149,3 +163,4 @@ const List = ({ id, list, booksInList, refetchLists, refetchBooks }) => {
 };
 
 export default List;
+

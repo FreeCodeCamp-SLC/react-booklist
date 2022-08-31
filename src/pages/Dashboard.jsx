@@ -48,6 +48,7 @@ export default function DashboardPage() {
     refetch();
   }, [booksItemCount, pageNumber, sortBy]);
 
+
   return (
     <section className="sm:grid grid-cols-layout grid-rows-layout">
       <Header />

@@ -49,12 +49,13 @@ export default function Book({ book, lists }) {
           </HashLink>
         )}
         <p className="mt-4">Favorite: {isFavorite}</p>
-        <div className=" mt-4 pb-4 px-8  flex items-center justify-between font-bold">
-          <div className="flex items-center">
+        <div className=" mt-4 pb-4 space-x-3 flex items-center justify-center font-bold">
+          <div className="flex items-center justify-center">
             <img className="h-4 mr-1" src={bookmark} alt="bookmark icon" />
             Bookmark
           </div>
-          |<div className="flex">pages: {book.pages ? book.pages : 'N/A'}</div>
+          <div>|</div>
+          <div>pages: {book.pages ? book.pages : 'N/A'}</div>
         </div>
       </div>
     </div>

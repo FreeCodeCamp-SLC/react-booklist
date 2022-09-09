@@ -82,11 +82,21 @@ export default function DashboardPage() {
             <div className="grid grid-cols-1 pb-6 mx-6 gap-x-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {searchResults?.length === 0 &&
                 books.data[0].map((book) => (
-                  <Book book={book} key={book.book_id} lists={lists} />
+                  <Book
+                    book={book}
+                    key={book.book_id}
+                    lists={lists}
+                    pageNumber={pageNumber}
+                  />
                 ))}
               {searchResults?.length > 0 &&
                 searchResults.map((book) => (
-                  <Book book={book} key={book.book_id} lists={lists} />
+                  <Book
+                    book={book}
+                    key={book.book_id}
+                    lists={lists}
+                    pageNumber={pageNumber}
+                  />
                 ))}
             </div>
             {searchResults?.length === 0 && (

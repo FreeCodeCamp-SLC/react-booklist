@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import bookImg from '../images/book.png';
 import bookmark from '../images/bookmark-icon.png';
 import { useAddFavorite } from '../hooks/useFavorites';
 
-export default function Book({ book, lists }) {
+export default function Book({ book, lists, pageNumber }) {
   const { push } = useHistory();
-  const [isFavorite, setIsFavorite] = useState(book.favorite);
-  const { mutate } = useAddFavorite(setIsFavorite);
+  const { mutate } = useAddFavorite();
+
+  const favoriteBookHandler = (boolean) => {
+    mutate({ boolean, id: book.book_id, pageNumber });
+  };
 
   const list = lists.data.filter(
     (singleList) => singleList.list_id === book.list_id,
@@ -16,10 +19,6 @@ export default function Book({ book, lists }) {
   const linkObj = {
     pathname: `/book/${book.book_id}`,
     state: { book },
-  };
-
-  const favoriteBookHandler = (boolean) => {
-    mutate({ boolean, id: book.book_id });
   };
 
   return (
@@ -31,7 +30,7 @@ export default function Book({ book, lists }) {
       }}
       className="flex flex-col items-center relative justify-center bg-white w-full  mt-7 mx-auto pt-6 pb-4 px-6 text-center rounded-md shadow-md cursor-pointer"
     >
-      {isFavorite && (
+      {book.favorite && (
         <svg
           onClick={() => favoriteBookHandler(false)}
           xmlns="http://www.w3.org/2000/svg"
@@ -49,7 +48,7 @@ export default function Book({ book, lists }) {
           />
         </svg>
       )}
-      {!isFavorite && (
+      {!book.favorite && (
         <svg
           onClick={() => favoriteBookHandler(true)}
           xmlns="http://www.w3.org/2000/svg"

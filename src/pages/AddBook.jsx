@@ -20,7 +20,9 @@ export default function AddBookPage() {
   const [listId, setListId] = useState(0);
   const [bookSelection, setBookSelection] = useState([]);
   const [bookImage, setBookImage] = useState(null);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  console.log('lists', lists);
+
+  const [modalIsOpen, setModalIsOpen] = useState(lists?.data?.length === 0);
 
   function addBookHandler(e) {
     e.preventDefault();
@@ -200,8 +202,7 @@ export default function AddBookPage() {
           </div>
 
           <h2 className="text-2xl">
-            You must create at least one collection before you begin adding
-            books.
+            You must create at least one list before you begin adding books.
           </h2>
           <button
             className="text-white font-semibold shadow-md rounded-xl hover:-translate-y-0.5 active:bg-booklistBlue-dark transform transition bg-booklistBlue hover:bg-booklistBlue-light py-1.5 px-4 mt-10 mb-4"
@@ -209,7 +210,7 @@ export default function AddBookPage() {
             onKeyPress={(e) => e.key === 'Enter' && goToListsPage}
             type="button"
           >
-            Create Collection
+            Create List
           </button>
         </ConfirmationModal>
       )}

@@ -2,15 +2,16 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import bookImg from '../images/book.png';
-import bookmark from '../images/bookmark-icon.png';
 import { useAddFavorite } from '../hooks/useFavorites';
+import RatingStars from './RatingStars';
+import readingStatus from '../utils/readingStatus';
 
 export default function Book({ book, lists, pageNumber }) {
   const { push } = useHistory();
-  const { mutate } = useAddFavorite();
+  const { mutate: favoriteBook } = useAddFavorite();
 
   const favoriteBookHandler = (boolean) => {
-    mutate({ boolean, id: book.book_id, pageNumber });
+    favoriteBook({ boolean, id: book.book_id, pageNumber });
   };
 
   const list = lists.data.filter(
@@ -21,14 +22,19 @@ export default function Book({ book, lists, pageNumber }) {
     state: { book },
   };
 
+  function navigateToEditBook(e) {
+    if (!e.target.matches('.cardBtn')) {
+      push(linkObj);
+    }
+  }
+
   return (
     <div
-      onClick={(e) => {
-        if (!e.target.matches('.cardBtn')) {
-          push(linkObj);
-        }
-      }}
-      className="flex flex-col items-center relative justify-center bg-white w-full  mt-7 mx-auto pt-6 pb-4 px-6 text-center rounded-md shadow-md cursor-pointer"
+      role="button"
+      tabIndex={0}
+      onClick={(e) => navigateToEditBook(e)}
+      onKeyPress={(e) => e.key === 'Enter' && navigateToEditBook(e)}
+      className="flex flex-col items-center relative justify-center bg-white w-full  mt-7 mx-auto pt-6 pb-4 px-6 text-center rounded-md shadow-md cursor-pointer focus:ring focus:ring-booklistBlue    focus:ring-opacity-50"
     >
       {book.favorite && (
         <svg
@@ -75,26 +81,26 @@ export default function Book({ book, lists, pageNumber }) {
       </div>
 
       <h3 className="text-gray-900 font-extrabold mt-3">{book.title}</h3>
-      <h4 className="text-gray-600 mt-2">{book.author}</h4>
+      <h4 className="text-gray-600 mt-1">{book.author}</h4>
+      <h4 className="text-gray-900 mt-2">
+        pages: {book.bookmark_pages && `${book.bookmark_pages} /`}{' '}
+        {book.pages ? book.pages : 'N/A'}
+      </h4>
       <div className="w-full">
         {list && (
           <HashLink to={`/lists#${list[0].list_id}`}>
             <button
               type="button"
-              className="bg-booklistRed text-white py-1 px-3 rounded-3xl font-semibold mt-4 shadow-md hover:bg-booklistRed-light hover:-translate-y-0.5 transform transition focus:outline-none focus:ring focus:ring-offset-2 focus:ring-booklistRed focus:ring-opacity-50 active:bg-booklistRed-dark"
+              className="bg-booklistRed text-white py-1 px-3 rounded-3xl font-semibold mt-3 shadow-md hover:bg-booklistRed-light hover:-translate-y-0.5 transform transition focus:outline-none focus:ring focus:ring-offset-2 focus:ring-booklistRed focus:ring-opacity-50 active:bg-booklistRed-dark"
             >
               {list[0].name}
             </button>
           </HashLink>
         )}
-        <div className=" mt-4 pb-4 space-x-3 flex items-center justify-center font-bold">
-          <div className="flex items-center justify-center">
-            <img className="h-4 mr-1" src={bookmark} alt="bookmark icon" />
-            Bookmark
-          </div>
-          <div>|</div>
-          <div>pages: {book.pages ? book.pages : 'N/A'}</div>
-        </div>
+        <h4 className="text-gray-900 mt-2 font-bold">
+          {readingStatus[`${book.reading_status_id}`]}
+        </h4>
+        <RatingStars rating={book.rating} bookId={book.book_id} />
       </div>
     </div>
   );

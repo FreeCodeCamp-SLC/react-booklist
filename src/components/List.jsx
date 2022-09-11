@@ -2,23 +2,22 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import bookImg from '../images/book.png';
 import BookIcon from './BookIcon';
-import Rating from './Rating';
 import ConfirmationModal from './ConfirmationModal';
 import { useDeleteList, useDeleteAllBooks } from '../hooks/useListsApi';
+import readingStatus from '../utils/readingStatus';
+import RatingStars from './RatingStars';
 
-const List = ({ id, list, booksInList, refetchLists, refetchBooks }) => {
+const List = ({ id, list, booksInList, refetchLists }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const deleteList = useDeleteList(id, setModalIsOpen);
   const deleteAllBooks = useDeleteAllBooks(booksInList);
-
   const deleteListHandler = async () => {
     try {
       await deleteAllBooks.mutateAsync();
       await deleteList.mutateAsync();
       refetchLists();
-      refetchBooks();
-    } catch {
-      console.log('error deleting list');
+    } catch (error) {
+      console.log('error deleting list', error);
     }
   };
 
@@ -36,10 +35,7 @@ const List = ({ id, list, booksInList, refetchLists, refetchBooks }) => {
       pathname: `/book/${book.book_id}`,
       state: { book },
     };
-    let isFavorite = 'false';
-    if (book.favorite) {
-      isFavorite = 'true';
-    }
+
     return (
       <div key={book.book_id}>
         <div className="border-b border-gray-200 border-solid" />
@@ -58,9 +54,11 @@ const List = ({ id, list, booksInList, refetchLists, refetchBooks }) => {
             <br />
             <span className="text-gray-500">{book.author}</span>
             <br />
-            <span>Favorite: {isFavorite}</span>
+            <span> {readingStatus[`${book.reading_status_id}`]}</span>
           </div>
-          <Rating placeholderRating="4/5" />
+          <div className="min-w-max">
+            <RatingStars rating={book.rating} bookId={book.book_id} />
+          </div>
         </div>
       </div>
     );

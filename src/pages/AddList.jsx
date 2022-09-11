@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useQueryClient } from 'react-query';
 import Header from '../components/Header';
 import api from '../config';
+import { useAddList } from '../hooks/useListsApi';
 
 export default function AddListPage() {
+  const history = useHistory();
+  const addList = useAddList(history);
   const [listName, setName] = useState('');
   const [listYear, setYear] = useState(0);
   const [yearValid, setYearValid] = useState(true);
@@ -14,28 +18,15 @@ export default function AddListPage() {
     getYear();
   }, []);
 
-  const history = useHistory();
-
-  function addList(e) {
+  function addListHandler(e) {
     e.preventDefault();
 
     const yearNum = +listYear;
 
     if (yearNum <= 0) {
       setYearValid(false);
-      return;
     }
-    api
-      .post(`/lists`, {
-        name: listName,
-        year: yearNum,
-      })
-      .then(() => {
-        history.push('/lists');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    addList.mutate({ name: listName, year: yearNum });
   }
 
   return (
@@ -84,7 +75,7 @@ export default function AddListPage() {
                 className="h-10 ml-4 font-semibold text-white rounded-md bg-booklistBlue-dark w-28"
                 type="submit"
                 form="new book"
-                onClick={addList}
+                onClick={addListHandler}
               >
                 Save
               </button>

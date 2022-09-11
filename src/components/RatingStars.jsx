@@ -11,11 +11,11 @@ const RatingStars = ({
   const { mutate: rateBook } = useRateBook();
   const [starHover, setStarHover] = useState(0);
   const ratingHandler = (bookRating) => {
-    if (bookRating === rating) {
-      return;
-    }
     if (isEditPage) {
       setStarRating(bookRating);
+      return;
+    }
+    if (bookRating === rating) {
       return;
     }
     rateBook({ rating: bookRating, id: bookId });

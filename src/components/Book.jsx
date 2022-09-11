@@ -94,7 +94,10 @@ export default function Book({ book, lists, pageNumber }) {
       <h3 className="text-gray-900 font-extrabold mt-3">{book.title}</h3>
       <h4 className="text-gray-600 mt-1">{book.author}</h4>
       <h4 className="text-gray-900 mt-2">
-        pages: {book.bookmark_pages && `${book.bookmark_pages} /`}{' '}
+        pages:{' '}
+        {book.bookmark_page &&
+          book.bookmark_page > 1 &&
+          `${book.bookmark_page} /`}{' '}
         {book.pages ? book.pages : 'N/A'}
       </h4>
       <div className="w-full">

@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useGetAllLists } from '../hooks/useListsApi';
 import Header from '../components/Header';
 import api from '../config';
 import ConfirmationModal from '../components/ConfirmationModal';
+import RatingStars from '../components/RatingStars';
+import PageContext from '../contexts/page-context';
 
 function convertDate(date) {
   if (date) return date.substring(0, 10);
@@ -14,6 +16,10 @@ export default function BookPage() {
   const [title, setTitle] = useState(book.title);
   const [author, setAuthor] = useState(book.author);
   const [pages, setPages] = useState(book.pages);
+  const [bookmark, setBookmark] = useState(
+    book.bookmark_page ? book.bookmark_page : 1,
+  );
+  const [starRating, setStarRating] = useState(book.rating);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [favorite, setFavorite] = useState(book.favorite);
   const [readingStatusId, setReadingStatusId] = useState(
@@ -39,6 +45,8 @@ export default function BookPage() {
       author,
       pages,
       favorite,
+      bookmark_page: bookmark,
+      rating: starRating,
       image_url: image,
       reading_status_id: readingStatusId ?? 1,
     };
@@ -129,6 +137,28 @@ export default function BookPage() {
                   required
                 />
               </label>
+              <label className="flex flex-col my-3" htmlFor="bookmark">
+                Current Bookmark Page
+                <input
+                  onChange={(e) => {
+                    setBookmark(Number(e.target.value));
+                  }}
+                  className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
+                  type="number"
+                  id="bookmark"
+                  name="Bookmark"
+                  value={bookmark ?? 0}
+                  required
+                />
+              </label>
+              <RatingStars
+                rating={book.rating}
+                bookId={book.book_id}
+                starRating={starRating}
+                setStarRating={setStarRating}
+                isEditPage
+              />
+
               <div className="flex justify-center py-4">
                 <img src={image} alt="book cover" className="w-32" />
               </div>

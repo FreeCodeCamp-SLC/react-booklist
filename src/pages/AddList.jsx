@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useQueryClient } from 'react-query';
 import Header from '../components/Header';
-import api from '../config';
 import { useAddList } from '../hooks/useListsApi';
 
 export default function AddListPage() {

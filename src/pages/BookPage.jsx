@@ -151,14 +151,16 @@ export default function BookPage() {
                   required
                 />
               </label>
-              <RatingStars
-                rating={book.rating}
-                bookId={book.book_id}
-                starRating={starRating}
-                setStarRating={setStarRating}
-                isEditPage
-              />
-
+              <span className="flex flex-col my-3">
+                Rating
+                <RatingStars
+                  rating={book.rating}
+                  bookId={book.book_id}
+                  starRating={starRating}
+                  setStarRating={setStarRating}
+                  isEditPage
+                />
+              </span>
               <div className="flex justify-center py-4">
                 <img src={image} alt="book cover" className="w-32" />
               </div>

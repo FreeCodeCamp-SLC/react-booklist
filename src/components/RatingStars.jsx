@@ -21,7 +21,7 @@ const RatingStars = ({
     rateBook({ rating: bookRating, id: bookId });
   };
   return (
-    <ul className="mt-3 cardBtn">
+    <ul className="cardBtn">
       {[1, 2, 3, 4, 5].map((star) => {
         if (
           (isEditPage && starRating >= star) ||

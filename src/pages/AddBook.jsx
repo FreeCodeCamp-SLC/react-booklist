@@ -20,7 +20,6 @@ export default function AddBookPage() {
   const [listId, setListId] = useState(0);
   const [bookSelection, setBookSelection] = useState([]);
   const [bookImage, setBookImage] = useState(null);
-  console.log('lists', lists);
 
   const [modalIsOpen, setModalIsOpen] = useState(lists?.data?.length === 0);
 

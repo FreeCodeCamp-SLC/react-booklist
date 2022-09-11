@@ -97,7 +97,7 @@ export default function Book({ book, lists, pageNumber }) {
             </button>
           </HashLink>
         )}
-        <h4 className="text-gray-900 mt-2 font-bold">
+        <h4 className="text-gray-900 my-3 font-bold">
           {readingStatus[`${book.reading_status_id}`]}
         </h4>
         <RatingStars rating={book.rating} bookId={book.book_id} />

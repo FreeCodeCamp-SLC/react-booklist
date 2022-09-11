@@ -21,7 +21,7 @@ export function useAddFavorite() {
 
   return useMutation(favoriteHandler, {
     onSuccess: (res, args) => {
-      const { id } = args;
+      const { id, pageNumber } = args;
       queryClient.setQueryData(['books', pageNumber], (old) => {
         const oldBookIndex = old.data[0].findIndex(
           (book) => book.book_id === id,

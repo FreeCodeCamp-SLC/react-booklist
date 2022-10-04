@@ -154,8 +154,7 @@ export default function BookPage() {
               <span className="flex flex-col my-3">
                 Rating
                 <RatingStars
-                  rating={book.rating}
-                  bookId={book.book_id}
+                  book={book}
                   starRating={starRating}
                   setStarRating={setStarRating}
                   isEditPage

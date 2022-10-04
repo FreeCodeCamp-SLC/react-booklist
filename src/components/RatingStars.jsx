@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
 import { useRateBook } from '../hooks/useBooksApi';
 
-const RatingStars = ({
-  rating,
-  bookId,
-  isEditPage,
-  starRating,
-  setStarRating,
-}) => {
+const RatingStars = ({ book, isEditPage, starRating, setStarRating }) => {
   const { mutate: rateBook } = useRateBook();
   const [starHover, setStarHover] = useState(0);
   const ratingHandler = (bookRating) => {
@@ -15,17 +9,17 @@ const RatingStars = ({
       setStarRating(bookRating);
       return;
     }
-    if (bookRating === rating) {
+    if (bookRating === book.rating) {
       return;
     }
-    rateBook({ rating: bookRating, id: bookId });
+    rateBook({ rating: bookRating, book });
   };
   return (
     <ul className="cardBtn">
       {[1, 2, 3, 4, 5].map((star) => {
         if (
           (isEditPage && starRating >= star) ||
-          (!isEditPage && rating >= star)
+          (!isEditPage && book.rating >= star)
         ) {
           return (
             <button

@@ -6,6 +6,7 @@ import SortOptions from '../components/SortOptions';
 import PageContext from '../contexts/page-context';
 import PageSelectors from '../components/PageSelectors';
 import PaginationOptions from '../components/PaginationOptions';
+import Toasts from '../components/Toasts';
 import { useGetAllLists } from '../hooks/useListsApi';
 import api from '../config';
 
@@ -22,12 +23,7 @@ export default function DashboardPage() {
   } = useContext(PageContext);
 
   const { data: lists } = useGetAllLists();
-  const {
-    data: books,
-    isLoading,
-    isError,
-    refetch,
-  } = useGetBooks(booksItemCount, pageNumber, sortBy);
+  const { data: books, isLoading, isError, refetch } = useGetBooks();
 
   const [searchResults, setSearchResults] = useState([]);
 
@@ -60,6 +56,7 @@ export default function DashboardPage() {
 
   return (
     <section className="sm:grid grid-cols-layout grid-rows-layout">
+      <Toasts />
       <Header searchHandler={searchHandler} />
       <div className="min-h-full col-start-2 row-start-2 bg-gray-100">
         <div className="px-5 pt-5 flex justify-between">

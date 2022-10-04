@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import bookImg from '../images/book.png';
@@ -11,7 +11,7 @@ export default function Book({ book, lists, pageNumber }) {
   const { mutate: favoriteBook } = useAddFavorite();
 
   const favoriteBookHandler = (boolean) => {
-    favoriteBook({ boolean, id: book.book_id, pageNumber });
+    favoriteBook({ boolean, book, pageNumber });
   };
 
   const list = lists.data.filter(
@@ -63,10 +63,9 @@ export default function Book({ book, lists, pageNumber }) {
         <button
           className="cardBtn focus:ring-booklistBlue focus:ring-opacity-50 focus:ring-2 absolute top-2 right-2"
           type="button"
-          onClick={() => favoriteBookHandler(false)}
+          onClick={() => favoriteBookHandler(true)}
         >
           <svg
-            onClick={() => favoriteBookHandler(true)}
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -114,7 +113,7 @@ export default function Book({ book, lists, pageNumber }) {
         <h4 className="text-gray-900 my-3 font-bold">
           {readingStatus[`${book.reading_status_id}`]}
         </h4>
-        <RatingStars rating={book.rating} bookId={book.book_id} />
+        <RatingStars book={book} />
       </div>
     </div>
   );

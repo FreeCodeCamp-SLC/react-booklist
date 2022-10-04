@@ -16,6 +16,7 @@ import BookPage from '../pages/BookPage';
 import AuthPage from '../pages/Auth';
 import { PageProvider } from '../contexts/page-context';
 import { loadAuthToken } from '../utils/local-storage';
+import { ToastProvider } from '../contexts/toast-context';
 
 const queryClient = new QueryClient();
 
@@ -34,37 +35,39 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <PageProvider>
-        <main>
-          <Switch>
-            <Route path="/" exact>
-              {authedRedirect(LandingPage)}
-            </Route>
-            <AuthenticateRoute path="/auth">
-              <AuthPage />
-            </AuthenticateRoute>
-            <AuthenticateRoute path="/dashboard">
-              <DashboardPage />
-            </AuthenticateRoute>
-            <AuthenticateRoute path="/profile">
-              <ProfilePage />
-            </AuthenticateRoute>
-            <AuthenticateRoute path="/add-book">
-              <AddBook />
-            </AuthenticateRoute>
-            <AuthenticateRoute path="/favorites">
-              <FavoritesPage />
-            </AuthenticateRoute>
-            <AuthenticateRoute path="/book/:book_id">
-              <BookPage />
-            </AuthenticateRoute>
-            <AuthenticateRoute path="/lists">
-              <Lists />
-            </AuthenticateRoute>
-            <AuthenticateRoute path="/add-list">
-              <AddList />
-            </AuthenticateRoute>
-          </Switch>
-        </main>
+        <ToastProvider>
+          <main>
+            <Switch>
+              <Route path="/" exact>
+                {authedRedirect(LandingPage)}
+              </Route>
+              <AuthenticateRoute path="/auth">
+                <AuthPage />
+              </AuthenticateRoute>
+              <AuthenticateRoute path="/dashboard">
+                <DashboardPage />
+              </AuthenticateRoute>
+              <AuthenticateRoute path="/profile">
+                <ProfilePage />
+              </AuthenticateRoute>
+              <AuthenticateRoute path="/add-book">
+                <AddBook />
+              </AuthenticateRoute>
+              <AuthenticateRoute path="/favorites">
+                <FavoritesPage />
+              </AuthenticateRoute>
+              <AuthenticateRoute path="/book/:book_id">
+                <BookPage />
+              </AuthenticateRoute>
+              <AuthenticateRoute path="/lists">
+                <Lists />
+              </AuthenticateRoute>
+              <AuthenticateRoute path="/add-list">
+                <AddList />
+              </AuthenticateRoute>
+            </Switch>
+          </main>
+        </ToastProvider>
       </PageProvider>
 
       <ReactQueryDevtools InitialIsOpen={false} position="bottom-right" />

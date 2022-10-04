@@ -57,7 +57,7 @@ const List = ({ id, list, booksInList, refetchLists }) => {
             <span> {readingStatus[`${book.reading_status_id}`]}</span>
           </div>
           <div className="min-w-max">
-            <RatingStars rating={book.rating} bookId={book.book_id} />
+            <RatingStars book={book} />
           </div>
         </div>
       </div>

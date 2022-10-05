@@ -36,6 +36,11 @@ export default function Toasts() {
               Success!
             </p>
           </div>
+          {toastType === 'add_book' && (
+            <div className="px-3 pb-3 bg-green-500 rounded-b-lg break-words text-white">
+              {book.title} has been added to your collection.
+            </div>
+          )}
           {toastType === 'favoriting' && (
             <div className="px-3 pb-3 bg-green-500 rounded-b-lg break-words text-white">
               {book.title} has been added to your favorites.
@@ -43,7 +48,17 @@ export default function Toasts() {
           )}
           {toastType === 'rating' && (
             <div className="px-3 pb-3 bg-green-500 rounded-b-lg break-words text-white">
-              {book.title}'s rating has been updated
+              {book.title} has been updated.
+            </div>
+          )}
+          {toastType === 'add_list' && (
+            <div className="px-3 pb-3 bg-green-500 rounded-b-lg break-words text-white">
+              List {book.name} has been added to your collection.
+            </div>
+          )}
+          {toastType === 'edit_book' && (
+            <div className="px-3 pb-3 bg-green-500 rounded-b-lg break-words text-white">
+              {book.title} has been updated.
             </div>
           )}
         </div>
@@ -76,12 +91,25 @@ export default function Toasts() {
                   d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"
                 />
               </svg>
-              Book Removed!
+              {toastType !== 'delete_list' && 'Book Removed'}
+              {toastType === 'delete_list' && 'List Removed'}
             </p>
           </div>
-          <div className="px-3 pb-3 bg-red-500 rounded-b-lg break-words text-white">
-            {book.title} has been removed from your favorites.
-          </div>
+          {toastType === 'favoriting' && (
+            <div className="px-3 pb-3 bg-red-500 rounded-b-lg break-words text-white">
+              {book.title} has been removed from your favorites.
+            </div>
+          )}
+          {toastType === 'delete_book' && (
+            <div className="px-3 pb-3 bg-red-500 rounded-b-lg break-words text-white">
+              {book.title} has been removed from your collection.
+            </div>
+          )}
+          {toastType === 'delete_list' && (
+            <div className="px-3 pb-3 bg-red-500 rounded-b-lg break-words text-white">
+              List {book.title} has been removed from your collection.
+            </div>
+          )}
         </div>
       )}
       {toastStatus === 'error' && (

@@ -1,5 +1,7 @@
+import { useContext } from 'react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import api from '../config';
+import ToastContext from '../contexts/toast-context';
 
 export const getbooksByList = (listIds) => api.get(`/booksByList`, { listIds });
 
@@ -39,11 +41,13 @@ export const useGetAllLists = () => {
   return useQuery('allLists', () => getLists);
 };
 
-export const useDeleteList = (id, setModalIsOpen) => {
+export const useDeleteList = (id, setModalIsOpen, list) => {
+  const { setToastFade, setToastStatus, setBook, setToastType } = useContext(ToastContext);
+
   const queryClient = useQueryClient();
   const deleteList = () => api.delete(`/lists/${id}`);
   return useMutation(deleteList, {
-    onSuccess: () => {
+    onSuccess: (res, args) => {
       queryClient.setQueryData('allLists', (old) => {
         const filteredLists = old.data.filter((list) => list.list_id !== id);
         old.data = filteredLists;
@@ -51,6 +55,17 @@ export const useDeleteList = (id, setModalIsOpen) => {
       });
       document.body.style.overflowY = 'visible';
       setModalIsOpen(false);
+      setToastStatus('remove');
+      setToastType('delete_list');
+      // rename this state
+      setBook(list.name);
+      setTimeout(() => {
+        setToastFade(true);
+      }, 250);
+      setTimeout(() => {
+        setToastFade(false);
+      }, 2000);
+
     },
     onError: (err) => {
       console.log('error deleting lists', err);
@@ -71,6 +86,8 @@ export const useDeleteAllBooks = (booksInList) => {
 };
 
 export function useAddList(history) {
+  const { setToastFade, setToastStatus, setBook, setToastType } = useContext(ToastContext);
+
   const queryClient = useQueryClient();
 
   const addList = ({ name, year }) =>
@@ -80,14 +97,32 @@ export function useAddList(history) {
     });
 
   return useMutation(addList, {
-    onSuccess: (res) => {
+    onSuccess: (res, args) => {
+      const {name} = args;
       queryClient.setQueryData('allLists', (old) => {
         old.data = [...old?.data, res.data];
         return old;
       });
       history.push('/lists');
+      setToastStatus('success');
+      setToastType('add_list');
+      // rename this state
+      setBook({name});
+      setTimeout(() => {
+        setToastFade(true);
+      }, 250);
+      setTimeout(() => {
+        setToastFade(false);
+      }, 2000);
     },
-    onError: (err) => {
+    onError: (err, args) => {
+      const {name} = args;
+      setToastStatus('error');
+      setBook({name});
+      setToastFade(true);
+      setTimeout(() => {
+        setToastFade(false);
+      }, 2000);
       console.log('error adding favorite', err);
     },
   });

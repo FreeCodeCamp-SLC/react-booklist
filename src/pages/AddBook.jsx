@@ -8,6 +8,7 @@ import { useAddBook } from '../hooks/useBooksApi';
 import CustomDropdown from '../components/customDropdown/CustomDropdown';
 import ConfirmationModal from '../components/ConfirmationModal';
 import logo from '../images/logo.png';
+import Toasts from '../components/Toasts';
 
 export default function AddBookPage() {
   const history = useHistory();
@@ -83,6 +84,8 @@ export default function AddBookPage() {
 
   return (
     <section className=" sm:grid grid-cols-layout grid-rows-layout">
+      <Toasts />
+
       <Header />
       {!isLoading && !isError && (
         <div className="min-h-full col-start-2 row-start-2 bg-gray-100 ">

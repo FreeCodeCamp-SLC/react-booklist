@@ -9,7 +9,7 @@ import RatingStars from './RatingStars';
 
 const List = ({ id, list, booksInList, refetchLists }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const deleteList = useDeleteList(id, setModalIsOpen);
+  const deleteList = useDeleteList(id, setModalIsOpen, list);
   const deleteAllBooks = useDeleteAllBooks(booksInList);
   const deleteListHandler = async () => {
     try {

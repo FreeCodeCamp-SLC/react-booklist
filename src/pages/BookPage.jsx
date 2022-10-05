@@ -1,11 +1,10 @@
-import React, { useState, useContext } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useGetAllLists } from '../hooks/useListsApi';
 import Header from '../components/Header';
-import api from '../config';
 import ConfirmationModal from '../components/ConfirmationModal';
 import RatingStars from '../components/RatingStars';
-import PageContext from '../contexts/page-context';
+import { useDeleteBook, useEditBook } from '../hooks/useBooksApi';
 
 function convertDate(date) {
   if (date) return date.substring(0, 10);
@@ -33,11 +32,12 @@ export default function BookPage() {
     convertDate(book.date_finished),
   );
   const { data: lists } = useGetAllLists();
-  const bookId = book.book_id;
-  const image = book.image_url;
-  const history = useHistory();
+  const { mutate: deleteBook } = useDeleteBook();
+  const { mutate: editBook } = useEditBook();
 
-  function editBook(e) {
+  const image = book.image_url;
+
+  function editBookHandler(e) {
     e.preventDefault();
     const bookDetails = {
       list_id: listId,
@@ -49,29 +49,11 @@ export default function BookPage() {
       rating: starRating,
       image_url: image,
       reading_status_id: readingStatusId ?? 1,
+      book_id: book.book_id,
     };
     if (dateStarted) bookDetails.date_started = dateStarted;
     if (dateFinished) bookDetails.date_finished = dateFinished;
-    api
-      .put(`/books/${bookId}`, bookDetails)
-      .then(() => {
-        history.push('/dashboard');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  function deleteBook(e) {
-    e.preventDefault();
-    api
-      .delete(`/books/${bookId}`)
-      .then(() => {
-        history.push('/dashboard');
-      })
-      .catch((err) => {
-        console.warn(err);
-      });
+    editBook(bookDetails);
   }
 
   function showModal() {
@@ -253,7 +235,7 @@ export default function BookPage() {
                 className="h-10 ml-4 font-semibold text-white rounded-md bg-booklistBlue-dark w-28"
                 type="submit"
                 form="new book"
-                onClick={editBook}
+                onClick={editBookHandler}
                 aria-label={`save book ${title}`}
               >
                 Save
@@ -282,7 +264,7 @@ export default function BookPage() {
             </h2>
             <button
               className="bg-booklistRed active:bg-booklistRed-dark hover:bg-booklistRed-light hover:-translate-y-0.5 text-white font-semibold shadow-md rounded-xl py-1.5 px-4 mt-8 transform transition"
-              onClick={deleteBook}
+              onClick={() => deleteBook(book)}
               onKeyPress={(e) => e.key === 'Enter' && deleteBook}
               type="button"
               aria-label={`confirm deletion of book ${title}`}

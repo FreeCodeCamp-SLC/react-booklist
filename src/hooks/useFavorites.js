@@ -36,7 +36,7 @@ export function useAddFavorite() {
       // triggering toast
       setToastFade(true);
       setToastStatus(boolean ? 'success' : 'remove');
-      setToastType(boolean ? 'favoriting' : 'unfavoriting');
+      setToastType('favoriting');
       setBook(book);
       setTimeout(() => {
         setToastFade(false);

@@ -117,12 +117,12 @@ const List = ({ id, list, booksInList, refetchLists }) => {
           {!deleteList.isLoading && (
             <>
               <h2 className="text-2xl">
-                Are you sure you want to delete collection {list.name}?
+                Are you sure you want to delete list {list.name}?
               </h2>
               <div>
                 <p className="text-xl my-4">
-                  Deleting this collection will also remove the following books
-                  from your collection:
+                  Deleting this list will also remove the following books
+                  from your list:
                 </p>
                 <ul className="flex flex-col">
                   {booksInList.map((book) => (
@@ -136,7 +136,7 @@ const List = ({ id, list, booksInList, refetchLists }) => {
                 onKeyPress={(e) => e.key === 'Enter' && deleteListHandler}
                 type="button"
               >
-                Delete Collection
+                Delete List
               </button>
             </>
           )}

@@ -144,7 +144,7 @@ export default function Toasts() {
             </p>
           </div>
           <div className="px-3 pb-3 bg-yellow-500 rounded-b-lg break-words text-white">
-            Error making changes to {book.title}
+            Error making changes to {book.title || book.name}
           </div>
         </div>
       )}

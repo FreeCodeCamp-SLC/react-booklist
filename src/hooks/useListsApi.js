@@ -1,11 +1,14 @@
 import { useContext } from 'react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { useHistory } from 'react-router-dom';
 import api from '../config';
 import ToastContext from '../contexts/toast-context';
 
 export const getbooksByList = (listIds) => api.get(`/booksByList`, { listIds });
 
 export default function useListsApi(booksItemCount, pageNumber, sortBy) {
+  const history = useHistory();
+
   const getLists = async () => {
     try {
       const lists = await api.get(`/lists`, {
@@ -24,8 +27,10 @@ export default function useListsApi(booksItemCount, pageNumber, sortBy) {
         ...lists?.data[1],
         books: booksByList?.data,
       };
-    } catch (err) {
-      console.log('err', err);
+    } catch (error) {
+      if (error.response.status === 401) {
+        history.push('/Auth');
+      }
       return {
         lists: [],
         booksByList: [],
@@ -36,16 +41,25 @@ export default function useListsApi(booksItemCount, pageNumber, sortBy) {
 }
 
 export const useGetAllLists = () => {
+  const history = useHistory();
+
   const getLists = api.get(`/allLists`);
 
-  return useQuery('allLists', () => getLists);
+  return useQuery('allLists', () => getLists, {
+    onError: (error) => {
+      console.log('error', error);
+      if (error.response.status === 401) {
+        history.push('/Auth');
+      }
+    },
+  });
 };
 
 export const useDeleteList = (id, setModalIsOpen, list) => {
-  const { setToastFade, setToastStatus, setBook, setToastType } = useContext(ToastContext);
-
+  const { setToastFade, setToastStatus, setBook, setToastType } =
+    useContext(ToastContext);
   const queryClient = useQueryClient();
-  const deleteList = () => api.delete(`/lists/${id}`);
+  const deleteList = () => api.delete(`/lists1/${id}`);
   return useMutation(deleteList, {
     onSuccess: (res, args) => {
       queryClient.setQueryData('allLists', (old) => {
@@ -65,10 +79,14 @@ export const useDeleteList = (id, setModalIsOpen, list) => {
       setTimeout(() => {
         setToastFade(false);
       }, 2000);
-
     },
-    onError: (err) => {
-      console.log('error deleting lists', err);
+    onError: () => {
+      setToastStatus('error');
+      setBook(list);
+      setToastFade(true);
+      setTimeout(() => {
+        setToastFade(false);
+      }, 2000);
     },
   });
 };
@@ -86,7 +104,8 @@ export const useDeleteAllBooks = (booksInList) => {
 };
 
 export function useAddList(history) {
-  const { setToastFade, setToastStatus, setBook, setToastType } = useContext(ToastContext);
+  const { setToastFade, setToastStatus, setBook, setToastType } =
+    useContext(ToastContext);
 
   const queryClient = useQueryClient();
 
@@ -98,7 +117,7 @@ export function useAddList(history) {
 
   return useMutation(addList, {
     onSuccess: (res, args) => {
-      const {name} = args;
+      const { name } = args;
       queryClient.setQueryData('allLists', (old) => {
         old.data = [...old?.data, res.data];
         return old;
@@ -107,7 +126,7 @@ export function useAddList(history) {
       setToastStatus('success');
       setToastType('add_list');
       // rename this state
-      setBook({name});
+      setBook({ name });
       setTimeout(() => {
         setToastFade(true);
       }, 250);
@@ -116,9 +135,9 @@ export function useAddList(history) {
       }, 2000);
     },
     onError: (err, args) => {
-      const {name} = args;
+      const { name } = args;
       setToastStatus('error');
-      setBook({name});
+      setBook({ name });
       setToastFade(true);
       setTimeout(() => {
         setToastFade(false);

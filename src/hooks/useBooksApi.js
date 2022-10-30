@@ -6,14 +6,21 @@ import PageContext from '../contexts/page-context';
 import ToastContext from '../contexts/toast-context';
 
 export default function useGetBooks() {
+  const history = useHistory();
+
   const { booksItemCount, pageNumber, sortBy } = useContext(PageContext);
   const getAllBooks = api.get(`/books`, { booksItemCount, pageNumber, sortBy });
-  return useQuery(['books', pageNumber], async () => getAllBooks, {});
+  return useQuery(['books', pageNumber], async () => getAllBooks, {
+    onError: (error) => {
+      if (error.response.status === 401) {
+        history.push('/Auth');
+      }
+    },
+  });
 }
 
 export function useAddBook() {
   const history = useHistory();
-
   const { setToastFade, setToastStatus, setBook, setToastType } =
     useContext(ToastContext);
 
@@ -32,14 +39,16 @@ export function useAddBook() {
         setToastFade(false);
       }, 2000);
     },
-    onError: (err, args) => {
+    onError: (error, args) => {
       setToastStatus('error');
       setBook(args);
       setToastFade(true);
       setTimeout(() => {
         setToastFade(false);
       }, 2000);
-      console.log('error adding book', err);
+      if (error.response.status === 401) {
+        history.push('/Auth');
+      }
     },
   });
 }

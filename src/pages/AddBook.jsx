@@ -67,6 +67,7 @@ export default function AddBookPage() {
       axios
         .get(`https://www.googleapis.com/books/v1/volumes?q=${query}`)
         .then((res) => {
+          console.log('res', res);
           setBookSelection(res.data.items);
         })
         .catch((err) => {
@@ -144,20 +145,20 @@ export default function AddBookPage() {
                 </div>
               )}
               <label className="flex flex-col my-3" htmlFor="Favorite">
-                Favorite
-                <div className="text-gray-500">
-                  Add this book to your list of favorites
+                Favorites
+                <div className="form-check form-switch">
+                  <input
+                    className="form-check-input appearance-none w-9 -ml-10 rounded-full float-left h-5 align-top bg-white bg-no-repeat bg-contain bg-gray-300 focus:outline-none cursor-pointer shadow-sm"
+                    type="checkbox"
+                    role="switch"
+                    name="Favorite"
+                    id="flexSwitchCheckChecked76"
+                    onChange={(e) => {
+                      setFavorite(e.target.checked);
+                    }}
+                    checked={favorite}
+                  />
                 </div>
-                <input
-                  onChange={(e) => {
-                    setFavorite(e.target.checked);
-                  }}
-                  className="w-5 mt-1"
-                  checked={favorite}
-                  type="checkbox"
-                  name="Favorite"
-                  id="Favorite"
-                />
               </label>
               <label className="my-3" htmlFor="Series">
                 List
@@ -166,7 +167,7 @@ export default function AddBookPage() {
                     onChange={(e) => {
                       setListId(e.target.value);
                     }}
-                    className="w-full border-2 py-1.5 px-2 rounded-md"
+                    className="mt-1 w-full border-2 py-1.5 px-2 rounded-md sm:w-72"
                     name="Series"
                     id="Series"
                     value={listId}

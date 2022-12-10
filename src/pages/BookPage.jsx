@@ -31,6 +31,7 @@ export default function BookPage() {
   const [dateFinished, setDateFinished] = useState(
     convertDate(book.date_finished),
   );
+  const [description, setDescription] = useState();
   const { data: lists } = useGetAllLists();
   const { mutate: deleteBook } = useDeleteBook();
   const { mutate: editBook } = useEditBook();
@@ -91,7 +92,7 @@ export default function BookPage() {
               </label>
 
               <label className="flex flex-col my-3" htmlFor="author">
-                Author
+                Author(s)
                 <input
                   onChange={(e) => {
                     setAuthor(e.target.value);
@@ -104,83 +105,128 @@ export default function BookPage() {
                   required
                 />
               </label>
+              <div className="w-full grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2">
+                {' '}
+                <div>
+                  <label className="flex flex-col my-3" htmlFor="pages">
+                    Pages
+                    <input
+                      onChange={(e) => {
+                        setPages(Number(e.target.value));
+                      }}
+                      className="w-full mt-1 md:w-48 border-2 py-1.5 px-2 rounded-md"
+                      type="number"
+                      id="pages"
+                      name="Pages"
+                      value={pages ?? 0}
+                      required
+                    />
+                  </label>
+                </div>
+                <label className="flex flex-col my-3" htmlFor="bookmark">
+                  Current Bookmark Page
+                  <input
+                    onChange={(e) => {
+                      setBookmark(Number(e.target.value));
+                    }}
+                    className="w-full mt-1 md:w-48 border-2 py-1.5 px-2 rounded-md"
+                    type="number"
+                    id="bookmark"
+                    name="Bookmark"
+                    value={bookmark ?? 0}
+                    required
+                  />
+                </label>
+                <label className="flex flex-col my-3" htmlFor="date-started">
+                  Date Started
+                  <input
+                    onChange={(e) => {
+                      setDateStarted(e.target.value);
+                    }}
+                    className="w-full mt-1 md:w-48 border-2 py-1.5 px-2 rounded-md"
+                    type="date"
+                    id="date-started"
+                    name="Date Started"
+                    value={dateStarted ?? ''}
+                  />
+                </label>
+                <label className="flex flex-col my-3" htmlFor="date-finished">
+                  Date Finished
+                  <input
+                    onChange={(e) => {
+                      setDateFinished(e.target.value);
+                    }}
+                    className="w-full mt-1 md:w-48 border-2 py-1.5 px-2 rounded-md"
+                    type="date"
+                    id="date-finished"
+                    name="Date Finished"
+                    value={dateFinished ?? ''}
+                  />
+                </label>
+              </div>
 
-              <label className="flex flex-col my-3" htmlFor="pages">
-                Pages
-                <input
-                  onChange={(e) => {
-                    setPages(Number(e.target.value));
-                  }}
-                  className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
-                  type="number"
-                  id="pages"
-                  name="Pages"
-                  value={pages ?? 0}
-                  required
-                />
-              </label>
-              <label className="flex flex-col my-3" htmlFor="bookmark">
-                Current Bookmark Page
-                <input
-                  onChange={(e) => {
-                    setBookmark(Number(e.target.value));
-                  }}
-                  className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
-                  type="number"
-                  id="bookmark"
-                  name="Bookmark"
-                  value={bookmark ?? 0}
-                  required
-                />
-              </label>
-              <span className="flex flex-col my-3">
-                Rating
-                <RatingStars
-                  book={book}
-                  starRating={starRating}
-                  setStarRating={setStarRating}
-                  isEditPage
-                />
-              </span>
-              <div className="flex justify-center py-4">
-                <img src={image} alt="book cover" className="w-32" />
+              <div className="grid md:grid-cols-2 grid-cols-1">
+                <div className="">
+                  <label
+                    className="flex flex-col my-4"
+                    htmlFor="reading-status"
+                  >
+                    Reading Status
+                    <select
+                      name="Reading Status Id"
+                      id="reading-status"
+                      className="w-full mt-1 md:w-48 border-2 py-1.5 px-2 rounded-md"
+                      value={readingStatusId ?? 1}
+                      onChange={(e) => {
+                        setReadingStatusId(Number(e.target.value));
+                      }}
+                    >
+                      <option value={1}>To Read</option>
+                      <option value={2}>Currently Reading</option>
+                      <option value={3}>On Hold</option>
+                      <option value={4}>Finished</option>
+                      <option value={5}>Abandoned</option>
+                    </select>
+                  </label>
+                  <label className="flex flex-col pt-1 my-4" htmlFor="Favorite">
+                    Favorite
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input appearance-none w-9 -ml-10 rounded-full float-left h-5 align-top bg-white bg-no-repeat bg-contain bg-gray-300 focus:outline-none cursor-pointer shadow-sm"
+                        type="checkbox"
+                        role="switch"
+                        name="Favorite"
+                        id="flexSwitchCheckChecked76"
+                        onChange={(e) => {
+                          setFavorite(e.target.checked);
+                        }}
+                        checked={favorite}
+                      />
+                    </div>
+                  </label>
+                  <span className="flex flex-col pt-1 my-4">
+                    Your Rating
+                    <RatingStars
+                      book={book}
+                      starRating={starRating}
+                      setStarRating={setStarRating}
+                      isEditPage
+                    />
+                  </span>
+                </div>
+                <div className="flex flex-col mt-1 mb-3">
+                  <span className="mb-1">Book Cover</span>
+                  <img src={image} alt="book cover" className="w-32" />
+                </div>
               </div>
               <label className="flex flex-col my-3" htmlFor="Favorite">
-                Favorite
-                <div className="text-gray-500">
-                  Add this book to your list of favorites
-                </div>
-                <input
-                  onChange={(e) => {
-                    setFavorite(e.target.checked);
-                  }}
-                  className="w-5 mt-1"
-                  checked={favorite}
-                  type="checkbox"
-                  name="Favorite"
-                  id="Favorite"
+                Description
+                <textarea
+                  className="w-full mt-1 border-2 py-1.5 px-2 rounded-md"
+                  onChange={(e) => setDescription(e.target.value)}
+                  value={description}
                 />
               </label>
-
-              <label className="flex flex-col my-3" htmlFor="reading-status">
-                Reading Status
-                <select
-                  name="Reading Status Id"
-                  id="reading-status"
-                  className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
-                  value={readingStatusId ?? 1}
-                  onChange={(e) => {
-                    setReadingStatusId(Number(e.target.value));
-                  }}
-                >
-                  <option value={1}>To Read</option>
-                  <option value={2}>Currently Reading</option>
-                  <option value={3}>On Hold</option>
-                  <option value={4}>Finished</option>
-                  <option value={5}>Abandoned</option>
-                </select>
-              </label>
-
               <label className="flex flex-col my-3" htmlFor="Series">
                 List
                 {lists?.data.length > 0 && (
@@ -188,7 +234,7 @@ export default function BookPage() {
                     onChange={(e) => {
                       setListId(parseInt(e.target.value));
                     }}
-                    className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
+                    className="w-full mt-1 md:w-72 border-2 py-1.5 px-2 rounded-md"
                     name="Series"
                     id="Series"
                     value={listId}
@@ -200,34 +246,6 @@ export default function BookPage() {
                     ))}
                   </select>
                 )}
-              </label>
-
-              <label className="flex flex-col my-3" htmlFor="date-started">
-                Date Started
-                <input
-                  onChange={(e) => {
-                    setDateStarted(e.target.value);
-                  }}
-                  className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
-                  type="date"
-                  id="date-started"
-                  name="Date Started"
-                  value={dateStarted ?? ''}
-                />
-              </label>
-
-              <label className="flex flex-col my-3" htmlFor="date-finished">
-                Date Finished
-                <input
-                  onChange={(e) => {
-                    setDateFinished(e.target.value);
-                  }}
-                  className="w-full mt-1 sm:w-48 border-2 py-1.5 px-2 rounded-md"
-                  type="date"
-                  id="date-finished"
-                  name="Date Finished"
-                  value={dateFinished ?? ''}
-                />
               </label>
             </form>
             <div className="flex items-center h-16 bg-gray-50 ">

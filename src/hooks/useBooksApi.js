@@ -16,6 +16,7 @@ export default function useGetBooks() {
         history.push('/Auth');
       }
     },
+    retry: 1,
   });
 }
 

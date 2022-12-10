@@ -4,6 +4,8 @@ import api from '../config';
 class CloudinaryUploadWidget extends Component {
   async componentDidMount() {
     const cloudName = process.env.REACT_APP_CLOUD_NAME; // replace with your own cloud name
+    console.log('cloudName', cloudName);
+    console.log('apiKey', process.env.REACT_APP_CLOUD_API_KEY);
     const uploadPreset = 'ml_default'; // replace with your own upload preset
 
     // Remove the comments from the code below to add
@@ -15,10 +17,12 @@ class CloudinaryUploadWidget extends Component {
 
     const generatedSignature = async () => {
       const response = await api.get('/images');
+      console.log('response', response);
       return response.data;
     };
-    console.log('generatedSignature', generatedSignature);
 
+    const signature = await generatedSignature();
+    console.log('signature', signature);
     const myWidget = window.cloudinary.createUploadWidget(
       {
         cloudName,
@@ -26,7 +30,7 @@ class CloudinaryUploadWidget extends Component {
         // cropping: true, //add a cropping step
         showAdvancedOptions: true,
         public_id: 'test123',
-        uploadSignature: generatedSignature(),
+        uploadSignature: signature,
         apiKey: process.env.REACT_APP_CLOUD_API_KEY,
         // add advanced options (public_id and tag)
         // sources: [ "local", "url"], // restrict the upload sources to URL and local files

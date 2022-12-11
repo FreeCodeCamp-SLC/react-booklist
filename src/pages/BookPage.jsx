@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { useGetAllLists } from '../hooks/useListsApi';
 import Header from '../components/Header';
 import ConfirmationModal from '../components/ConfirmationModal';
 import RatingStars from '../components/RatingStars';
 import { useDeleteBook, useEditBook } from '../hooks/useBooksApi';
+import Googlebooks from '../images/google-books.png';
 
 function convertDate(date) {
   if (date) return date.substring(0, 10);
@@ -31,7 +32,7 @@ export default function BookPage() {
   const [dateFinished, setDateFinished] = useState(
     convertDate(book.date_finished),
   );
-  const [description, setDescription] = useState();
+  const [description, setDescription] = useState(book.description);
   const { data: lists } = useGetAllLists();
   const { mutate: deleteBook } = useDeleteBook();
   const { mutate: editBook } = useEditBook();
@@ -150,7 +151,7 @@ export default function BookPage() {
                     value={dateStarted ?? ''}
                   />
                 </label>
-                <label className="flex flex-col my-3" htmlFor="date-finished">
+                <label className="flex flex-col my-3" htmlFor="date_finished">
                   Date Finished
                   <input
                     onChange={(e) => {
@@ -158,7 +159,7 @@ export default function BookPage() {
                     }}
                     className="w-full mt-1 md:w-48 border-2 py-1.5 px-2 rounded-md"
                     type="date"
-                    id="date-finished"
+                    id="date_finished"
                     name="Date Finished"
                     value={dateFinished ?? ''}
                   />
@@ -169,12 +170,12 @@ export default function BookPage() {
                 <div className="">
                   <label
                     className="flex flex-col my-4"
-                    htmlFor="reading-status"
+                    htmlFor="reading_status"
                   >
                     Reading Status
                     <select
                       name="Reading Status Id"
-                      id="reading-status"
+                      id="reading_status"
                       className="w-full mt-1 md:w-48 border-2 py-1.5 px-2 rounded-md"
                       value={readingStatusId ?? 1}
                       onChange={(e) => {
@@ -188,14 +189,14 @@ export default function BookPage() {
                       <option value={5}>Abandoned</option>
                     </select>
                   </label>
-                  <label className="flex flex-col pt-1 my-4" htmlFor="Favorite">
+                  <label className="flex flex-col pt-1 my-4" htmlFor="favorite">
                     Favorite
                     <div className="form-check form-switch">
                       <input
                         className="form-check-input appearance-none w-9 -ml-10 rounded-full float-left h-5 align-top bg-white bg-no-repeat bg-contain bg-gray-300 focus:outline-none cursor-pointer shadow-sm"
                         type="checkbox"
                         role="switch"
-                        name="Favorite"
+                        name="favorite"
                         id="flexSwitchCheckChecked76"
                         onChange={(e) => {
                           setFavorite(e.target.checked);
@@ -219,35 +220,50 @@ export default function BookPage() {
                   <img src={image} alt="book cover" className="w-32" />
                 </div>
               </div>
-              <label className="flex flex-col my-3" htmlFor="Favorite">
+              <label className="flex flex-col my-3" htmlFor="description">
                 Description
                 <textarea
                   className="w-full mt-1 border-2 py-1.5 px-2 rounded-md"
                   onChange={(e) => setDescription(e.target.value)}
+                  id="description"
+                  maxLength="2000"
                   value={description}
                 />
               </label>
-              <label className="flex flex-col my-3" htmlFor="Series">
-                List
-                {lists?.data.length > 0 && (
-                  <select
-                    onChange={(e) => {
-                      setListId(parseInt(e.target.value));
-                    }}
-                    className="w-full mt-1 md:w-72 border-2 py-1.5 px-2 rounded-md"
-                    name="Series"
-                    id="Series"
-                    value={listId}
-                  >
-                    {lists?.data.map((item) => (
-                      <option value={item.list_id} key={item.list_id}>
-                        {item.name}
-                      </option>
-                    ))}
-                  </select>
-                )}
-              </label>
+              <div className="grid md:grid-cols-2 grid-cols-1">
+                <label className="flex flex-col my-3" htmlFor="Series">
+                  List
+                  {lists?.data.length > 0 && (
+                    <select
+                      onChange={(e) => {
+                        setListId(parseInt(e.target.value));
+                      }}
+                      className="w-full mt-1 md:w-72 border-2 py-1.5 px-2 rounded-md"
+                      name="Series"
+                      id="Series"
+                      value={listId}
+                    >
+                      {lists?.data.map((item) => (
+                        <option value={item.list_id} key={item.list_id}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </label>
+                <div className="my-3">
+                  <span>Purchase Or Preview On</span>
+                  <Link to={{ pathname: book?.google_link }} target="_blank">
+                    <img
+                      src={Googlebooks}
+                      alt="google books logo"
+                      className="w-36 mt-1"
+                    />
+                  </Link>
+                </div>
+              </div>
             </form>
+
             <div className="flex items-center h-16 bg-gray-50 ">
               <button
                 className="h-10 ml-4 font-semibold text-white rounded-md bg-booklistBlue-dark w-28"

@@ -21,6 +21,8 @@ export default function AddBookPage() {
   const [listId, setListId] = useState(0);
   const [bookSelection, setBookSelection] = useState([]);
   const [bookImage, setBookImage] = useState(null);
+  const [description, setDescription] = useState('');
+  const [googleLink, setGoogleLink] = useState('');
 
   const [modalIsOpen, setModalIsOpen] = useState(lists?.data?.length === 0);
 
@@ -41,6 +43,13 @@ export default function AddBookPage() {
     if (favorite) {
       bookDetails.favorite = favorite;
     }
+    if (description) {
+      bookDetails.description = description;
+    }
+    if (googleLink) {
+      bookDetails.google_link = googleLink;
+    }
+
     addBook(bookDetails);
   }
   function autofillBookInfo(book) {
@@ -59,6 +68,16 @@ export default function AddBookPage() {
     } else {
       setBookImage(book.volumeInfo.imageLinks.thumbnail);
     }
+    if (!book.volumeInfo.description) {
+      setDescription('');
+    } else {
+      setDescription(book.volumeInfo.description);
+    }
+    if (!book.volumeInfo.canonicalVolumeLink) {
+      setGoogleLink('');
+    } else {
+      setGoogleLink(book.volumeInfo.canonicalVolumeLink);
+    }
     setTitle(book.volumeInfo.title);
   }
 
@@ -67,7 +86,6 @@ export default function AddBookPage() {
       axios
         .get(`https://www.googleapis.com/books/v1/volumes?q=${query}`)
         .then((res) => {
-          console.log('res', res);
           setBookSelection(res.data.items);
         })
         .catch((err) => {
@@ -159,6 +177,16 @@ export default function AddBookPage() {
                     checked={favorite}
                   />
                 </div>
+              </label>
+              <label className="flex flex-col my-3" htmlFor="description">
+                Description
+                <textarea
+                  className="w-full mt-1 border-2 py-1.5 px-2 rounded-md"
+                  onChange={(e) => setDescription(e.target.value)}
+                  id="description"
+                  maxLength="2000"
+                  value={description}
+                />
               </label>
               <label className="my-3" htmlFor="Series">
                 List

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../components/Header';
 import { useGetAllLists } from '../hooks/useListsApi';
 import { useAddBook } from '../hooks/useBooksApi';
+import Googlebooks from '../images/google-books.png';
 
 import CustomDropdown from '../components/customDropdown/CustomDropdown';
 import ConfirmationModal from '../components/ConfirmationModal';
@@ -188,28 +189,46 @@ export default function AddBookPage() {
                   value={description}
                 />
               </label>
-              <label className="my-3 flex flex-col" htmlFor="Series">
-                List
-                {lists?.data.length > 0 && (
-                  <select
-                    onChange={(e) => {
-                      setListId(e.target.value);
-                    }}
-                    className="mt-1 w-full border-2 py-1.5 px-2 rounded-md sm:w-72"
-                    name="Series"
-                    id="Series"
-                    value={listId}
-                  >
-                    {lists?.data.map((item) => (
-                      <option value={item.list_id} key={item.list_id}>
-                        {item.name}
-                      </option>
-                    ))}
-                  </select>
+              <div className="grid md:grid-cols-2 grid-cols-1">
+                <label className="my-3 flex flex-col" htmlFor="Series">
+                  List
+                  {lists?.data.length > 0 && (
+                    <select
+                      onChange={(e) => {
+                        setListId(e.target.value);
+                      }}
+                      className="mt-1 w-full border-2 py-1.5 px-2 rounded-md sm:w-72"
+                      name="Series"
+                      id="Series"
+                      value={listId}
+                    >
+                      {lists?.data.map((item) => (
+                        <option value={item.list_id} key={item.list_id}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </label>
+                {googleLink && (
+                  <div className="my-3">
+                    <span>Purchase Or Preview On</span>
+                    <Link
+                      to={{
+                        pathname: googleLink || 'https://books.google.com/',
+                      }}
+                      target="_blank"
+                    >
+                      <img
+                        src={Googlebooks}
+                        alt="google books logo"
+                        className="w-36 mt-1"
+                      />
+                    </Link>
+                  </div>
                 )}
-              </label>
+              </div>
             </form>
-
             <div className="flex items-center h-16 bg-gray-50 ">
               <button
                 className="h-10 ml-4 font-semibold text-white rounded-md bg-booklistBlue-dark w-28"

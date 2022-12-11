@@ -223,7 +223,7 @@ export default function BookPage() {
               <label className="flex flex-col my-3" htmlFor="description">
                 Description
                 <textarea
-                  className="w-full mt-1 border-2 py-1.5 px-2 rounded-md"
+                  className="w-full mt-1 border-2 py-1.5 px-2 rounded-md h-36"
                   onChange={(e) => setDescription(e.target.value)}
                   id="description"
                   maxLength="2500"

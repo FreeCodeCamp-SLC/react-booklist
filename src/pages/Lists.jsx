@@ -97,9 +97,14 @@ export default function Lists() {
           </div>
         </div>
         {listsIsLoading && (
-          <h2 className="px-5 pt-5 text-3xl font-bold text-gray-900">
-            Loading Lists...
-          </h2>
+          <div className="flex justify-center items-center mt-40">
+            <div
+              className="spinner-border animate-spin inline-block w-32 h-32 border-8 rounded-full text-booklistBlue-light"
+              role="status"
+            >
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
         )}
         {listsIsError && (
           <h2 className="px-5 pt-5 text-3xl font-bold text-gray-900">

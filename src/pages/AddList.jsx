@@ -32,17 +32,17 @@ export default function AddListPage() {
       <Header />
       <div className="min-h-full col-start-2 row-start-2 bg-gray-100 ">
         <h2 className="px-4 pt-5 text-3xl font-bold text-gray-900 ">
-          Create New Collection
+          Create New List
         </h2>
         <div className="mx-5 overflow-hidden rounded-md shadow-md mt-7">
           <form className="flex flex-col px-5 pt-5 pb-2 bg-white" id="new book">
             <label className="my-3" htmlFor="Book Title">
-              Series / Collection Name
+              List Name
               <input
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
-                className="w-full border-2"
+                className="w-full mt-1 border-2 py-1.5 px-2 rounded-md"
                 type="text"
                 id="name"
                 name="name"
@@ -50,13 +50,13 @@ export default function AddListPage() {
                 required
               />
             </label>
-            <label className="my-3" htmlFor="Series">
+            <label className="my-3 flex flex-col" htmlFor="Series">
               Year
               <input
                 onChange={(e) => {
                   setYear(e.target.value);
                 }}
-                className="w-full border-2"
+                className="border-2 w-48 py-1.5 px-2 rounded-md mt-1"
                 type="number"
                 name="Year"
                 id="Year"

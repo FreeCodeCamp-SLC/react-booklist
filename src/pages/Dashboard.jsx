@@ -65,9 +65,14 @@ export default function DashboardPage() {
           <SortOptions setSortBy={setSortBy} sortBy={sortBy} />
         </div>
         {isLoading && (
-          <h2 className="px-5 pt-5 text-3xl font-bold text-gray-900">
-            Loading Books...
-          </h2>
+          <div className="flex justify-center items-center mt-40">
+            <div
+              className="spinner-border animate-spin inline-block w-32 h-32 border-8 rounded-full text-booklistBlue-light"
+              role="status"
+            >
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
         )}
         {isError && (
           <h2 className="px-5 pt-5 text-3xl font-bold text-gray-900">

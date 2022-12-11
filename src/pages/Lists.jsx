@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import useListsApi, { getbooksByList } from '../hooks/useListsApi';
 import Header from '../components/Header';
@@ -12,6 +12,9 @@ import api from '../config';
 import Toasts from '../components/Toasts';
 
 export default function Lists() {
+  const location = useLocation();
+  const listName = location.state?.listName;
+
   const {
     listsItemCount,
     pageNumber,
@@ -68,6 +71,12 @@ export default function Lists() {
     }
   }
 
+  useEffect(() => {
+    if (listName) {
+      searchHandler(listName);
+    }
+  }, [listName]);
+
   return (
     <section className="sm:grid grid-cols-layout grid-rows-layout">
       <Toasts />
@@ -97,9 +106,14 @@ export default function Lists() {
           </div>
         </div>
         {listsIsLoading && (
-          <h2 className="px-5 pt-5 text-3xl font-bold text-gray-900">
-            Loading Lists...
-          </h2>
+          <div className="flex justify-center items-center mt-40">
+            <div
+              className="spinner-border animate-spin inline-block w-32 h-32 border-8 rounded-full text-booklistBlue-light"
+              role="status"
+            >
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
         )}
         {listsIsError && (
           <h2 className="px-5 pt-5 text-3xl font-bold text-gray-900">

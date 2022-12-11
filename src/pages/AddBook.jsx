@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../components/Header';
 import { useGetAllLists } from '../hooks/useListsApi';
 import { useAddBook } from '../hooks/useBooksApi';
+import Googlebooks from '../images/google-books.png';
 
 import CustomDropdown from '../components/customDropdown/CustomDropdown';
 import ConfirmationModal from '../components/ConfirmationModal';
@@ -21,6 +22,8 @@ export default function AddBookPage() {
   const [listId, setListId] = useState(0);
   const [bookSelection, setBookSelection] = useState([]);
   const [bookImage, setBookImage] = useState(null);
+  const [description, setDescription] = useState('');
+  const [googleLink, setGoogleLink] = useState('');
 
   const [modalIsOpen, setModalIsOpen] = useState(lists?.data?.length === 0);
 
@@ -41,6 +44,13 @@ export default function AddBookPage() {
     if (favorite) {
       bookDetails.favorite = favorite;
     }
+    if (description) {
+      bookDetails.description = description;
+    }
+    if (googleLink) {
+      bookDetails.google_link = googleLink;
+    }
+
     addBook(bookDetails);
   }
   function autofillBookInfo(book) {
@@ -58,6 +68,16 @@ export default function AddBookPage() {
       setBookImage(null);
     } else {
       setBookImage(book.volumeInfo.imageLinks.thumbnail);
+    }
+    if (!book.volumeInfo.description) {
+      setDescription('');
+    } else {
+      setDescription(book.volumeInfo.description.substring(0, 2500));
+    }
+    if (!book.volumeInfo.canonicalVolumeLink) {
+      setGoogleLink('');
+    } else {
+      setGoogleLink(book.volumeInfo.canonicalVolumeLink);
     }
     setTitle(book.volumeInfo.title);
   }
@@ -144,43 +164,71 @@ export default function AddBookPage() {
                 </div>
               )}
               <label className="flex flex-col my-3" htmlFor="Favorite">
-                Favorite
-                <div className="text-gray-500">
-                  Add this book to your list of favorites
+                Favorites
+                <div className="form-check form-switch">
+                  <input
+                    className="form-check-input appearance-none w-9 -ml-10 rounded-full float-left h-5 align-top bg-white bg-no-repeat bg-contain bg-gray-300 focus:outline-none cursor-pointer shadow-sm"
+                    type="checkbox"
+                    role="switch"
+                    name="Favorite"
+                    id="flexSwitchCheckChecked76"
+                    onChange={(e) => {
+                      setFavorite(e.target.checked);
+                    }}
+                    checked={favorite}
+                  />
                 </div>
-                <input
-                  onChange={(e) => {
-                    setFavorite(e.target.checked);
-                  }}
-                  className="w-5 mt-1"
-                  checked={favorite}
-                  type="checkbox"
-                  name="Favorite"
-                  id="Favorite"
+              </label>
+              <label className="flex flex-col my-3" htmlFor="description">
+                Description
+                <textarea
+                  className="w-full mt-1 border-2 py-1.5 px-2 rounded-md h-36"
+                  onChange={(e) => setDescription(e.target.value)}
+                  id="description"
+                  maxLength="2500"
+                  value={description}
                 />
               </label>
-              <label className="my-3" htmlFor="Series">
-                List
-                {lists?.data.length > 0 && (
-                  <select
-                    onChange={(e) => {
-                      setListId(e.target.value);
-                    }}
-                    className="w-full border-2 py-1.5 px-2 rounded-md"
-                    name="Series"
-                    id="Series"
-                    value={listId}
-                  >
-                    {lists?.data.map((item) => (
-                      <option value={item.list_id} key={item.list_id}>
-                        {item.name}
-                      </option>
-                    ))}
-                  </select>
+              <div className="grid md:grid-cols-2 grid-cols-1">
+                <label className="my-3 flex flex-col" htmlFor="Series">
+                  List
+                  {lists?.data.length > 0 && (
+                    <select
+                      onChange={(e) => {
+                        setListId(e.target.value);
+                      }}
+                      className="mt-1 w-full border-2 py-1.5 px-2 rounded-md sm:w-72"
+                      name="Series"
+                      id="Series"
+                      value={listId}
+                    >
+                      {lists?.data.map((item) => (
+                        <option value={item.list_id} key={item.list_id}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </label>
+                {googleLink && (
+                  <div className="my-3">
+                    <span>Purchase Or Preview On</span>
+                    <Link
+                      to={{
+                        pathname: googleLink || 'https://books.google.com/',
+                      }}
+                      target="_blank"
+                    >
+                      <img
+                        src={Googlebooks}
+                        alt="google books logo"
+                        className="w-36 mt-1"
+                      />
+                    </Link>
+                  </div>
                 )}
-              </label>
+              </div>
             </form>
-
             <div className="flex items-center h-16 bg-gray-50 ">
               <button
                 className="h-10 ml-4 font-semibold text-white rounded-md bg-booklistBlue-dark w-28"
@@ -190,6 +238,13 @@ export default function AddBookPage() {
               >
                 Save
               </button>
+              {/* future implementation of loading spinner */}
+              {/* <div
+                className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-booklistBlue-light ml-4"
+                role="status"
+              >
+                <span className="visually-hidden">Loading...</span>
+              </div> */}
             </div>
           </div>
         </div>

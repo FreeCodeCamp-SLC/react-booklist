@@ -71,7 +71,7 @@ export default function AddBookPage() {
     if (!book.volumeInfo.description) {
       setDescription('');
     } else {
-      setDescription(book.volumeInfo.description);
+      setDescription(book.volumeInfo.description.substring(0, 2500));
     }
     if (!book.volumeInfo.canonicalVolumeLink) {
       setGoogleLink('');
@@ -184,7 +184,7 @@ export default function AddBookPage() {
                   className="w-full mt-1 border-2 py-1.5 px-2 rounded-md"
                   onChange={(e) => setDescription(e.target.value)}
                   id="description"
-                  maxLength="2000"
+                  maxLength="2500"
                   value={description}
                 />
               </label>

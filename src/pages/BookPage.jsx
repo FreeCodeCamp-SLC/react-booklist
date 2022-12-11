@@ -226,7 +226,7 @@ export default function BookPage() {
                   className="w-full mt-1 border-2 py-1.5 px-2 rounded-md"
                   onChange={(e) => setDescription(e.target.value)}
                   id="description"
-                  maxLength="2000"
+                  maxLength="2500"
                   value={description}
                 />
               </label>
@@ -253,7 +253,13 @@ export default function BookPage() {
                 </label>
                 <div className="my-3">
                   <span>Purchase Or Preview On</span>
-                  <Link to={{ pathname: book?.google_link }} target="_blank">
+                  <Link
+                    to={{
+                      pathname:
+                        book?.google_link || 'https://books.google.com/',
+                    }}
+                    target="_blank"
+                  >
                     <img
                       src={Googlebooks}
                       alt="google books logo"

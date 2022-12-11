@@ -21,6 +21,8 @@ export default function AddBookPage() {
   const [listId, setListId] = useState(0);
   const [bookSelection, setBookSelection] = useState([]);
   const [bookImage, setBookImage] = useState(null);
+  const [description, setDescription] = useState('');
+  const [googleLink, setGoogleLink] = useState('');
 
   const [modalIsOpen, setModalIsOpen] = useState(lists?.data?.length === 0);
 
@@ -41,6 +43,13 @@ export default function AddBookPage() {
     if (favorite) {
       bookDetails.favorite = favorite;
     }
+    if (description) {
+      bookDetails.description = description;
+    }
+    if (googleLink) {
+      bookDetails.google_link = googleLink;
+    }
+
     addBook(bookDetails);
   }
   function autofillBookInfo(book) {
@@ -58,6 +67,16 @@ export default function AddBookPage() {
       setBookImage(null);
     } else {
       setBookImage(book.volumeInfo.imageLinks.thumbnail);
+    }
+    if (!book.volumeInfo.description) {
+      setDescription('');
+    } else {
+      setDescription(book.volumeInfo.description.substring(0, 2500));
+    }
+    if (!book.volumeInfo.canonicalVolumeLink) {
+      setGoogleLink('');
+    } else {
+      setGoogleLink(book.volumeInfo.canonicalVolumeLink);
     }
     setTitle(book.volumeInfo.title);
   }
@@ -144,19 +163,29 @@ export default function AddBookPage() {
                 </div>
               )}
               <label className="flex flex-col my-3" htmlFor="Favorite">
-                Favorite
-                <div className="text-gray-500">
-                  Add this book to your list of favorites
+                Favorites
+                <div className="form-check form-switch">
+                  <input
+                    className="form-check-input appearance-none w-9 -ml-10 rounded-full float-left h-5 align-top bg-white bg-no-repeat bg-contain bg-gray-300 focus:outline-none cursor-pointer shadow-sm"
+                    type="checkbox"
+                    role="switch"
+                    name="Favorite"
+                    id="flexSwitchCheckChecked76"
+                    onChange={(e) => {
+                      setFavorite(e.target.checked);
+                    }}
+                    checked={favorite}
+                  />
                 </div>
-                <input
-                  onChange={(e) => {
-                    setFavorite(e.target.checked);
-                  }}
-                  className="w-5 mt-1"
-                  checked={favorite}
-                  type="checkbox"
-                  name="Favorite"
-                  id="Favorite"
+              </label>
+              <label className="flex flex-col my-3" htmlFor="description">
+                Description
+                <textarea
+                  className="w-full mt-1 border-2 py-1.5 px-2 rounded-md"
+                  onChange={(e) => setDescription(e.target.value)}
+                  id="description"
+                  maxLength="2500"
+                  value={description}
                 />
               </label>
               <label className="my-3" htmlFor="Series">
@@ -166,7 +195,7 @@ export default function AddBookPage() {
                     onChange={(e) => {
                       setListId(e.target.value);
                     }}
-                    className="w-full border-2 py-1.5 px-2 rounded-md"
+                    className="mt-1 w-full border-2 py-1.5 px-2 rounded-md sm:w-72"
                     name="Series"
                     id="Series"
                     value={listId}

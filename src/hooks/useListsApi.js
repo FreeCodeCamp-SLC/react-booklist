@@ -59,7 +59,7 @@ export const useDeleteList = (id, setModalIsOpen, list) => {
   const { setToastFade, setToastStatus, setBook, setToastType } =
     useContext(ToastContext);
   const queryClient = useQueryClient();
-  const deleteList = () => api.delete(`/lists1/${id}`);
+  const deleteList = () => api.delete(`/lists/${id}`);
   return useMutation(deleteList, {
     onSuccess: (res, args) => {
       queryClient.setQueryData('allLists', (old) => {

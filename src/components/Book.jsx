@@ -17,15 +17,23 @@ export default function Book({ book, lists, pageNumber }) {
   const list = lists.data.filter(
     (singleList) => singleList.list_id === book.list_id,
   );
-  const linkObj = {
-    pathname: `/book/${book.book_id}`,
-    state: { book },
-  };
 
   function navigateToEditBook(e) {
+    const bookObj = {
+      pathname: `/book/${book.book_id}`,
+      state: { book },
+    };
     if (!e.target.matches('.cardBtn')) {
-      push(linkObj);
+      push(bookObj);
     }
+  }
+
+  function navigateToList(e) {
+    const listObj = {
+      pathname: `/lists/`,
+      state: { listName: e.target.innerHTML },
+    };
+    push(listObj);
   }
 
   return (
@@ -101,14 +109,15 @@ export default function Book({ book, lists, pageNumber }) {
       </h4>
       <div className="w-full">
         {list && (
-          <HashLink to={`/lists#${list[0].list_id}`}>
-            <button
-              type="button"
-              className="bg-booklistRed text-white py-1 px-3 rounded-3xl font-semibold mt-3 shadow-md hover:bg-booklistRed-light hover:-translate-y-0.5 transform transition focus:outline-none focus:ring focus:ring-offset-2 focus:ring-booklistRed focus:ring-opacity-50 active:bg-booklistRed-dark"
-            >
-              {list[0].name}
-            </button>
-          </HashLink>
+          // <HashLink to={`/lists#${list[0].list_id}`}>
+          <button
+            onClick={(e) => navigateToList(e)}
+            type="button"
+            className="cardBtn bg-booklistRed text-white py-1 px-3 rounded-3xl font-semibold mt-3 shadow-md hover:bg-booklistRed-light hover:-translate-y-0.5 transform transition focus:outline-none focus:ring focus:ring-offset-2 focus:ring-booklistRed focus:ring-opacity-50 active:bg-booklistRed-dark"
+          >
+            {list[0].name}
+          </button>
+          // </HashLink>
         )}
         <h4 className="text-gray-900 my-3 font-bold">
           {readingStatus[`${book.reading_status_id}`]}

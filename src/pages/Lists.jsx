@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import useListsApi, { getbooksByList } from '../hooks/useListsApi';
 import Header from '../components/Header';
@@ -12,6 +12,9 @@ import api from '../config';
 import Toasts from '../components/Toasts';
 
 export default function Lists() {
+  const location = useLocation();
+  const listName = location.state?.listName;
+
   const {
     listsItemCount,
     pageNumber,
@@ -67,6 +70,12 @@ export default function Lists() {
       setSearchResults(null);
     }
   }
+
+  useEffect(() => {
+    if (listName) {
+      searchHandler(listName);
+    }
+  }, [listName]);
 
   return (
     <section className="sm:grid grid-cols-layout grid-rows-layout">

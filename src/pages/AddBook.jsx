@@ -181,14 +181,14 @@ export default function AddBookPage() {
               <label className="flex flex-col my-3" htmlFor="description">
                 Description
                 <textarea
-                  className="w-full mt-1 border-2 py-1.5 px-2 rounded-md"
+                  className="w-full mt-1 border-2 py-1.5 px-2 rounded-md h-36"
                   onChange={(e) => setDescription(e.target.value)}
                   id="description"
                   maxLength="2500"
                   value={description}
                 />
               </label>
-              <label className="my-3" htmlFor="Series">
+              <label className="my-3 flex flex-col" htmlFor="Series">
                 List
                 {lists?.data.length > 0 && (
                   <select
@@ -219,6 +219,13 @@ export default function AddBookPage() {
               >
                 Save
               </button>
+              {/* future implementation of loading spinner */}
+              {/* <div
+                className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-booklistBlue-light ml-4"
+                role="status"
+              >
+                <span className="visually-hidden">Loading...</span>
+              </div> */}
             </div>
           </div>
         </div>

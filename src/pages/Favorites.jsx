@@ -56,9 +56,11 @@ export default function FavoritesPage() {
   return (
     <section className=" sm:grid grid-cols-layout grid-rows-layout">
       <Header searchHandler={searchHandler} />
-      <div className="min-h-full col-start-2 row-start-2 bg-gray-100 ">
-        <div className="flex pt-5 justify-between items-center">
-          <h2 className="px-4 text-3xl font-bold text-gray-900 ">Favorites</h2>
+      <div className="min-h-screen sm:min-h-full col-start-2 row-start-2 bg-gray-100 ">
+        <div className="px-6 flex pt-5 justify-between items-center">
+          <h2 className="text-3xl font-bold text-gray-900 sm:hidden inline-block ">
+            Favorites
+          </h2>
           <SortOptions setSortBy={setSortBy} sortBy={sortBy} />
         </div>
         {isLoading && (

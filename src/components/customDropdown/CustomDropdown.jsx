@@ -35,11 +35,11 @@ function Select({
   return (
     <div>
       <div
-        className={`absolute inset-0 z-40 ${!toggle ? 'hidden' : 'block'} `}
+        className={`absolute inset-0 z-20 ${!toggle ? 'hidden' : 'block'} `}
         onClick={outsideClickHandler}
         role="dialog"
       />
-      <div className="relative z-50 mt-1">
+      <div className="relative z-30 mt-1">
         <input
           id="selectLabel"
           name={name}

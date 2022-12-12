@@ -108,9 +108,9 @@ export default function AddBookPage() {
 
       <Header />
       {!isLoading && !isError && (
-        <div className="min-h-full col-start-2 row-start-2 bg-gray-100 ">
-          <h2 className="px-4 pt-5 text-3xl font-bold text-gray-900 ">
-            Add New
+        <div className="min-h-screen sm:min-h-full col-start-2 row-start-2 bg-gray-100 ">
+          <h2 className="px-6 pt-5 text-3xl font-bold text-gray-900 sm:hidden inline-block">
+            Add New Book
           </h2>
           <div className="mx-5 rounded-md shadow-md mt-7">
             <form

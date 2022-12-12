@@ -9,20 +9,27 @@ export default function SortOptions({ setSortBy, isLists }) {
   };
   return (
     <div className="flex space-x-2 items-center">
-      <label htmlFor="sort">Sort By</label>
-      <select id="sort" name="sort" onChange={(e) => sortHandler(e)}>
-        <option>Name: Asc</option>
-        <option>Name: Desc</option>
-        <option>Most Recent: Asc</option>
-        <option>Most Recent: Desc</option>
+      <label htmlFor="sort" className="flex flex-col">
+        Sort by
+        <select
+          id="sort"
+          name="sort"
+          onChange={(e) => sortHandler(e)}
+          className="pt-1"
+        >
+          <option>Name: Asc</option>
+          <option>Name: Desc</option>
+          <option>Most Recent: Asc</option>
+          <option>Most Recent: Desc</option>
 
-        {isLists && (
-          <>
-            <option>Year: Asc</option>
-            <option>Year: Desc</option>
-          </>
-        )}
-      </select>
+          {isLists && (
+            <>
+              <option>Year: Asc</option>
+              <option>Year: Desc</option>
+            </>
+          )}
+        </select>
+      </label>
     </div>
   );
 }

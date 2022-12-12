@@ -15,7 +15,7 @@ const LogoutButton = () => {
 
   return (
     isAuthenticated && (
-      <li className="p-1 focus:bg-booklistBlue-dark text-center sm:text-left">
+      <li className="p-1 focus:bg-booklistBlue-dark text-center sm:text-left py-2">
         <button
           className="flex font-semibold"
           type="button"

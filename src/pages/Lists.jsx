@@ -83,7 +83,9 @@ export default function Lists() {
       <Header searchHandler={searchHandler} />
       <div className="min-h-full col-start-2 row-start-2 bg-gray-100 ">
         <div className="flex py-5 px-6 justify-between items-center">
-          <h2 className="text-3xl font-bold text-gray-900">Lists</h2>
+          <h2 className="text-3xl font-bold text-gray-900 sm:hidden inline-block">
+            Lists
+          </h2>
           <SortOptions setSortBy={setSortBy} sortBy={sortBy} isLists />
           <div className="flex flex-col items-center">
             <Link className="text-booklistBlue-dark" to="add-list">
@@ -102,7 +104,7 @@ export default function Lists() {
                 />
               </svg>
             </Link>
-            <span className="text-sm">new list</span>
+            <span className="text-sm hidden sm:inline-block">new list</span>
           </div>
         </div>
         {listsIsLoading && (

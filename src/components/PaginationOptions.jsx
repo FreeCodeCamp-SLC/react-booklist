@@ -6,9 +6,8 @@ export default function PaginationOptions({
   isLists,
 }) {
   return (
-    <div className="grid place-items-center">
+    <div className="grid place-items-center absolute right-5 bottom-5">
       <div className="flex space-x-2 items-center">
-        <label htmlFor="paginationOptions">Show</label>
         <select
           id="paginationOptions"
           name="paginationOptions"

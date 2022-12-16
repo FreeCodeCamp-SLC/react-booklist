@@ -59,7 +59,7 @@ export default function DashboardPage() {
       <Toasts />
       <Header searchHandler={searchHandler} />
       <div className="min-h-screen sm:min-h-full col-start-2 row-start-2 bg-gray-100 relative pb-20">
-        <div className="px-6 pt-5 flex justify-between items-center">
+        <div className="px-6 pt-5 flex justify-center items-center">
           <h2 className=" text-3xl font-bold text-gray-900 sm:hidden inline-block">
             Books
           </h2>

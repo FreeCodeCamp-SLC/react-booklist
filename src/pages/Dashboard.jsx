@@ -102,22 +102,20 @@ export default function DashboardPage() {
                 ))}
             </div>
             {searchResults?.length === 0 && (
-              <>
-                <div className="justify-center absolute bottom-0 w-full pb-3.5">
-                  <SortOptions setSortBy={setSortBy} sortBy={sortBy} />
-                  <PageSelectors
-                    setPageNumber={setPageNumber}
-                    pageNumber={pageNumber}
-                    listsItemCount={listsItemCount}
-                    booksItemCount={booksItemCount}
-                    totalBooksPages={books.data[1]}
-                  />
-                  <PaginationOptions
-                    setBooksItemCount={setBooksItemCount}
-                    setListsItemCount={setListsItemCount}
-                  />
-                </div>
-              </>
+              <div className="justify-center absolute bottom-0 w-full pb-4">
+                <SortOptions setSortBy={setSortBy} sortBy={sortBy} />
+                <PageSelectors
+                  setPageNumber={setPageNumber}
+                  pageNumber={pageNumber}
+                  listsItemCount={listsItemCount}
+                  booksItemCount={booksItemCount}
+                  totalBooksPages={books.data[1]}
+                />
+                <PaginationOptions
+                  setBooksItemCount={setBooksItemCount}
+                  setListsItemCount={setListsItemCount}
+                />
+              </div>
             )}
           </>
         )}

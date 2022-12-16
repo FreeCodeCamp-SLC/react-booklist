@@ -18,6 +18,7 @@ export default function useFavorites(booksItemCount, pageNumber, sortBy) {
         history.push('/Auth');
       }
     },
+    retry: 1,
   });
 }
 

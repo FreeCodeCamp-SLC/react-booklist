@@ -37,7 +37,9 @@ export default function useListsApi(booksItemCount, pageNumber, sortBy) {
       };
     }
   };
-  return useQuery(['lists', pageNumber], getLists);
+  return useQuery(['lists', pageNumber], getLists, {
+    retry: 1
+  });
 }
 
 export const useGetAllLists = () => {
@@ -52,6 +54,7 @@ export const useGetAllLists = () => {
         history.push('/Auth');
       }
     },
+    retry: 1,
   });
 };
 

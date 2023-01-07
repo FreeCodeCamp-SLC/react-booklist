@@ -22,6 +22,8 @@ export default function useProfileImage() {
 
 
 export const useUploadToCloudinary = () => {
+  const { setToastFade, setToastStatus, setBook, setToastType } =
+  useContext(ToastContext);
   const queryClient = useQueryClient();
   const history = useHistory();
   const uploadToCloudinary = (formData) =>
@@ -31,7 +33,6 @@ export const useUploadToCloudinary = () => {
         formData,
       )
       .then((data) => {
-        console.log('res from cloudinary', data);
         const { secure_url } = data.data;
         if (secure_url) {
             api.post('/images', { image_url: secure_url.substring(50) });
@@ -42,12 +43,26 @@ export const useUploadToCloudinary = () => {
     retry: 1,
     onSuccess: () => {
       queryClient.invalidateQueries('profileImage');
+      setToastStatus('success');
+      console.log('success toast')
+      setToastType('update_profile');
+      setTimeout(() => {
+        setToastFade(true);
+      }, 250);
+      setTimeout(() => {
+        setToastFade(false);
+      }, 2000);
+      // success toast
     },
     onError: (error) => {
       if (error.response.status === 401) {
         history.push('/Auth');
       }
-      // error toast
-    },
+      setToastStatus('error');
+      setToastType('update_profile');
+      setToastFade(true);
+      setTimeout(() => {
+        setToastFade(false);
+      }, 2000);    },
   });
 };

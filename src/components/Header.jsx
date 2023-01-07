@@ -190,14 +190,15 @@ export default function Header({ searchHandler }) {
           )}
         </div>
         <div className="z-10 flex min-w-max">
-          {!useAltImage ? (
+          {profileImage?.data && (
             <img
               src={`https://res.cloudinary.com/${process.env.REACT_APP_CLOUD_NAME}/image/upload/ar_1:1,b_rgb:ffffff,bo_3px_solid_rgb:195885,c_thumb,g_face:center,r_max,w_40/${profileImage?.data[0].image_url}`}
               alt=""
               id="profileImg"
               onError={() => setUseAltImage(true)}
             />
-          ) : (
+          )}
+          {useAltImage && (
             <img src={user.picture} alt="user" className="rounded-full w-10" />
           )}
         </div>

@@ -11,9 +11,10 @@ const Profile = () => {
   const { mutateAsync: updateProfileImage } = useUploadToCloudinary();
 
   const [useAltImage, setUseAltImage] = useState(false);
-  const [url, setUrl] = useState();
+  const [url, setUrl] = useState('');
   const [userName, setUserName] = useState(user.name);
-  const [about, setAbout] = useState();
+  const [about, setAbout] = useState('');
+  const [toggleUrl, setToggleUrl] = useState(false);
 
   const [localFile, setLocalFile] = useState();
   const fileInput = React.createRef();
@@ -24,39 +25,46 @@ const Profile = () => {
   };
 
   const handleSubmit = async () => {
-    if (!localFile) {
+    if (!toggleUrl && !localFile) {
       return;
     }
-    async function getFileFromUrl(url, name, defaultType = 'image/jpeg') {
-      const response = await fetch(url);
+    if (toggleUrl && !url) {
+      return;
+    }
+    async function getFileFromUrl(urlString, defaultType = 'image/jpeg') {
+      const response = await fetch(urlString);
       const data = await response.blob();
-      return new File([data], name, {
+      return new File([data], 'urlUpload', {
         type: data.type || defaultType,
       });
     }
-    const file = await getFileFromUrl(
-      'https://www.bubblypet.com/wp-content/uploads/2020/11/Black-and-tan-Shiba-Inu-having-a-Sunny-walk-in-Dennistoun.jpg',
-      'example.jpg',
-    );
 
-    // still have to build out fetch from url funcitonality
-
-    api.get(`/images/generateSignature`).then((res) => {
-      const { signature, timestamp } = res.data;
-      const formData = new FormData();
-      formData.append('file', localFile);
-      formData.append('api_key', process.env.REACT_APP_CLOUD_API_KEY);
-      formData.append('timestamp', timestamp);
-      formData.append('signature', signature);
-      formData.append('folder', 'booklists');
-      formData.append('public_id', user.sub);
-      formData.append('invalidate', true);
-      formData.append('overwrite', true);
-      updateProfileImage(formData).then(() => {
-        refetch();
-        useAltImage(false);
+    api
+      .get(`/images/generateSignature`)
+      .then(async (res) => {
+        const { signature, timestamp } = res.data;
+        const formData = new FormData();
+        if (toggleUrl && url) {
+          const urlFile = await getFileFromUrl(url);
+          formData.append('file', urlFile);
+        } else {
+          formData.append('file', localFile);
+        }
+        formData.append('api_key', process.env.REACT_APP_CLOUD_API_KEY);
+        formData.append('timestamp', timestamp);
+        formData.append('signature', signature);
+        formData.append('folder', 'booklists');
+        formData.append('public_id', user.sub);
+        formData.append('invalidate', true);
+        formData.append('overwrite', true);
+        updateProfileImage(formData).then(() => {
+          refetch();
+          setUseAltImage(false);
+        });
+      })
+      .catch((err) => {
+        // error toast
       });
-    });
   };
 
   return (
@@ -88,40 +96,50 @@ const Profile = () => {
             />
           </label>
 
-          <label htmlFor="file" className="flex flex-col my-3 mt-5">
-            Upload profile image from file
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              ref={fileInput}
-              id="file"
-              className="mt-1"
-            />
-          </label>
-          {/* </div> */}
-          <label htmlFor="url" className="flex flex-col my-3">
-            Upload profile image from URL
-            <input
-              type="text"
-              name="url"
-              id="url"
-              placeholder="paste url"
-              onChange={(e) => setUrl(e.target.value)}
-              className="w-full mt-1 border-2 py-1.5 px-2 rounded-md mb-5"
-              value={url}
-            />
-          </label>
-          {!useAltImage ? (
+          {profileImage?.data && (
             <img
               src={`https://res.cloudinary.com/${process.env.REACT_APP_CLOUD_NAME}/image/upload/ar_1:1,b_rgb:f3f4f6,bo_12px_solid_rgb:195885,c_thumb,g_face:center,r_max,w_300/${profileImage?.data[0].image_url}`}
               alt=""
               id="profileImg"
               onError={() => setUseAltImage(true)}
             />
-          ) : (
+          )}
+          {useAltImage && (
             <img src={user.picture} alt="user" className="rounded-full" />
           )}
+
+          <label htmlFor="file" className="flex flex-col my-3 mt-5">
+            Upload profile image
+            {!toggleUrl && (
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                ref={fileInput}
+                id="file"
+                className="mt-1"
+              />
+            )}
+            <button
+              style={{ width: '104px', backgroundColor: '#EFEFEF' }}
+              className="py-0.5 rounded-sm border-gray-500 border inline mt-2"
+              type="button"
+              onClick={() => setToggleUrl(!toggleUrl)}
+            >
+              {toggleUrl ? 'From File' : 'From URL'}
+            </button>
+            {toggleUrl && (
+              <input
+                type="text"
+                name="url"
+                id="url"
+                placeholder="paste url"
+                onChange={(e) => setUrl(e.target.value)}
+                className="w-full mt-1 border-2 py-1.5 px-2 rounded-md mb-5"
+                value={url}
+              />
+            )}
+          </label>
 
           <button
             type="button"

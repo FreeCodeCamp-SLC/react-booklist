@@ -61,6 +61,11 @@ export default function Toasts() {
               {book.title} has been updated.
             </div>
           )}
+          {toastType === 'update_profile' && (
+            <div className="px-3 pb-3 bg-green-500 rounded-b-lg break-words text-white">
+              Successfully updated your profile.
+            </div>
+          )}
         </div>
       )}
       {toastStatus === 'remove' && (
@@ -143,9 +148,15 @@ export default function Toasts() {
               Error!
             </p>
           </div>
-          <div className="px-3 pb-3 bg-yellow-500 rounded-b-lg break-words text-white">
-            Error making changes to {book.title || book.name}
-          </div>
+          {toastType === 'update_profile' ? (
+            <div className="px-3 pb-3 bg-yellow-500 rounded-b-lg break-words text-white">
+              Error updating profile
+            </div>
+          ) : (
+            <div className="px-3 pb-3 bg-yellow-500 rounded-b-lg break-words text-white">
+              Error making changes to {book.title || book.name}
+            </div>
+          )}
         </div>
       )}
     </>

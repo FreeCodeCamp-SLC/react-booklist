@@ -15,7 +15,10 @@ import { focusOn } from '@cloudinary/url-gen/qualifiers/gravity';
 import { FocusOn } from '@cloudinary/url-gen/qualifiers/focusOn';
 import { outline, cartoonify } from '@cloudinary/url-gen/actions/effect';
 import { innerFill, fill } from '@cloudinary/url-gen/qualifiers/outlineMode';
-
+import useProfileImage, {
+  useUploadImage,
+  useUploadToCloudinary,
+} from '../hooks/useImagesApi';
 import { loadAuthToken } from '../utils/local-storage';
 import Header from '../components/Header';
 import CloudinaryUploadWidget from '../components/CloudinaryUploadWidget';
@@ -23,8 +26,9 @@ import api from '../config';
 
 const Profile = () => {
   const { user, isAuthenticated } = useAuth0();
-  console.log('user', user);
-  // Create and configure your Cloudinary instance.
+
+  const { data: profileImage, refetch } = useProfileImage();
+  const { mutateAsync: updateProfileImage } = useUploadToCloudinary();
 
   const [useAltImage, setUseAltImage] = useState(false);
   const [url, setUrl] = useState();
@@ -46,21 +50,15 @@ const Profile = () => {
   const [localFile, setLocalFile] = useState();
   const fileInput = React.createRef();
 
-  // Activates user file input to set div
-  // const editProfilePic = () => {
-  //   fileInput.current.click();
-  // };
-
   const handleImageChange = (e) => {
     e.preventDefault();
     setLocalFile(e.target.files[0]);
   };
 
-  useEffect(() => {
-    console.log('localFile', localFile);
-  }, [localFile]);
-
   const handleSubmit = async () => {
+    if (!localFile) {
+      return;
+    }
     async function getFileFromUrl(url, name, defaultType = 'image/jpeg') {
       const response = await fetch(url);
       const data = await response.blob();
@@ -73,38 +71,50 @@ const Profile = () => {
       'example.jpg',
     );
 
-    const url = `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/image/upload`;
+    // still have to build out fetch from url funcitonality
 
-    api.get(`/images`).then((res) => {
+    // const url = `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/image/upload`;
+
+    api.get(`/images/generateSignature`).then((res) => {
       const { signature, timestamp } = res.data;
       const formData = new FormData();
       formData.append('file', localFile);
       formData.append('api_key', process.env.REACT_APP_CLOUD_API_KEY);
       formData.append('timestamp', timestamp);
       formData.append('signature', signature);
-      // formData.append('eager', 'c_pad,h_300,w_400|c_crop,h_200,w_260');
       formData.append('folder', 'booklists');
       formData.append('public_id', user.sub);
       formData.append('invalidate', true);
       formData.append('overwrite', true);
-
-      fetch(url, {
-        method: 'POST',
-        body: formData,
-      })
-        .then((response) => response.text())
-        .then((data) => {
-          console.log('res from cloudinary', JSON.parse(data));
-        });
+      updateProfileImage(formData).then(() => {
+        refetch();
+      });
+      // use axios
+      // fetch(url, {
+      //   method: 'POST',
+      //   body: formData,
+      // })
+      //   .then((response) => response.text())
+      //   .then((data) => {
+      //     console.log('res from cloudinary', JSON.parse(data));
+      //     const response = JSON.parse(data);
+      //     // api.post('/images', {
+      //     //   image_url: response.secure_url,
+      //     // });
+      //     const { secure_url } = response;
+      //     if (secure_url) {
+      //       updateProfileImage({ image_url: secure_url }).then(() => {
+      //         refetch();
+      //       });
+      //     }
+      //     // save image url to db
+      //   });
+      // .catch((err) => {
+      //   // error posting updating image toast
+      //   console.log('error posting image', err);
+      // };
     });
   };
-
-  // const handleImageAlt = () => {
-  //   console.log('hitting this');
-  //   setUseAltImage(true);
-  //   // document.querySelector('#profileImg').src = user.picture;
-  //   document.querySelector('#profileImg').cldImg = user.picture;
-  // };
 
   return (
     isAuthenticated && (
@@ -134,8 +144,7 @@ const Profile = () => {
               onChange={(e) => setAbout(e.target.value)}
             />
           </label>
-          {/* <CloudinaryUploadWidget /> */}
-          {/* <div onClick={editProfilePic}> */}
+
           <label htmlFor="file" className="flex flex-col my-3 mt-5">
             Upload profile image from file
             <input
@@ -160,26 +169,27 @@ const Profile = () => {
               value={url}
             />
           </label>
-
-          {/* <img src={user.picture} alt={user.name} /> */}
-
           {!useAltImage ? (
-            <AdvancedImage
-              cldImg={myImage}
-              id="profileImg"
-              onError={() => setUseAltImage(true)}
-              // plugins={[lazyload(), responsive(), accessibility(), placeholder()]}
-            />
+            <>
+              <AdvancedImage
+                cldImg={myImage}
+                id="profileImg"
+                onError={() => setUseAltImage(true)}
+                // plugins={[lazyload(), responsive(), accessibility(), placeholder()]}
+              />
+              {/* <img src="" alt="profile" className="h-8 rounded-full" /> */}
+            </>
           ) : (
             <img src={user.picture} alt="user" className="rounded-full" />
           )}
-
-          {/* <img
-            src="https://res.cloudinary.com/deqapvzrv/image/upload/ar_1:1,b_rgb:f3f4f6,bo_6px_solid_rgb:195885,c_fill,g_auto,r_max,w_400/v1669834995/booklists/google-oauth2%7C108968739070494181045.jpg"
-            alt=""
-            id="profileImg"
-            onError={handleImageAlt}
-          /> */}
+          {profileImage?.data && profileImage?.data.length > 0 && (
+            <img
+              src={profileImage?.data[0].image_url}
+              alt=""
+              id="profileImg"
+              onError={() => setUseAltImage(true)}
+            />
+          )}
 
           <button
             type="button"

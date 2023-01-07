@@ -1,27 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
-import {
-  AdvancedImage,
-  lazyload,
-  responsive,
-  accessibility,
-  placeholder,
-} from '@cloudinary/react';
-import { Cloudinary } from '@cloudinary/url-gen';
-import { thumbnail } from '@cloudinary/url-gen/actions/resize';
-import { byRadius, max } from '@cloudinary/url-gen/actions/roundCorners';
-import { focusOn } from '@cloudinary/url-gen/qualifiers/gravity';
-import { FocusOn } from '@cloudinary/url-gen/qualifiers/focusOn';
-import { outline, cartoonify } from '@cloudinary/url-gen/actions/effect';
-import { innerFill, fill } from '@cloudinary/url-gen/qualifiers/outlineMode';
-import useProfileImage, {
-  useUploadImage,
-  useUploadToCloudinary,
-} from '../hooks/useImagesApi';
-import { loadAuthToken } from '../utils/local-storage';
+import useProfileImage, { useUploadToCloudinary } from '../hooks/useImagesApi';
 import Header from '../components/Header';
-import CloudinaryUploadWidget from '../components/CloudinaryUploadWidget';
 import api from '../config';
 
 const Profile = () => {
@@ -34,18 +14,6 @@ const Profile = () => {
   const [url, setUrl] = useState();
   const [userName, setUserName] = useState(user.name);
   const [about, setAbout] = useState();
-
-  const cld = new Cloudinary({
-    cloud: {
-      cloudName: process.env.REACT_APP_CLOUD_NAME,
-    },
-  });
-  const myImage = cld
-    .image(`booklists/${user.sub}`)
-    .resize(thumbnail().width(300).height(300).gravity(focusOn(FocusOn.face())))
-    .backgroundColor('#F3F4F6')
-    .roundCorners(max())
-    .effect(outline().mode(fill()).width(16).color('#195885'));
 
   const [localFile, setLocalFile] = useState();
   const fileInput = React.createRef();
@@ -73,8 +41,6 @@ const Profile = () => {
 
     // still have to build out fetch from url funcitonality
 
-    // const url = `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/image/upload`;
-
     api.get(`/images/generateSignature`).then((res) => {
       const { signature, timestamp } = res.data;
       const formData = new FormData();
@@ -88,31 +54,8 @@ const Profile = () => {
       formData.append('overwrite', true);
       updateProfileImage(formData).then(() => {
         refetch();
+        useAltImage(false);
       });
-      // use axios
-      // fetch(url, {
-      //   method: 'POST',
-      //   body: formData,
-      // })
-      //   .then((response) => response.text())
-      //   .then((data) => {
-      //     console.log('res from cloudinary', JSON.parse(data));
-      //     const response = JSON.parse(data);
-      //     // api.post('/images', {
-      //     //   image_url: response.secure_url,
-      //     // });
-      //     const { secure_url } = response;
-      //     if (secure_url) {
-      //       updateProfileImage({ image_url: secure_url }).then(() => {
-      //         refetch();
-      //       });
-      //     }
-      //     // save image url to db
-      //   });
-      // .catch((err) => {
-      //   // error posting updating image toast
-      //   console.log('error posting image', err);
-      // };
     });
   };
 
@@ -170,25 +113,14 @@ const Profile = () => {
             />
           </label>
           {!useAltImage ? (
-            <>
-              <AdvancedImage
-                cldImg={myImage}
-                id="profileImg"
-                onError={() => setUseAltImage(true)}
-                // plugins={[lazyload(), responsive(), accessibility(), placeholder()]}
-              />
-              {/* <img src="" alt="profile" className="h-8 rounded-full" /> */}
-            </>
-          ) : (
-            <img src={user.picture} alt="user" className="rounded-full" />
-          )}
-          {profileImage?.data && profileImage?.data.length > 0 && (
             <img
-              src={profileImage?.data[0].image_url}
+              src={`https://res.cloudinary.com/${process.env.REACT_APP_CLOUD_NAME}/image/upload/ar_1:1,b_rgb:f3f4f6,bo_12px_solid_rgb:195885,c_thumb,g_face:center,r_max,w_300/${profileImage?.data[0].image_url}`}
               alt=""
               id="profileImg"
               onError={() => setUseAltImage(true)}
             />
+          ) : (
+            <img src={user.picture} alt="user" className="rounded-full" />
           )}
 
           <button

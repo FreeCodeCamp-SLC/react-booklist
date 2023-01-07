@@ -31,9 +31,10 @@ export const useUploadToCloudinary = () => {
         formData,
       )
       .then((data) => {
+        console.log('res from cloudinary', data);
         const { secure_url } = data.data;
         if (secure_url) {
-            api.post('/images', { image_url: secure_url });
+            api.post('/images', { image_url: secure_url.substring(50) });
         }
       });
 

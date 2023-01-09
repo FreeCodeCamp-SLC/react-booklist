@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useHistory } from 'react-router-dom';
-import { saveAuthToken } from '../utils/local-storage';
+import { saveAuthToken, loadAuthToken } from '../utils/local-storage';
 
 export default function AuthPage() {
   const history = useHistory();
@@ -29,9 +29,7 @@ export default function AuthPage() {
         <div
           className="spinner-border animate-spin inline-block w-32 h-32 border-8 rounded-full text-booklistBlue-light"
           role="status"
-        >
-          <span className="visually-hidden">Loading...</span>
-        </div>
+        />
       </div>
     </>
   );

@@ -27,7 +27,11 @@ export default function Header({ searchHandler }) {
 
   if (isAuthenticated) {
     homeButton = (
-      <li className="items-center p-1 focus:bg-booklistBlue-dark">
+      <li
+        className={`items-center p-1 focus:bg-booklistBlue-dark rounded-md py-2 ${
+          pathname === '/dashboard' && 'bg-booklistBlue-dark'
+        }`}
+      >
         <Link className="flex" to="/dashboard">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -48,7 +52,11 @@ export default function Header({ searchHandler }) {
       </li>
     );
     profile = (
-      <li className="items-center p-1 focus:bg-booklistBlue-dark">
+      <li
+        className={`items-center p-1 focus:bg-booklistBlue-dark rounded-md py-2 ${
+          pathname === '/profile' && 'bg-booklistBlue-dark'
+        }`}
+      >
         <Link className="flex" to="/profile">
           <svg
             className="w-6 h-6 mr-2"
@@ -69,7 +77,11 @@ export default function Header({ searchHandler }) {
       </li>
     );
     addBook = (
-      <li className="items-center p-1 focus:bg-booklistBlue-dark">
+      <li
+        className={`items-center p-1 focus:bg-booklistBlue-dark rounded-md py-2 ${
+          pathname === '/add-book' && 'bg-booklistBlue-dark'
+        }`}
+      >
         <Link className="flex" to="/add-book">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -90,7 +102,11 @@ export default function Header({ searchHandler }) {
       </li>
     );
     lists = (
-      <li className="items-center p-1 focus:bg-booklistBlue-dark">
+      <li
+        className={`items-center p-1 focus:bg-booklistBlue-dark rounded-md py-2 ${
+          pathname === '/lists' && 'bg-booklistBlue-dark'
+        }`}
+      >
         <Link className="flex" to="/lists">
           <svg
             className="w-6 h-6 mr-2"
@@ -111,7 +127,11 @@ export default function Header({ searchHandler }) {
       </li>
     );
     favorites = (
-      <li className="items-center p-1 focus:bg-booklistBlue-dark">
+      <li
+        className={`items-center p-1 focus:bg-booklistBlue-dark rounded-md py-2 ${
+          pathname === '/favorites' && 'bg-booklistBlue-dark'
+        }`}
+      >
         <Link className="flex" to="/favorites">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -135,7 +155,7 @@ export default function Header({ searchHandler }) {
 
   return (
     <>
-      <div className="relative z-30 flex justify-between col-span-2 px-2 py-3 items-center bg-white shadow-md sm:col-start-2 sm:col-span-1">
+      <div className="relative z-50 flex justify-between col-span-2 px-2 pt-5 pb-4 items-center bg-white shadow-md sm:col-start-2 sm:col-span-1">
         <div className="flex items-center">
           <button
             type="button"
@@ -217,7 +237,8 @@ export default function Header({ searchHandler }) {
           )}
         </div>
       </div>
-      <header className="hidden min-h-screen col-start-1 row-span-2 row-start-1 sm:inline bg-booklistBlue">
+      {/* desktop */}
+      <header className="hidden min-h-screen col-start-1 row-span-2 row-start-1 sm:inline bg-booklistBlue z-50">
         <nav className="m-2 text-lg font-semibold text-white">
           <ul>
             {homeButton}
@@ -230,14 +251,15 @@ export default function Header({ searchHandler }) {
           </ul>
         </nav>
       </header>
+      {/* mobile */}
       <header
         className={`
-        col-start-1 absolute top-16 sm:hidden w-screen bg-booklistBlue transform transition z-20
+        col-start-1 absolute top-16 sm:hidden w-screen bg-booklistBlue transform transition z-40
           ${!toggle ? '-translate-y-full transparent' : 'translate-y-0'}
         `}
       >
-        <nav className="flex justify-centerF m-2 text-lg font-semibold text-white">
-          <ul>
+        <nav className="flex m-2 text-lg font-semibold text-white">
+          <ul className="w-full">
             {homeButton}
             {profile}
             {favorites}

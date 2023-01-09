@@ -39,7 +39,7 @@ export default function PageSelectors({
         {pageNumber !== 1 && (
           <>
             <button
-              className="border-1 border-gray-500 p-2"
+              className="border-1 border-gray-500"
               onClick={() => setPageNumber(1)}
               role="button"
             >
@@ -59,7 +59,7 @@ export default function PageSelectors({
               </svg>
             </button>
             <button
-              className="border-1 border-gray-500 p-2"
+              className="border-1 border-gray-500"
               onClick={() => setPageNumber(--pageNumber)}
               role="button"
             >
@@ -87,7 +87,7 @@ export default function PageSelectors({
         {pageNumber < booksMaxPage && (
           <>
             <button
-              className="border-1 border-gray-500 p-2"
+              className="border-1 border-gray-500"
               onClick={() => setPageNumber(++pageNumber)}
               role="button"
             >
@@ -135,7 +135,7 @@ export default function PageSelectors({
         {isLists && pageNumber < listsMaxPage && (
           <>
             <button
-              className="border-1 border-gray-500 p-2"
+              className="border-1 border-gray-500"
               onClick={() => setPageNumber(pageNumber++)}
               role="button"
             >

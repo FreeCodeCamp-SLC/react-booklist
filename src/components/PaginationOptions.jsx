@@ -6,9 +6,8 @@ export default function PaginationOptions({
   isLists,
 }) {
   return (
-    <div className="grid place-items-center">
+    <div className="grid place-items-center absolute right-5 sm:bottom-5 bottom-12">
       <div className="flex space-x-2 items-center">
-        <label htmlFor="paginationOptions">Show</label>
         <select
           id="paginationOptions"
           name="paginationOptions"
@@ -25,7 +24,7 @@ export default function PaginationOptions({
           <option>{isLists ? 15 : 50}</option>
           <option>{isLists ? 20 : 100}</option>
         </select>
-        <span>{isLists ? 'lists' : 'books'} per page</span>
+        <span>items</span>
       </div>
     </div>
   );

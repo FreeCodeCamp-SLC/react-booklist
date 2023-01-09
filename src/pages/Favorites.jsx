@@ -56,10 +56,11 @@ export default function FavoritesPage() {
   return (
     <section className=" sm:grid grid-cols-layout grid-rows-layout">
       <Header searchHandler={searchHandler} />
-      <div className="min-h-full col-start-2 row-start-2 bg-gray-100 ">
-        <div className="flex pt-5 justify-between items-center">
-          <h2 className="px-4 text-3xl font-bold text-gray-900 ">Favorites</h2>
-          <SortOptions setSortBy={setSortBy} sortBy={sortBy} />
+      <div className="min-h-screen sm:min-h-full col-start-2 row-start-2 bg-gray-100 relative pb-20">
+        <div className="px-6 flex pt-5 justify-center items-center">
+          <h2 className="text-3xl font-bold text-gray-900 sm:hidden inline-block ">
+            Favorites
+          </h2>
         </div>
         {isLoading && (
           <div className="flex justify-center items-center mt-40">
@@ -89,7 +90,8 @@ export default function FavoritesPage() {
                 ))}
             </div>
             {searchResults?.length === 0 && (
-              <>
+              <div className="justify-center absolute bottom-0 w-full pb-4">
+                <SortOptions setSortBy={setSortBy} sortBy={sortBy} />
                 <PageSelectors
                   setPageNumber={setPageNumber}
                   pageNumber={pageNumber}
@@ -97,12 +99,11 @@ export default function FavoritesPage() {
                   totalBooksPages={favorites.data[1]}
                 />
                 <PaginationOptions setBooksItemCount={setBooksItemCount} />
-              </>
+              </div>
             )}
           </>
         )}
       </div>
-      <div className="mx-5 overflow-hidden rounded-md shadow-md mt-7" />
     </section>
   );
 }

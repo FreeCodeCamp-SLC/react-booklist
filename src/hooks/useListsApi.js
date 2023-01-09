@@ -52,6 +52,7 @@ export const useGetAllLists = () => {
         history.push('/Auth');
       }
     },
+    retry: 1,
   });
 };
 

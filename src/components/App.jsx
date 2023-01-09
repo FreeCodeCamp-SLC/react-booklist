@@ -15,23 +15,15 @@ import FavoritesPage from '../pages/Favorites';
 import BookPage from '../pages/BookPage';
 import AuthPage from '../pages/Auth';
 import { PageProvider } from '../contexts/page-context';
-import { loadAuthToken } from '../utils/local-storage';
 import { ToastProvider } from '../contexts/toast-context';
 
 const queryClient = new QueryClient();
 
 function App() {
   const { isAuthenticated } = useAuth0();
-  const authToken = loadAuthToken();
 
   const authedRedirect = (Component) =>
-    isAuthenticated && !authToken ? (
-      <Redirect to="/auth" />
-    ) : isAuthenticated ? (
-      <Redirect to="/dashboard" />
-    ) : (
-      <Component />
-    );
+    isAuthenticated ? <Redirect to="/auth" /> : <Component />;
   return (
     <QueryClientProvider client={queryClient}>
       <PageProvider>

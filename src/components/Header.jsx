@@ -3,17 +3,16 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import LoginButton from './LoginButton';
 import LogoutButton from './LogoutButton';
-import useProfileImage from '../hooks/useImagesApi';
+import useProfile from '../hooks/useProfileApi';
 
 export default function Header({ searchHandler }) {
   const { pathname } = useLocation();
-  const { user, isAuthenticated } = useAuth0();
+  const { isAuthenticated } = useAuth0();
 
   const [toggle, setToggle] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const [useAltImage, setUseAltImage] = useState(false);
 
-  const { data: profileImage } = useProfileImage();
+  const { data: profileData } = useProfile();
 
   let homeButton = (
     <Link to="/">
@@ -190,16 +189,31 @@ export default function Header({ searchHandler }) {
           )}
         </div>
         <div className="z-10 flex min-w-max">
-          {profileImage?.data && (
-            <img
-              src={`https://res.cloudinary.com/${process.env.REACT_APP_CLOUD_NAME}/image/upload/ar_1:1,b_rgb:ffffff,bo_3px_solid_rgb:195885,c_thumb,g_face:center,r_max,w_40/${profileImage?.data[0].image_url}`}
-              alt=""
-              id="profileImg"
-              onError={() => setUseAltImage(true)}
-            />
-          )}
-          {useAltImage && (
-            <img src={user.picture} alt="user" className="rounded-full w-10" />
+          {profileData?.data[0]?.image_url ? (
+            <Link className="flex" to="/profile">
+              <img
+                src={`https://res.cloudinary.com/${process.env.REACT_APP_CLOUD_NAME}/image/upload/ar_1:1,b_rgb:ffffff,bo_3px_solid_rgb:195885,c_thumb,g_face:center,r_max,w_40/${profileData?.data[0]?.image_url}`}
+                alt=""
+                id="profileImg"
+              />
+            </Link>
+          ) : (
+            <Link className="flex" to="/profile">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+            </Link>
           )}
         </div>
       </div>

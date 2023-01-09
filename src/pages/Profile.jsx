@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import useProfileImage, { useUploadToCloudinary } from '../hooks/useImagesApi';
+
 import Header from '../components/Header';
 import api from '../config';
+import useProfile, {
+  useUpdateProfile,
+  useCreateProfile,
+  uploadToCloudinary,
+  getFileFromUrl,
+} from '../hooks/useProfileApi';
 
 const Profile = () => {
   const { user, isAuthenticated } = useAuth0();
+  const { data: profile, refetch } = useProfile();
+  const { mutateAsync: updateProfile } = useUpdateProfile();
+  const { mutateAsync: createProfile } = useCreateProfile();
 
-  const { data: profileImage, refetch } = useProfileImage();
-  const { mutateAsync: updateProfileImage } = useUploadToCloudinary();
-
-  const [useAltImage, setUseAltImage] = useState(false);
   const [url, setUrl] = useState('');
   const [userName, setUserName] = useState(user.name);
-  const [about, setAbout] = useState('');
+  const [about, setAbout] = useState();
   const [toggleUrl, setToggleUrl] = useState(false);
 
   const [localFile, setLocalFile] = useState();
@@ -24,47 +29,61 @@ const Profile = () => {
     setLocalFile(e.target.files[0]);
   };
 
-  const handleSubmit = async () => {
-    if (!toggleUrl && !localFile) {
-      return;
-    }
-    if (toggleUrl && !url) {
-      return;
-    }
-    async function getFileFromUrl(urlString, defaultType = 'image/jpeg') {
-      const response = await fetch(urlString);
-      const data = await response.blob();
-      return new File([data], 'urlUpload', {
-        type: data.type || defaultType,
-      });
-    }
+  const submitImage = async () => {
+    let imageUrl;
 
-    api
-      .get(`/images/generateSignature`)
-      .then(async (res) => {
-        const { signature, timestamp } = res.data;
-        const formData = new FormData();
-        if (toggleUrl && url) {
-          const urlFile = await getFileFromUrl(url);
-          formData.append('file', urlFile);
-        } else {
-          formData.append('file', localFile);
-        }
-        formData.append('api_key', process.env.REACT_APP_CLOUD_API_KEY);
-        formData.append('timestamp', timestamp);
-        formData.append('signature', signature);
-        formData.append('folder', 'booklists');
-        formData.append('public_id', user.sub);
-        formData.append('invalidate', true);
-        formData.append('overwrite', true);
-        updateProfileImage(formData).then(() => {
-          refetch();
-          setUseAltImage(false);
+    if (url || localFile) {
+      return new Promise((resolve, reject) => {
+        api.get(`/profiles/generateSignature`).then(async (res) => {
+          const { signature, timestamp } = res.data;
+          const formData = new FormData();
+          if (toggleUrl && url) {
+            const urlFile = await getFileFromUrl(url);
+            formData.append('file', urlFile);
+          } else {
+            formData.append('file', localFile);
+          }
+          formData.append('api_key', process.env.REACT_APP_CLOUD_API_KEY);
+          formData.append('timestamp', timestamp);
+          formData.append('signature', signature);
+          formData.append('folder', 'booklists');
+          formData.append('public_id', user.sub);
+          formData.append('invalidate', true);
+          formData.append('overwrite', true);
+          return uploadToCloudinary(formData).then((data) => {
+            const { secure_url } = data.data;
+            if (secure_url) {
+              resolve(secure_url.substring(50));
+            } else {
+              reject();
+            }
+          });
         });
-      })
-      .catch((err) => {
-        // error toast
       });
+    }
+    return imageUrl;
+  };
+
+  const handleSubmit = async () => {
+    submitImage().then((imageUrl) => {
+      if (profile.data.length === 0) {
+        createProfile({
+          user_name: userName,
+          about,
+          image_url: imageUrl,
+        }).then(() => {
+          refetch();
+        });
+      } else {
+        updateProfile({
+          user_name: userName,
+          about,
+          image_url: imageUrl,
+        }).then(() => {
+          refetch();
+        });
+      }
+    });
   };
 
   return (
@@ -96,16 +115,12 @@ const Profile = () => {
             />
           </label>
 
-          {profileImage?.data && (
+          {profile?.data[0]?.image_url && (
             <img
-              src={`https://res.cloudinary.com/${process.env.REACT_APP_CLOUD_NAME}/image/upload/ar_1:1,b_rgb:f3f4f6,bo_12px_solid_rgb:195885,c_thumb,g_face:center,r_max,w_300/${profileImage?.data[0].image_url}`}
+              src={`https://res.cloudinary.com/${process.env.REACT_APP_CLOUD_NAME}/image/upload/ar_1:1,b_rgb:f3f4f6,bo_12px_solid_rgb:195885,c_thumb,g_face:center,r_max,w_300/${profile?.data[0]?.image_url}`}
               alt=""
               id="profileImg"
-              onError={() => setUseAltImage(true)}
             />
-          )}
-          {useAltImage && (
-            <img src={user.picture} alt="user" className="rounded-full" />
           )}
 
           <label htmlFor="file" className="flex flex-col my-3 mt-5">
@@ -142,9 +157,12 @@ const Profile = () => {
           </label>
 
           <button
+            disabled={userName.length < 1}
             type="button"
             onClick={handleSubmit}
-            className="h-10 font-semibold text-white rounded-md bg-booklistBlue-dark w-28 mt-24"
+            className={`h-10 font-semibold text-white rounded-md ${
+              userName.length < 1 ? 'bg-gray-400' : 'bg-booklistBlue-dark'
+            } w-28 mt-24`}
           >
             Update
           </button>

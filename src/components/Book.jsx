@@ -6,12 +6,11 @@ import { useAddFavorite } from '../hooks/useFavorites';
 import RatingStars from './RatingStars';
 import readingStatus from '../utils/readingStatus';
 
-export default function Book({ book, lists, pageNumber }) {
+export default function Book({ book, lists, pageNumber, isFavoritesPage }) {
   const { push } = useHistory();
   const { mutate: favoriteBook } = useAddFavorite();
-
   const favoriteBookHandler = (boolean) => {
-    favoriteBook({ boolean, book, pageNumber });
+    favoriteBook({ boolean, book, pageNumber, isFavoritesPage });
   };
 
   const list = lists.data.filter(

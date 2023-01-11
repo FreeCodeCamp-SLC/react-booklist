@@ -22,31 +22,25 @@ export default function useGetBooks() {
 
 export function useAddBook() {
   const history = useHistory();
-  const { setToastFade, setToastStatus, setBook, setToastType } =
-    useContext(ToastContext);
+  const { setToast } = useContext(ToastContext);
 
   const addBook = (book) => api.post('/books', book);
 
   return useMutation(addBook, {
     onSuccess: (res, args) => {
       history.push('/dashboard');
-      setToastStatus('success');
-      setToastType('add_book');
-      setBook(args);
-      setTimeout(() => {
-        setToastFade(true);
-      }, 250);
-      setTimeout(() => {
-        setToastFade(false);
-      }, 2000);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      setToast({
+        status: 'success',
+        message: `${args?.title} successfully added to your collection!`,
+      });
     },
     onError: (error, args) => {
-      setToastStatus('error');
-      setBook(args);
-      setToastFade(true);
-      setTimeout(() => {
-        setToastFade(false);
-      }, 2000);
+      setToast({
+        status: 'error',
+        message: `Error adding ${args?.title} to your collection!`,
+      });
       if (error.response.status === 401) {
         history.push('/Auth');
       }
@@ -56,7 +50,7 @@ export function useAddBook() {
 
 export function useEditBook() {
   const history = useHistory();
-  const { setToastFade, setToastStatus, setBook, setToastType } =
+  const { setToast } =
     useContext(ToastContext);
   const editBook = (book) => {
     const bookId = book.book_id;
@@ -67,23 +61,16 @@ export function useEditBook() {
     onSuccess: (res, args) => {
       history.push('/dashboard');
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      setToastStatus('success');
-      setToastType('edit_book');
-      setBook(args);
-      setTimeout(() => {
-        setToastFade(true);
-      }, 250);
-      setTimeout(() => {
-        setToastFade(false);
-      }, 2000);
+      setToast({
+        status: 'success',
+        message: `Successfully edited ${args?.title}!`,
+      });
     },
     onError: (err, args) => {
-      setToastStatus('error');
-      setBook(args);
-      setToastFade(true);
-      setTimeout(() => {
-        setToastFade(false);
-      }, 2000);
+      setToast({
+        status: 'error',
+        message: `Error making changes to${args?.title}!`,
+      });
       console.log('error editing book', err);
     },
   });
@@ -91,7 +78,7 @@ export function useEditBook() {
 
 export function useDeleteBook() {
   const history = useHistory();
-  const { setToastFade, setToastStatus, setBook, setToastType } =
+  const { setToast } =
     useContext(ToastContext);
   const queryClient = useQueryClient();
 
@@ -100,31 +87,26 @@ export function useDeleteBook() {
   return useMutation(deleteBook, {
     onSuccess: (res, args) => {
       history.push('/dashboard');
-      setToastStatus('remove');
-      setToastType('delete_book');
-      setBook(args);
-      setTimeout(() => {
-        setToastFade(true);
-      }, 250);
-      setTimeout(() => {
-        setToastFade(false);
-      }, 2000);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      setToast({
+        status: 'delete',
+        message: `Successfully removed ${args?.title}!`,
+      });
       queryClient.invalidateQueries('books');
     },
     onError: (err, args) => {
-      setToastStatus('error');
-      setBook(args);
-      setToastFade(true);
-      setTimeout(() => {
-        setToastFade(false);
-      }, 2000);
+      setToast({
+        status: 'error',
+        message: `Error making changes to${args?.title}!`,
+      });
       console.log('error deleting book', err);
     },
   });
 }
 
 export function useRateBook() {
-  const { setToastFade, setToastStatus, setBook, setToastType } =
+  const { setToast } =
     useContext(ToastContext);
   const queryClient = useQueryClient();
   const { pageNumber } = useContext(PageContext);
@@ -152,24 +134,18 @@ export function useRateBook() {
           return old;
         }
       });
-
-      setToastStatus('success');
-      setToastType('rating');
-      setBook(book);
-      setToastFade(true);
-      setTimeout(() => {
-        setToastFade(false);
-      }, 2000);
+      setToast({
+        status: 'success',
+        message: `Rated ${book?.title}!`,
+      });
     },
     onError: (err, args) => {
       const { book } = args;
-      setToastStatus('error');
-      setBook(book);
-      setToastFade(true);
-      setTimeout(() => {
-        setToastFade(false);
-      }, 2000);
-      console.log('error adding book', err);
+      setToast({
+        status: 'error',
+        message: `Error editing rating of ${book?.title}!`,
+      });
+      console.log('Error rating book', err);
     },
   });
 }

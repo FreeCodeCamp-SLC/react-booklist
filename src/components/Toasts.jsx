@@ -1,13 +1,28 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ToastContext from '../contexts/toast-context';
 
 export default function Toasts() {
-  const { toastFade, toastStatus, book, toastType } = useContext(ToastContext);
+  const { toastStatus, book, toastType, toastMessage, toast } =
+    useContext(ToastContext);
+  const [toastFade, setToastFade] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setToastFade(true);
+    }, 250);
+    setTimeout(() => {
+      setToastFade(false);
+    }, 2000);
+    return () => {
+      setToastFade(false);
+    };
+  }, [toast]);
+
   return (
     <>
-      {toastStatus === 'success' && (
+      {toast.status === 'success' && (
         <div
-          className={`bg-green-500 shadow-lg mx-auto w-96 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block mb-3 absolute right-0 left-0 top-5 text-center transform transition-all duration-500 ${
+          className={`bg-green-500 shadow-lg mx-auto w-96 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block mb-3 sticky right-0 left-0 top-5 text-center transform transition-all duration-500 ${
             toastFade ? 'opacity-100 translate-y-2' : 'opacity-0'
           }`}
           style={{ zIndex: 1000 }}
@@ -36,41 +51,14 @@ export default function Toasts() {
               Success!
             </p>
           </div>
-          {toastType === 'add_book' && (
-            <div className="px-3 pb-3 bg-green-500 rounded-b-lg break-words text-white">
-              {book.title} has been added to your collection.
-            </div>
-          )}
-          {toastType === 'favoriting' && (
-            <div className="px-3 pb-3 bg-green-500 rounded-b-lg break-words text-white">
-              {book.title} has been added to your favorites.
-            </div>
-          )}
-          {toastType === 'rating' && (
-            <div className="px-3 pb-3 bg-green-500 rounded-b-lg break-words text-white">
-              {book.title} has been updated.
-            </div>
-          )}
-          {toastType === 'add_list' && (
-            <div className="px-3 pb-3 bg-green-500 rounded-b-lg break-words text-white">
-              List {book.name} has been added to your collection.
-            </div>
-          )}
-          {toastType === 'edit_book' && (
-            <div className="px-3 pb-3 bg-green-500 rounded-b-lg break-words text-white">
-              {book.title} has been updated.
-            </div>
-          )}
-          {toastType === 'update_profile' && (
-            <div className="px-3 pb-3 bg-green-500 rounded-b-lg break-words text-white">
-              Successfully updated your profile.
-            </div>
-          )}
+          <div className="px-3 pb-3 bg-green-500 rounded-b-lg break-words text-white">
+            {toast.message}
+          </div>
         </div>
       )}
-      {toastStatus === 'remove' && (
+      {toast.status === 'delete' && (
         <div
-          className={`bg-red-500 shadow-lg mx-auto w-96 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block mb-3 absolute right-0 left-0 top-5 text-center transform transition-all duration-500 ${
+          className={`bg-red-500 shadow-lg mx-auto w-96 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block mb-3 sticky right-0 left-0 top-5 text-center transform transition-all duration-500 ${
             toastFade ? 'opacity-100 translate-y-2' : 'opacity-0'
           }`}
           style={{ zIndex: 1000 }}
@@ -96,30 +84,17 @@ export default function Toasts() {
                   d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"
                 />
               </svg>
-              {toastType !== 'delete_list' && 'Book Removed'}
-              {toastType === 'delete_list' && 'List Removed'}
+              Removed!
             </p>
           </div>
-          {toastType === 'favoriting' && (
-            <div className="px-3 pb-3 bg-red-500 rounded-b-lg break-words text-white">
-              {book.title} has been removed from your favorites.
-            </div>
-          )}
-          {toastType === 'delete_book' && (
-            <div className="px-3 pb-3 bg-red-500 rounded-b-lg break-words text-white">
-              {book.title} has been removed from your collection.
-            </div>
-          )}
-          {toastType === 'delete_list' && (
-            <div className="px-3 pb-3 bg-red-500 rounded-b-lg break-words text-white">
-              List {book.title} has been removed from your collection.
-            </div>
-          )}
+          <div className="px-3 pb-3 bg-red-500 rounded-b-lg break-words text-white">
+            {toast.message}
+          </div>
         </div>
       )}
-      {toastStatus === 'error' && (
+      {toast.status === 'error' && (
         <div
-          className={`bg-yellow-500 shadow-lg mx-auto w-96 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block mb-3 absolute right-0 left-0 top-5 text-center transform transition-all duration-500 ${
+          className={`bg-yellow-500 shadow-lg mx-auto w-96 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block mb-3 sticky right-0 left-0 top-5 text-center transform transition-all duration-500 ${
             toastFade ? 'opacity-100 translate-y-2' : 'opacity-0'
           }`}
           style={{ zIndex: 1000 }}
@@ -148,15 +123,9 @@ export default function Toasts() {
               Error!
             </p>
           </div>
-          {toastType === 'update_profile' ? (
-            <div className="px-3 pb-3 bg-yellow-500 rounded-b-lg break-words text-white">
-              Error updating profile
-            </div>
-          ) : (
-            <div className="px-3 pb-3 bg-yellow-500 rounded-b-lg break-words text-white">
-              Error making changes to {book.title || book.name}
-            </div>
-          )}
+          <div className="px-3 pb-3 bg-yellow-500 rounded-b-lg break-words text-white">
+            {toast.message}
+          </div>
         </div>
       )}
     </>

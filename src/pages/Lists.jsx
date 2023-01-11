@@ -9,7 +9,6 @@ import PageSelectors from '../components/PageSelectors';
 import PaginationOptions from '../components/PaginationOptions';
 import PageContext from '../contexts/page-context';
 import api from '../config';
-import Toasts from '../components/Toasts';
 
 export default function Lists() {
   const location = useLocation();
@@ -79,7 +78,6 @@ export default function Lists() {
 
   return (
     <section className="sm:grid grid-cols-layout grid-rows-layout">
-      <Toasts />
       <Header searchHandler={searchHandler} />
       <div className="min-h-screen sm:min-h-full col-start-2 row-start-2 bg-gray-100 relative pb-20">
         <div className="flex py-5 px-6 justify-between items-center">

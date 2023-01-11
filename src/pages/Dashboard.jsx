@@ -56,7 +56,6 @@ export default function DashboardPage() {
 
   return (
     <section className="sm:grid grid-cols-layout grid-rows-layout">
-      <Toasts />
       <Header searchHandler={searchHandler} />
       <div className="min-h-screen sm:min-h-full col-start-2 row-start-2 bg-gray-100 relative pb-20">
         <div className="px-6 pt-5 flex justify-center items-center">

@@ -24,42 +24,35 @@ export default function useFavorites(booksItemCount, pageNumber, sortBy) {
 
 export function useAddFavorite() {
   const queryClient = useQueryClient();
-  const { setToastFade, setToastStatus, setBook, setToastType } =
+  const { setToast } =
     useContext(ToastContext);
 
-  const favoriteHandler = ({ boolean, book }) =>
+  const favoriteHandler = ({ boolean, book,  }) =>
     api.put(`/books/${book.book_id}`, {
       favorite: boolean,
     });
 
   return useMutation(favoriteHandler, {
     onSuccess: (res, args) => {
-      const { book, pageNumber, boolean } = args;
-      // updating cache
-      queryClient.setQueryData(['books', pageNumber], (old) => {
+      const { book, pageNumber, boolean, isFavoritesPage } = args;
+      queryClient.setQueryData([isFavoritesPage ? 'favorites' : 'books', pageNumber], (old) => {
         const oldBookIndex = old.data[0].findIndex(
           (item) => item.book_id === book.book_id,
         );
         old.data[0].splice(oldBookIndex, 1, res.data);
         return old;
       });
-      // triggering toast
-      setToastFade(true);
-      setToastStatus(boolean ? 'success' : 'remove');
-      setToastType('favoriting');
-      setBook(book);
-      setTimeout(() => {
-        setToastFade(false);
-      }, 2000);
+      setToast({
+        status: boolean ? 'success' : 'delete',
+        message: `${boolean ? 'Favorited' : 'Unfavorited'} ${book?.title}!`,
+      });
     },
     onError: (error, args) => {
-      const { book } = args;
-      setToastFade(true);
-      setToastStatus('error');
-      setBook(book);
-      setTimeout(() => {
-        setToastFade(false);
-      }, 2000);
+     const {boolean, book} = args;
+      setToast({
+        status: 'error',
+        message: `Error ${boolean ? 'favoriting' : 'unfavoriting'} ${book?.title}!`,
+      });
     },
   });
 }

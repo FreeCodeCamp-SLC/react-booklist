@@ -9,13 +9,12 @@ import Googlebooks from '../images/google-books.png';
 import CustomDropdown from '../components/customDropdown/CustomDropdown';
 import ConfirmationModal from '../components/ConfirmationModal';
 import logo from '../images/main-logo-new.png';
-import Toasts from '../components/Toasts';
 
 export default function AddBookPage() {
   const history = useHistory();
   const location = useLocation();
   const { data: lists } = useGetAllLists();
-  const { mutate: addBook, isLoading, isError } = useAddBook(history);
+  const { mutate: addBook, isLoading } = useAddBook(history);
   const [title, setTitle] = useState('');
   const [pages, setPages] = useState('');
   const [author, setAuthor] = useState('');
@@ -28,9 +27,14 @@ export default function AddBookPage() {
   const [description, setDescription] = useState('');
   const [googleLink, setGoogleLink] = useState('');
   const [modalIsOpen, setModalIsOpen] = useState(lists?.data?.length === 0);
+  const [descriptionValid, setDescriptionValid] = useState(true);
 
   function addBookHandler(e) {
     e.preventDefault();
+    if (description.length > 5000) {
+      setDescriptionValid(false);
+      return;
+    }
     const bookDetails = {
       list_id: +listId || +lists?.data[0].list_id,
       title,
@@ -85,7 +89,7 @@ export default function AddBookPage() {
   }
 
   function searchBooks(query) {
-    if (query.length > 2) {
+    if (query.length > 1) {
       axios
         .get(`https://www.googleapis.com/books/v1/volumes?q=${query}`)
         .then((res) => {
@@ -106,10 +110,8 @@ export default function AddBookPage() {
 
   return (
     <section className=" sm:grid grid-cols-layout grid-rows-layout">
-      <Toasts />
-
       <Header />
-      {!isLoading && !isError && (
+      {!isLoading && (
         <div className="min-h-screen sm:min-h-full col-start-2 row-start-2 bg-gray-100 ">
           <h2 className="px-6 pt-5 text-3xl font-bold text-gray-900 sm:hidden inline-block">
             Add New Book
@@ -119,14 +121,25 @@ export default function AddBookPage() {
               className="flex flex-col px-5 pt-5 pb-2 bg-white"
               id="new book"
             >
+              <CustomDropdown
+                searchBooks={searchBooks}
+                bookSelection={bookSelection}
+                autofillBookInfo={autofillBookInfo}
+                setBookSelection={setBookSelection}
+              />
+
               <label className="my-3" htmlFor="Book-Title">
                 Book Title
-                <CustomDropdown
+                <input
+                  onChange={(e) => {
+                    setAuthor(e.target.value);
+                  }}
+                  className="w-full mt-1 border-2 py-1.5 px-2 rounded-md"
+                  type="text"
                   name="Book-Title"
-                  searchBooks={searchBooks}
-                  bookSelection={bookSelection}
-                  autofillBookInfo={autofillBookInfo}
-                  setBookSelection={setBookSelection}
+                  id="Book-Title"
+                  value={title}
+                  required
                 />
               </label>
 
@@ -187,9 +200,14 @@ export default function AddBookPage() {
                   className="w-full mt-1 border-2 py-1.5 px-2 rounded-md h-36"
                   onChange={(e) => setDescription(e.target.value)}
                   id="description"
-                  maxLength="2500"
+                  maxLength="5000"
                   value={description}
                 />
+                {!descriptionValid && (
+                  <span className="text-red-500">
+                    description may not exceed 5000 characters
+                  </span>
+                )}
               </label>
               <div className="grid md:grid-cols-2 grid-cols-1">
                 <label className="my-3 flex flex-col" htmlFor="Series">
@@ -240,19 +258,11 @@ export default function AddBookPage() {
               >
                 Save
               </button>
-              {/* future implementation of loading spinner */}
-              {/* <div
-                className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-booklistBlue-light ml-4"
-                role="status"
-              >
-                <span className="visually-hidden">Loading...</span>
-              </div> */}
             </div>
           </div>
         </div>
       )}
       {isLoading && <h2 className="px-6 py-4">Loading...</h2>}
-      {isError && <h2 className="px-6 py-4">Error Adding Book</h2>}
       {modalIsOpen && (
         <ConfirmationModal setModalIsOpen={setModalIsOpen} modalCannotClose>
           <div className="flex justify-center w-full pb-6">

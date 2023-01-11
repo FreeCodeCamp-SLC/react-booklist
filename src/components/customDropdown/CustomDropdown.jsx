@@ -22,7 +22,7 @@ function Select({
     if (e.type === 'click' || e.key === 'Enter') {
       autofillBookInfo(book);
       setSelected(book);
-      setSelectInput(book.volumeInfo.title);
+      setSelectInput(`${book.volumeInfo.title} - ${book.volumeInfo.authors}`);
       setToggle(false);
     }
   }
@@ -53,7 +53,7 @@ function Select({
           className={`relative z-10 flex items-center justify-center w-full py-1.5 px-4  border-2 ${
             toggle ? ' rounded-t-md' : 'rounded-md'
           }`}
-          placeholder="Search"
+          placeholder="Search By Title or Author"
           type="text"
           onClick={() => {
             if (bookSelection?.length > 0) setToggle(!toggle);

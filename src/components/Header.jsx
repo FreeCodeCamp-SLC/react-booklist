@@ -6,12 +6,11 @@ import LogoutButton from './LogoutButton';
 import useProfile from '../hooks/useProfileApi';
 import logo from '../images/nav-logo-new.png';
 
-export default function Header({ searchHandler }) {
+export default function Header({ searchHandler, listName }) {
   const { pathname } = useLocation();
   const { isAuthenticated } = useAuth0();
-
   const [toggle, setToggle] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
+  const [searchValue, setSearchValue] = useState(listName || '');
 
   const { data: profileData } = useProfile();
 
@@ -156,8 +155,8 @@ export default function Header({ searchHandler }) {
 
   return (
     <>
-      <div className="relative z-50 flex justify-between col-span-2 px-2 pt-5 pb-4 items-center bg-white shadow-md sm:col-start-2 sm:col-span-1">
-        <div className="flex items-center">
+      <div className="relative z-50 flex  col-span-2 px-2 pt-5 pb-4 items-center bg-white shadow-md sm:col-start-2 sm:col-span-1">
+        <div className="flex items-center w-full">
           <button
             type="button"
             className="mx-2 min-w-max focus:outline-none focus:ring-2 focus:ring-gray-500"
@@ -175,7 +174,7 @@ export default function Header({ searchHandler }) {
           {(pathname === '/dashboard' ||
             pathname === '/lists' ||
             pathname === '/favorites') && (
-            <>
+            <div className="w-full flex items-center">
               <svg
                 className="h-5 px-2 stroke-current text-booklistBlue-dark"
                 xmlns="http://www.w3.org/2000/svg"
@@ -190,10 +189,10 @@ export default function Header({ searchHandler }) {
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                 />
               </svg>
-              <form action="/" method="GET">
+              <form action="/" method="GET" className="w-full">
                 <label htmlFor="search">
                   <input
-                    className="text-lg text-booklistBlue-dark focus:outline-none"
+                    className="text-lg text-booklistBlue-dark focus:outline-none w-full"
                     onChange={(e) => {
                       searchHandler(e.target.value);
                       setSearchValue(e.target.value);
@@ -201,17 +200,17 @@ export default function Header({ searchHandler }) {
                     type="text"
                     name="search"
                     id="search"
-                    placeholder="Search"
+                    placeholder="Search Your Collection"
                     value={searchValue}
                   />
                 </label>
               </form>
-            </>
+            </div>
           )}
         </div>
         <div className="z-10 flex min-w-max">
           {profileData?.data[0]?.image_url ? (
-            <Link className="flex" to="/profile">
+            <Link className="flex px-5" to="/profile">
               <img
                 src={`https://res.cloudinary.com/${process.env.REACT_APP_CLOUD_NAME}/image/upload/ar_1:1,b_rgb:ffffff,bo_3px_solid_rgb:195885,c_thumb,g_face:center,r_max,w_40/${profileData?.data[0]?.image_url}`}
                 alt=""
@@ -219,14 +218,14 @@ export default function Header({ searchHandler }) {
               />
             </Link>
           ) : (
-            <Link className="flex" to="/profile">
+            <Link className="flex px-5" to="/profile">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
+                stroke="#195885"
+                className="w-12 h-12"
               >
                 <path
                   strokeLinecap="round"

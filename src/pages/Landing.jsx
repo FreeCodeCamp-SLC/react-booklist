@@ -1,6 +1,6 @@
 import React from 'react';
 
-import logo from '../images/logo.png';
+import logo from '../images/main-logo-new.png';
 import bgImg from '../images/sign-in.jpg';
 import LoginButton from '../components/LoginButton';
 

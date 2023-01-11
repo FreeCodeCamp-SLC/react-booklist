@@ -78,7 +78,7 @@ export default function Lists() {
 
   return (
     <section className="sm:grid grid-cols-layout grid-rows-layout">
-      <Header searchHandler={searchHandler} />
+      <Header searchHandler={searchHandler} listName={listName} />
       <div className="min-h-screen sm:min-h-full col-start-2 row-start-2 bg-gray-100 relative pb-20">
         <div className="flex py-5 px-6 justify-between items-center">
           <h2 className="text-3xl font-bold text-gray-900 sm:hidden inline-block">
@@ -122,7 +122,17 @@ export default function Lists() {
         )}
         {lists && (
           <>
-            <div className="grid grid-cols-1 pb-6 mx-6 gap-6 lg:grid-cols-2 xl:grid-cols-3">
+            <div
+              className={`grid grid-cols-1 pb-6 mx-6 gap-6 ${
+                lists?.lists?.length === 1 ? 'lg:grid-cols-1' : 'lg:grid-cols-2'
+              } ${
+                lists?.lists?.length === 1
+                  ? 'xl:grid-cols-1'
+                  : lists?.lists?.length === 2
+                  ? 'xl:grid-cols-2'
+                  : 'xl:grid-cols-3'
+              }`}
+            >
               {!searchResults &&
                 lists?.lists.map((list) => (
                   <List

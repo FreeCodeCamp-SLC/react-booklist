@@ -237,7 +237,7 @@ export default function BookPage() {
                   className="w-full mt-1 border-2 py-1.5 px-2 rounded-md h-36"
                   onChange={(e) => setDescription(e.target.value)}
                   id="description"
-                  maxLength="2500"
+                  maxLength="5000"
                   value={description}
                 />
               </label>

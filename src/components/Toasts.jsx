@@ -2,8 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import ToastContext from '../contexts/toast-context';
 
 export default function Toasts() {
-  const { toastStatus, book, toastType, toastMessage, toast } =
-    useContext(ToastContext);
+  const { toast } = useContext(ToastContext);
   const [toastFade, setToastFade] = useState(false);
 
   useEffect(() => {

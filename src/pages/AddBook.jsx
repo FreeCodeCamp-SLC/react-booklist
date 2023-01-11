@@ -9,7 +9,6 @@ import Googlebooks from '../images/google-books.png';
 import CustomDropdown from '../components/customDropdown/CustomDropdown';
 import ConfirmationModal from '../components/ConfirmationModal';
 import logo from '../images/main-logo-new.png';
-import Toasts from '../components/Toasts';
 
 export default function AddBookPage() {
   const history = useHistory();
@@ -28,9 +27,14 @@ export default function AddBookPage() {
   const [description, setDescription] = useState('');
   const [googleLink, setGoogleLink] = useState('');
   const [modalIsOpen, setModalIsOpen] = useState(lists?.data?.length === 0);
+  const [descriptionValid, setDescriptionValid] = useState(true);
 
   function addBookHandler(e) {
     e.preventDefault();
+    if (description.length > 5000) {
+      setDescriptionValid(false);
+      return;
+    }
     const bookDetails = {
       list_id: +listId || +lists?.data[0].list_id,
       title,
@@ -85,7 +89,7 @@ export default function AddBookPage() {
   }
 
   function searchBooks(query) {
-    if (query.length > 2) {
+    if (query.length > 1) {
       axios
         .get(`https://www.googleapis.com/books/v1/volumes?q=${query}`)
         .then((res) => {
@@ -106,8 +110,6 @@ export default function AddBookPage() {
 
   return (
     <section className=" sm:grid grid-cols-layout grid-rows-layout">
-      <Toasts />
-
       <Header />
       {!isLoading && !isError && (
         <div className="min-h-screen sm:min-h-full col-start-2 row-start-2 bg-gray-100 ">
@@ -187,9 +189,14 @@ export default function AddBookPage() {
                   className="w-full mt-1 border-2 py-1.5 px-2 rounded-md h-36"
                   onChange={(e) => setDescription(e.target.value)}
                   id="description"
-                  maxLength="2500"
+                  maxLength="5000"
                   value={description}
                 />
+                {!descriptionValid && (
+                  <span className="text-red-500">
+                    description may not exceed 5000 characters
+                  </span>
+                )}
               </label>
               <div className="grid md:grid-cols-2 grid-cols-1">
                 <label className="my-3 flex flex-col" htmlFor="Series">

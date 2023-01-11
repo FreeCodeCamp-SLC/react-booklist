@@ -8,7 +8,7 @@ import Googlebooks from '../images/google-books.png';
 
 import CustomDropdown from '../components/customDropdown/CustomDropdown';
 import ConfirmationModal from '../components/ConfirmationModal';
-import logo from '../images/logo.png';
+import logo from '../images/main-logo-new.png';
 import Toasts from '../components/Toasts';
 
 export default function AddBookPage() {

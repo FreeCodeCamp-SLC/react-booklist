@@ -4,6 +4,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import LoginButton from './LoginButton';
 import LogoutButton from './LogoutButton';
 import useProfile from '../hooks/useProfileApi';
+import logo from '../images/nav-logo-new.png';
 
 export default function Header({ searchHandler }) {
   const { pathname } = useLocation();
@@ -239,6 +240,9 @@ export default function Header({ searchHandler }) {
       </div>
       {/* desktop */}
       <header className="hidden min-h-screen col-start-1 row-span-2 row-start-1 sm:inline bg-booklistBlue z-50">
+        <div className="py-4 px-4">
+          <img src={logo} alt="logo" />
+        </div>
         <nav className="m-2 text-lg font-semibold text-white">
           <ul>
             {homeButton}

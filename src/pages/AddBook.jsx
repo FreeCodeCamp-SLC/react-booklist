@@ -21,7 +21,7 @@ export default function AddBookPage() {
   const [author, setAuthor] = useState('');
   const [favorite, setFavorite] = useState(false);
   const [listId, setListId] = useState(
-    location?.state?.list_id || lists?.data[0].list_id,
+    location?.state?.list_id || lists?.data[0]?.list_id,
   );
   const [bookSelection, setBookSelection] = useState([]);
   const [bookImage, setBookImage] = useState(null);

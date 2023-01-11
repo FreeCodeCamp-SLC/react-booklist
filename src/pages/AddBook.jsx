@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { useHistory, Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../components/Header';
 import { useGetAllLists } from '../hooks/useListsApi';
@@ -13,18 +13,20 @@ import Toasts from '../components/Toasts';
 
 export default function AddBookPage() {
   const history = useHistory();
+  const location = useLocation();
   const { data: lists } = useGetAllLists();
   const { mutate: addBook, isLoading, isError } = useAddBook(history);
   const [title, setTitle] = useState('');
   const [pages, setPages] = useState('');
   const [author, setAuthor] = useState('');
   const [favorite, setFavorite] = useState(false);
-  const [listId, setListId] = useState(0);
+  const [listId, setListId] = useState(
+    location?.state?.list_id || lists?.data[0]?.list_id,
+  );
   const [bookSelection, setBookSelection] = useState([]);
   const [bookImage, setBookImage] = useState(null);
   const [description, setDescription] = useState('');
   const [googleLink, setGoogleLink] = useState('');
-
   const [modalIsOpen, setModalIsOpen] = useState(lists?.data?.length === 0);
 
   function addBookHandler(e) {

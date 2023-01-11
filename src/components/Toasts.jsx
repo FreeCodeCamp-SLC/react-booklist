@@ -22,7 +22,7 @@ export default function Toasts() {
     <>
       {toast.status === 'success' && (
         <div
-          className={`bg-green-500 shadow-lg mx-auto w-96 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block mb-3 sticky right-0 left-0 top-5 text-center transform transition-all duration-500 ${
+          className={`bg-green-500 shadow-lg mx-auto w-96 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block mb-3 absolute right-0 left-0 top-5 text-center transform transition-all duration-500 ${
             toastFade ? 'opacity-100 translate-y-2' : 'opacity-0'
           }`}
           style={{ zIndex: 1000 }}
@@ -58,7 +58,7 @@ export default function Toasts() {
       )}
       {toast.status === 'delete' && (
         <div
-          className={`bg-red-500 shadow-lg mx-auto w-96 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block mb-3 sticky right-0 left-0 top-5 text-center transform transition-all duration-500 ${
+          className={`bg-red-500 shadow-lg mx-auto w-96 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block mb-3 absolute right-0 left-0 top-5 text-center transform transition-all duration-500 ${
             toastFade ? 'opacity-100 translate-y-2' : 'opacity-0'
           }`}
           style={{ zIndex: 1000 }}
@@ -94,7 +94,7 @@ export default function Toasts() {
       )}
       {toast.status === 'error' && (
         <div
-          className={`bg-yellow-500 shadow-lg mx-auto w-96 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block mb-3 sticky right-0 left-0 top-5 text-center transform transition-all duration-500 ${
+          className={`bg-yellow-500 shadow-lg mx-auto w-96 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block mb-3 absolute right-0 left-0 top-5 text-center transform transition-all duration-500 ${
             toastFade ? 'opacity-100 translate-y-2' : 'opacity-0'
           }`}
           style={{ zIndex: 1000 }}

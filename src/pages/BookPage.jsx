@@ -19,6 +19,7 @@ export default function BookPage() {
   const [bookmark, setBookmark] = useState(
     book.bookmark_page ? book.bookmark_page : 1,
   );
+  const [bookMarkValid, setBookMarkValid] = useState(true);
   const [starRating, setStarRating] = useState(book.rating);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [favorite, setFavorite] = useState(book.favorite);
@@ -41,6 +42,11 @@ export default function BookPage() {
 
   function editBookHandler(e) {
     e.preventDefault();
+    if (bookmark < 1) {
+      setBookMarkValid(false);
+      return;
+    }
+
     const bookDetails = {
       list_id: listId,
       title,
@@ -137,6 +143,11 @@ export default function BookPage() {
                     value={bookmark ?? 0}
                     required
                   />
+                  {!bookMarkValid && (
+                    <span className="text-red-500">
+                      Year must be a positive integer
+                    </span>
+                  )}
                 </label>
                 <label className="flex flex-col my-3" htmlFor="date-started">
                   Date Started

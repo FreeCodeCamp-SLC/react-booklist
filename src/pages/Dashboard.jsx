@@ -6,7 +6,6 @@ import SortOptions from '../components/SortOptions';
 import PageContext from '../contexts/page-context';
 import PageSelectors from '../components/PageSelectors';
 import PaginationOptions from '../components/PaginationOptions';
-import Toasts from '../components/Toasts';
 import { useGetAllLists } from '../hooks/useListsApi';
 import api from '../config';
 

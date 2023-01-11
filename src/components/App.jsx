@@ -22,7 +22,6 @@ const queryClient = new QueryClient();
 
 function App() {
   const { isAuthenticated } = useAuth0();
-
   const authedRedirect = (Component) =>
     isAuthenticated ? <Redirect to="/auth" /> : <Component />;
   return (
@@ -63,8 +62,9 @@ function App() {
           </main>
         </ToastProvider>
       </PageProvider>
-
-      <ReactQueryDevtools InitialIsOpen={false} position="bottom-right" />
+      {process.env.NODE_ENV === 'development' && (
+        <ReactQueryDevtools InitialIsOpen={false} position="bottom-right" />
+      )}
     </QueryClientProvider>
   );
 }

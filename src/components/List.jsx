@@ -99,7 +99,10 @@ const List = ({ id, list, booksInList, refetchLists }) => {
           <div className="flex items-center gap-2">
             add book
             <Link
-              to="/add-book"
+              to={{
+                pathname: '/add-book',
+                state: { list_id: id },
+              }}
               className="rounded-full bg-white shadow-md border-solid border-gray-200"
             >
               <BookIcon />
@@ -121,8 +124,8 @@ const List = ({ id, list, booksInList, refetchLists }) => {
               </h2>
               <div>
                 <p className="text-xl my-4">
-                  Deleting this list will also remove the following books
-                  from your list:
+                  Deleting this list will also remove the following books from
+                  your list:
                 </p>
                 <ul className="flex flex-col">
                   {booksInList.map((book) => (

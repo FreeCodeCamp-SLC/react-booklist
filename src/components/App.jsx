@@ -16,6 +16,7 @@ import BookPage from '../pages/BookPage';
 import AuthPage from '../pages/Auth';
 import { PageProvider } from '../contexts/page-context';
 import { ToastProvider } from '../contexts/toast-context';
+import Toasts from './Toasts';
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <PageProvider>
         <ToastProvider>
+          <Toasts />
           <main>
             <Switch>
               <Route path="/" exact>

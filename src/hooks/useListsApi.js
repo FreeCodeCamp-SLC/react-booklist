@@ -57,7 +57,7 @@ export const useGetAllLists = () => {
 };
 
 export const useDeleteList = (id, setModalIsOpen, list) => {
-  const { setToastFade, setToastStatus, setBook, setToastType } =
+  const { setToast } =
     useContext(ToastContext);
   const queryClient = useQueryClient();
   const deleteList = () => api.delete(`/lists/${id}`);
@@ -70,24 +70,16 @@ export const useDeleteList = (id, setModalIsOpen, list) => {
       });
       document.body.style.overflowY = 'visible';
       setModalIsOpen(false);
-      setToastStatus('remove');
-      setToastType('delete_list');
-      // rename this state
-      setBook(list.name);
-      setTimeout(() => {
-        setToastFade(true);
-      }, 250);
-      setTimeout(() => {
-        setToastFade(false);
-      }, 2000);
+      setToast({
+        status: 'delete',
+        message: `${list.name} successfully removed from your collection!`,
+      });
     },
     onError: () => {
-      setToastStatus('error');
-      setBook(list);
-      setToastFade(true);
-      setTimeout(() => {
-        setToastFade(false);
-      }, 2000);
+      setToast({
+        status: 'error',
+        message: `Error deleting list: ${list.name}`,
+      });
     },
   });
 };
@@ -105,7 +97,7 @@ export const useDeleteAllBooks = (booksInList) => {
 };
 
 export function useAddList(history) {
-  const { setToastFade, setToastStatus, setBook, setToastType } =
+  const { setToast } =
     useContext(ToastContext);
 
   const queryClient = useQueryClient();
@@ -124,26 +116,18 @@ export function useAddList(history) {
         return old;
       });
       history.push('/lists');
-      setToastStatus('success');
-      setToastType('add_list');
-      // rename this state
-      setBook({ name });
-      setTimeout(() => {
-        setToastFade(true);
-      }, 250);
-      setTimeout(() => {
-        setToastFade(false);
-      }, 2000);
+      setToast({
+        status: 'success',
+        message: `${name} successfully added to your collection!`,
+      });
     },
     onError: (err, args) => {
       const { name } = args;
-      setToastStatus('error');
-      setBook({ name });
-      setToastFade(true);
-      setTimeout(() => {
-        setToastFade(false);
-      }, 2000);
-      console.log('error adding favorite', err);
+      setToast({
+        status: 'error',
+        message: `error creating list: ${name}`,
+      });
+      console.log('Error adding favorite', err);
     },
   });
 }

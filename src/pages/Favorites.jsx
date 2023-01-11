@@ -82,11 +82,23 @@ export default function FavoritesPage() {
             <div className="grid grid-cols-1 pb-6 mx-6 gap-x-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {searchResults?.length === 0 &&
                 favorites.data[0].map((favorite) => (
-                  <Book book={favorite} key={favorite.book_id} lists={lists} />
+                  <Book
+                    book={favorite}
+                    key={favorite.book_id}
+                    lists={lists}
+                    pageNumber={pageNumber}
+                    isFavoritesPage
+                  />
                 ))}
               {searchResults?.length > 0 &&
                 searchResults.map((favorite) => (
-                  <Book book={favorite} key={favorite.book_id} lists={lists} />
+                  <Book
+                    book={favorite}
+                    key={favorite.book_id}
+                    lists={lists}
+                    pageNumber={pageNumber}
+                    isFavoritesPage
+                  />
                 ))}
             </div>
             {searchResults?.length === 0 && (

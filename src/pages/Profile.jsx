@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 
 import Header from '../components/Header';
@@ -9,12 +9,14 @@ import useProfile, {
   uploadToCloudinary,
   getFileFromUrl,
 } from '../hooks/useProfileApi';
+import ToastContext from '../contexts/toast-context';
 
 const Profile = () => {
   const { user, isAuthenticated } = useAuth0();
   const { data: profile, refetch } = useProfile();
   const { mutateAsync: updateProfile } = useUpdateProfile();
   const { mutateAsync: createProfile } = useCreateProfile();
+  const { setToast } = useContext(ToastContext);
 
   const [url, setUrl] = useState('');
   const [userName, setUserName] = useState(user.name);
@@ -56,6 +58,10 @@ const Profile = () => {
               resolve(secure_url.substring(50));
             } else {
               reject();
+              setToast({
+                status: 'error',
+                message: 'Error uploading image',
+              });
             }
           });
         });

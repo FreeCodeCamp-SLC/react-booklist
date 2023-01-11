@@ -19,8 +19,10 @@ const Profile = () => {
   const { setToast } = useContext(ToastContext);
 
   const [url, setUrl] = useState('');
-  const [userName, setUserName] = useState(user.name);
-  const [about, setAbout] = useState();
+  const [userName, setUserName] = useState(
+    profile?.data[0]?.user_name || user.name,
+  );
+  const [about, setAbout] = useState(profile?.data[0]?.about || '');
   const [toggleUrl, setToggleUrl] = useState(false);
 
   const [localFile, setLocalFile] = useState();

@@ -8,7 +8,7 @@ export default function SortOptions({ setSortBy, isLists }) {
     setSortBy(e.target.value);
   };
   return (
-    <div className="flex space-x-2 items-center absolute sm:bottom-5 sm:left-5 bottom-12 left-5">
+    <div className="flex space-x-2 items-center absolute sm:bottom-5 bottom-12 left-5 lg:left-20">
       <label htmlFor="sort" className="flex">
         Sort
         <select

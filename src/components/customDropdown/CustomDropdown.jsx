@@ -26,7 +26,6 @@ function Select({
       setToggle(false);
     }
   }
-  // closes select if the user clicks anywhere outside the dropdown
   function outsideClickHandler() {
     setToggle(false);
     document.querySelector('#selectLabel').focus();
@@ -50,7 +49,7 @@ function Select({
             handleSelect(e);
             searchBooks(selectInput);
           }}
-          className={`relative z-10 flex items-center justify-center w-full py-1.5 px-4  border-2 ${
+          className={`relative z-10 flex items-center justify-center w-full py-1.5 px-4  border-2 border-gray-500 ${
             toggle ? ' rounded-t-md' : 'rounded-md'
           }`}
           placeholder="Search By Title or Author"

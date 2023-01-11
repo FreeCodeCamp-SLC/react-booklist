@@ -14,7 +14,7 @@ export default function AddBookPage() {
   const history = useHistory();
   const location = useLocation();
   const { data: lists } = useGetAllLists();
-  const { mutate: addBook, isLoading, isError } = useAddBook(history);
+  const { mutate: addBook, isLoading } = useAddBook(history);
   const [title, setTitle] = useState('');
   const [pages, setPages] = useState('');
   const [author, setAuthor] = useState('');
@@ -111,7 +111,7 @@ export default function AddBookPage() {
   return (
     <section className=" sm:grid grid-cols-layout grid-rows-layout">
       <Header />
-      {!isLoading && !isError && (
+      {!isLoading && (
         <div className="min-h-screen sm:min-h-full col-start-2 row-start-2 bg-gray-100 ">
           <h2 className="px-6 pt-5 text-3xl font-bold text-gray-900 sm:hidden inline-block">
             Add New Book
@@ -121,14 +121,25 @@ export default function AddBookPage() {
               className="flex flex-col px-5 pt-5 pb-2 bg-white"
               id="new book"
             >
+              <CustomDropdown
+                searchBooks={searchBooks}
+                bookSelection={bookSelection}
+                autofillBookInfo={autofillBookInfo}
+                setBookSelection={setBookSelection}
+              />
+
               <label className="my-3" htmlFor="Book-Title">
                 Book Title
-                <CustomDropdown
+                <input
+                  onChange={(e) => {
+                    setAuthor(e.target.value);
+                  }}
+                  className="w-full mt-1 border-2 py-1.5 px-2 rounded-md"
+                  type="text"
                   name="Book-Title"
-                  searchBooks={searchBooks}
-                  bookSelection={bookSelection}
-                  autofillBookInfo={autofillBookInfo}
-                  setBookSelection={setBookSelection}
+                  id="Book-Title"
+                  value={title}
+                  required
                 />
               </label>
 
@@ -247,19 +258,11 @@ export default function AddBookPage() {
               >
                 Save
               </button>
-              {/* future implementation of loading spinner */}
-              {/* <div
-                className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-booklistBlue-light ml-4"
-                role="status"
-              >
-                <span className="visually-hidden">Loading...</span>
-              </div> */}
             </div>
           </div>
         </div>
       )}
       {isLoading && <h2 className="px-6 py-4">Loading...</h2>}
-      {isError && <h2 className="px-6 py-4">Error Adding Book</h2>}
       {modalIsOpen && (
         <ConfirmationModal setModalIsOpen={setModalIsOpen} modalCannotClose>
           <div className="flex justify-center w-full pb-6">

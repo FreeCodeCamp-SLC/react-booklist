@@ -1,6 +1,5 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { HashLink } from 'react-router-hash-link';
 import bookImg from '../images/book.png';
 import { useAddFavorite } from '../hooks/useFavorites';
 import RatingStars from './RatingStars';
@@ -29,7 +28,7 @@ export default function Book({ book, lists, pageNumber, isFavoritesPage }) {
 
   function navigateToList(e) {
     const listObj = {
-      pathname: `/lists/`,
+      pathname: `/lists`,
       state: { listName: e.target.innerHTML },
     };
     push(listObj);
@@ -108,7 +107,6 @@ export default function Book({ book, lists, pageNumber, isFavoritesPage }) {
       </h4>
       <div className="w-full">
         {list && (
-          // <HashLink to={`/lists#${list[0].list_id}`}>
           <button
             onClick={(e) => navigateToList(e)}
             type="button"
@@ -116,7 +114,6 @@ export default function Book({ book, lists, pageNumber, isFavoritesPage }) {
           >
             {list[0].name}
           </button>
-          // </HashLink>
         )}
         <h4 className="text-gray-900 my-3 font-bold">
           {readingStatus[`${book.reading_status_id}`]}

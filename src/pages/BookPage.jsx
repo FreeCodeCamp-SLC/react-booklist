@@ -145,7 +145,7 @@ export default function BookPage() {
                   />
                   {!bookMarkValid && (
                     <span className="text-red-500">
-                      Year must be a positive integer
+                      Bookmark must be a positive integer
                     </span>
                   )}
                 </label>

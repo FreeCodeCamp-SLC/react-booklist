@@ -26,10 +26,6 @@ export default function DashboardPage() {
 
   const [searchResults, setSearchResults] = useState([]);
 
-  useEffect(async () => {
-    setPageNumber(1);
-  }, []);
-
   useEffect(() => {
     refetch();
   }, [booksItemCount, pageNumber, sortBy]);

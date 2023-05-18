@@ -36,9 +36,6 @@ export default function Lists() {
     totalBookPages = lists.books.length;
   }
 
-  useEffect(() => {
-    setPageNumber(1);
-  }, []);
   useEffect(async () => {
     await refetchLists();
   }, [listsItemCount, pageNumber, sortBy]);

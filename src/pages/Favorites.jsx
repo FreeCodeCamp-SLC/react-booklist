@@ -28,9 +28,6 @@ export default function FavoritesPage() {
   useEffect(() => {
     refetch();
   }, [booksItemCount, pageNumber, sortBy]);
-  useEffect(async () => {
-    setPageNumber(1);
-  }, []);
 
   const [searchResults, setSearchResults] = useState([]);
 

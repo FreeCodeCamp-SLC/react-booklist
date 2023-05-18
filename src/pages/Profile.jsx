@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 
+import { useForm } from 'react-hook-form';
 import Header from '../components/Header';
 import api from '../config';
 import useProfile, {
@@ -18,11 +19,15 @@ const Profile = () => {
   const { mutateAsync: createProfile } = useCreateProfile();
   const { setToast } = useContext(ToastContext);
 
-  const [url, setUrl] = useState('');
-  const [userName, setUserName] = useState(
-    profile?.data[0]?.user_name || user.name,
-  );
-  const [about, setAbout] = useState(profile?.data[0]?.about || '');
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
+  const userName = watch('userName');
+
   const [toggleUrl, setToggleUrl] = useState(false);
 
   const [localFile, setLocalFile] = useState();
@@ -33,7 +38,7 @@ const Profile = () => {
     setLocalFile(e.target.files[0]);
   };
 
-  const submitImage = async () => {
+  const submitImage = async (url) => {
     let imageUrl;
 
     if (url || localFile) {
@@ -72,21 +77,21 @@ const Profile = () => {
     return imageUrl;
   };
 
-  const handleSubmit = async () => {
-    submitImage().then((imageUrl) => {
+  const submit = async (formData) => {
+    submitImage(formData.url).then((imageUrl) => {
       if (profile.data.length === 0) {
         createProfile({
-          user_name: userName,
-          about,
+          user_name: formData.userName,
+          about: formData.about,
           image_url: imageUrl,
         }).then(() => {
           refetch();
         });
       } else {
         updateProfile({
-          user_name: userName,
-          about,
-          image_url: imageUrl,
+          user_name: formData.userName,
+          about: formData.about,
+          image_url: formData.imageUrl,
         }).then(() => {
           refetch();
         });
@@ -98,18 +103,18 @@ const Profile = () => {
     isAuthenticated && (
       <section className="sm:grid grid-cols-layout grid-rows-layout">
         <Header />
-        <section className="p-10 bg-gray-100">
+        <form onSubmit={handleSubmit(submit)} className="p-10 bg-gray-100">
           <h2 className="font-bold">Email:</h2>
-          <p className="mt-1 mb-3 "> {user.email}</p>
+          <p className="mt-1 mb-3">{user.email}</p>
           <label className="flex flex-col my-3" htmlFor="name">
             User Name
             <input
+              defaultValue={profile?.data[0]?.user_name || user.name}
               type="text"
               name="name"
               id="name"
-              value={userName}
+              {...register('userName')}
               className="w-full mt-1 border-2 py-1.5 px-2 rounded-md"
-              onChange={(e) => setUserName(e.target.value)}
             />
           </label>
           <label className="flex flex-col my-3" htmlFor="about">
@@ -117,9 +122,8 @@ const Profile = () => {
             <textarea
               name="about"
               id="about"
-              value={about}
+              {...register('about')}
               className="w-full mt-1 border-2 py-1.5 px-2 rounded-md"
-              onChange={(e) => setAbout(e.target.value)}
             />
           </label>
 
@@ -157,24 +161,22 @@ const Profile = () => {
                 name="url"
                 id="url"
                 placeholder="paste url"
-                onChange={(e) => setUrl(e.target.value)}
+                {...register('url')}
                 className="w-full mt-1 border-2 py-1.5 px-2 rounded-md mb-5"
-                value={url}
               />
             )}
           </label>
 
           <button
-            disabled={userName.length < 1}
-            type="button"
-            onClick={handleSubmit}
+            type="submit"
+            disabled={!userName}
             className={`h-10 font-semibold text-white rounded-md ${
-              userName.length < 1 ? 'bg-gray-400' : 'bg-booklistBlue-dark'
+              !userName ? 'bg-gray-400' : 'bg-booklistBlue-dark'
             } w-28 mt-24`}
           >
             Update
           </button>
-        </section>
+        </form>
       </section>
     )
   );

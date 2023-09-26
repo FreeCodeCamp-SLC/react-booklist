@@ -1,0 +1,10 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["com.brivity.home"],
+        "paths": ["*"]
+      }
+    ]
+  }
+}

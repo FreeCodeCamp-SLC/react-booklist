@@ -3,7 +3,7 @@
     "details": [
       {
         "appIDs": ["com.brivity.home"],
-        "paths": ["*", "./dashboard/*"]
+        "paths": ["*", "/dashboard/*"]
       }
     ]
   }

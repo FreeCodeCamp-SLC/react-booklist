@@ -2,7 +2,7 @@
   "applinks": {
     "details": [
       {
-        "appIDs": ["com.brivity.home"],
+        "appIDs": ["226K39KR48.com.brivity.home"],
         "paths": ["*", "/dashboard/*"]
       }
     ]

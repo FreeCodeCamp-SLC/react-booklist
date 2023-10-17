@@ -3,8 +3,24 @@
     "details": [
       {
         "appIDs": ["226K39KR48.com.brivity.home"],
-        "paths": ["*", "/dashboard/*"]
+        "components": [
+          {
+             "#": "no_universal_links",
+             "exclude": true,
+             "comment": "Matches any URL with a fragment that equals no_universal_links and instructs the system not to open it as a universal link."
+          },
+          {
+             "/": "/dashbooard/*",
+             "comment": "Matches any URL with a path that starts with /buy/."
+          }
+        ]
       }
     ]
-  }
+  },
+  "webcredentials": {
+    "apps": ["226K39KR48.com.brivity.home"]
+  },
+  "appclips": {
+    "apps": ["226K39KR48.com.brivity.home"]
+}
 }

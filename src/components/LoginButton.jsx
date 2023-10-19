@@ -11,17 +11,14 @@ const LoginButton = () => {
       </div>
     );
   }
-
   return (
-    !isAuthenticated && (
-      <button
-        type="submit"
-        onClick={() => loginWithRedirect()}
-        className="w-full py-2 text-white rounded-md bg-booklistBlue-light hover:bg-booklistBlue "
-      >
-        Sign in or create an account
-      </button>
-    )
+    <button
+      type="submit"
+      onClick={() => loginWithRedirect()}
+      className="w-full py-2 text-white rounded-md bg-booklistBlue-light hover:bg-booklistBlue "
+    >
+      Sign in or create an account
+    </button>
   );
 };
 

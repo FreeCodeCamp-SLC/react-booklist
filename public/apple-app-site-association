@@ -10,8 +10,8 @@
              "comment": "Matches any URL with a fragment that equals no_universal_links and instructs the system not to open it as a universal link."
           },
           {
-             "/": "/dashbooard/*",
-             "comment": "Matches any URL with a path that starts with /buy/."
+             "/": "/dashboard/*",
+             "comment": "Matches any URL with a path that starts with /dashboard/."
           }
         ]
       }

@@ -102,7 +102,7 @@ export default function Lists() {
             <span className="text-sm hidden sm:inline-block">new list</span>
           </div>
         </div>
-        {listsIsLoading && (
+        {/* {listsIsLoading && (
           <div className="flex justify-center items-center mt-40">
             <div
               className="spinner-border animate-spin inline-block w-32 h-32 border-8 rounded-full text-booklistBlue-light"
@@ -174,7 +174,8 @@ export default function Lists() {
               </div>
             )}
           </>
-        )}
+        )} */}
+        <a href="https://book-lists.com/dashboard">book-lists.com/dashboard</a>
       </div>
     </section>
   );

@@ -5,6 +5,7 @@ import bgImg from '../images/sign-in.jpg';
 import LoginButton from '../components/LoginButton';
 
 export default function LandingPage() {
+  console.log('var11', process.env.REACT_APP_AUTH0_CALLBACK_URL);
   return (
     <article className="h-screen md:flex">
       <section className="flex flex-col items-center justify-center w-full px-10 md:w-5/12">

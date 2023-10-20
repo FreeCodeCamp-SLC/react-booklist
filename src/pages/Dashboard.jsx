@@ -113,7 +113,11 @@ export default function DashboardPage() {
             )}
           </>
         )} */}
-        <div>testing</div>
+        <div>
+          <a href="https://book-lists.com/dashboard">
+            book-lists.com/dashboard
+          </a>
+        </div>
       </div>
     </section>
   );

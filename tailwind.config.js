@@ -1,3 +1,5 @@
+const twElements = require('tw-elements/dist/plugin.cjs');
+
 module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: false, // or 'media' or 'class'
@@ -23,20 +25,20 @@ module.exports = {
         layout: '75px auto',
       },
       height: {
-        "fit": "fit-content"
+        fit: 'fit-content',
       },
     },
     screens: {
-      'sm': '640px',
+      sm: '640px',
       // => @media (min-width: 640px) { ... }
 
-      'md': '850px',
+      md: '850px',
       // => @media (min-width: 768px) { ... }
 
-      'lg': '1130px',
+      lg: '1130px',
       // => @media (min-width: 1024px) { ... }
 
-      'xl': '1400px',
+      xl: '1400px',
       // => @media (min-width: 1280px) { ... }
 
       '2xl': '1536px',
@@ -48,6 +50,9 @@ module.exports = {
       backgroundColor: ['active'],
     },
   },
-  content: ['./src/**/*.{html,js}', './node_modules/tw-elements/dist/js/**/*.js'],
-  plugins: [require('tw-elements/dist/plugin')],
+  content: [
+    './src/**/*.{html,js}',
+    './node_modules/tw-elements/dist/js/**/*.js',
+  ],
+  plugins: [twElements],
 };

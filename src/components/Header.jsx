@@ -155,7 +155,6 @@ export default function Header({ searchHandler, listName }) {
 
   return (
     <>
-      <LogoutButton />
       <div className="relative z-50 flex  col-span-2 px-2 pt-5 pb-4 items-center bg-white shadow-md sm:col-start-2 sm:col-span-1">
         <div className="flex items-center w-full">
           <button
@@ -250,7 +249,7 @@ export default function Header({ searchHandler, listName }) {
             {favorites}
             {lists}
             {addBook}
-            <LoginButton />
+            {!isAuthenticated && <LoginButton />}
             <LogoutButton />
           </ul>
         </nav>

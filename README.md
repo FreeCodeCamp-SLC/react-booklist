@@ -16,6 +16,7 @@ This is the react front end for the booklist application.
    2. REACT_APP_AUTH0_DOMAIN=MESSAGE_ALEX_FOR_VALUE (make sure it doesn't have a '/' at the end. Results in 404)
    3. REACT_APP_AUTH0_CLIENTID=MESSAGE_ALEX_FOR_VALUE
    4. REACT_APP_AUTH0_AUDIENCE=MESSAGE_ALEX_FOR_VALUE
+5. Run `npm install` to install dependencies.
 
 ## Available Scripts
 

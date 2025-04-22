@@ -249,7 +249,7 @@ export default function Header({ searchHandler, listName }) {
             {favorites}
             {lists}
             {addBook}
-            <LoginButton />
+            {!isAuthenticated && <LoginButton />}
             <LogoutButton />
           </ul>
         </nav>

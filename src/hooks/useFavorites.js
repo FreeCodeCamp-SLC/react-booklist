@@ -4,13 +4,15 @@ import { useHistory } from 'react-router-dom';
 import api from '../config';
 import ToastContext from '../contexts/toast-context';
 
-export default function useFavorites(booksItemCount, pageNumber, sortBy) {
+export default function useFavorites(booksItemCount, pageNumber, 
+	// sortBy
+) {
   const history = useHistory();
 
   const getFavorites = api.get(`/favorites`, {
     booksItemCount,
     pageNumber,
-    sortBy,
+    // sortBy,
   });
   return useQuery(['favorites', pageNumber], () => getFavorites, {
     onError: (error) => {
@@ -18,7 +20,7 @@ export default function useFavorites(booksItemCount, pageNumber, sortBy) {
         history.push('/Auth');
       }
     },
-    retry: 1,
+    // retry: 1,
   });
 }
 

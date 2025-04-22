@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "craco start",
+    "start": "NODE_OPTIONS=--openssl-legacy-provider craco start",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject"
@@ -27,7 +27,7 @@
     ]
   },
   "dependencies": {
-    "@auth0/auth0-react": "^2.2.1",
+    "@auth0/auth0-react": "^2.3.0",
     "@craco/craco": "^6.1.1",
     "@tailwindcss/postcss7-compat": "^2.0.3",
     "@testing-library/jest-dom": "^5.11.4",
@@ -37,7 +37,7 @@
     "axios": "^0.21.1",
     "jwt-decode": "^3.1.2",
     "normalize.css": "^8.0.1",
-    "postcss": "^7.0.35",
+    "postcss": "^8.5.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.1",
     "react-hook-form": "^7.43.9",
@@ -46,7 +46,7 @@
     "react-router-hash-link": "^2.4.3",
     "react-scripts": "4.0.3",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.3",
-    "tw-elements": "^1.0.0-alpha12",
+    "tw-elements": "^1.1.0",
     "use-debounce": "^9.0.4",
     "web-vitals": "^1.0.1"
   },

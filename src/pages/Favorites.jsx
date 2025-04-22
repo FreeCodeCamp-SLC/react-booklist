@@ -6,7 +6,7 @@ import SortOptions from '../components/SortOptions';
 import Header from '../components/Header';
 import Book from '../components/Book';
 import useFavorites from '../hooks/useFavorites';
-import { useGetAllLists } from '../hooks/useListsApi';
+// import { useGetAllLists } from '../hooks/useListsApi';
 import api from '../config';
 
 export default function FavoritesPage() {
@@ -18,16 +18,17 @@ export default function FavoritesPage() {
     sortBy,
     setSortBy,
   } = useContext(PageContext);
-  const { data: lists } = useGetAllLists();
+  // const { data: lists } = useGetAllLists();
   const {
     data: favorites,
     isLoading,
     isError,
     refetch,
   } = useFavorites(booksItemCount, pageNumber, sortBy);
-  useEffect(() => {
-    refetch();
-  }, [booksItemCount, pageNumber, sortBy]);
+  // console.log('favorites', favorites);
+  // useEffect(() => {
+  //   refetch();
+  // }, [booksItemCount, pageNumber, sortBy]);
 
   const [searchResults, setSearchResults] = useState([]);
 
@@ -59,22 +60,22 @@ export default function FavoritesPage() {
             Favorites
           </h2>
         </div>
-        {isLoading && (
+        {/* {isLoading && (
           <div className="flex justify-center items-center mt-40">
             <div
               className="spinner-border animate-spin inline-block w-32 h-32 border-8 rounded-full text-booklistBlue-light"
               role="status"
             >
-              <span className="visually-hidden">Loading...</span>
             </div>
+            <span className="visually-hidden">Loading...</span>
           </div>
-        )}
-        {isError && (
+        )} */}
+        {/* {isError && (
           <h2 className="px-5 pt-5 text-3xl font-bold text-gray-900">
             Error Fetching Favorites
           </h2>
-        )}
-        {favorites?.data && lists && (
+        )} */}
+        {/* {favorites?.data && lists && (
           <>
             <div className="grid grid-cols-1 pb-6 mx-6 gap-x-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {searchResults?.length === 0 &&
@@ -111,7 +112,7 @@ export default function FavoritesPage() {
               </div>
             )}
           </>
-        )}
+        )} */}
       </div>
     </section>
   );

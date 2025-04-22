@@ -13,9 +13,10 @@ This is the react front end for the booklist application.
    1. This is to ensure you are still able to pull down the latest changes from the original project. If you're new to using Git/GitHub and pushing/pulling, just ask one of the project leaders or ask during a meetup to go over this.
 4. Create a .env file in the root of this project, go ahead and add the first one down below "ESLINT_NO_DEV_ERRORS". There is also 3 other key/value pairs you'll need here, message Alex Puhl on the UtahJS Slack to get this.
    1. ESLINT_NO_DEV_ERRORS=true
-   2. REACT_APP_AUTH0_DOMAIN=MESSAGE_ALEX_FOR_VALUE
+   2. REACT_APP_AUTH0_DOMAIN=MESSAGE_ALEX_FOR_VALUE (make sure it doesn't have a '/' at the end. Results in 404)
    3. REACT_APP_AUTH0_CLIENTID=MESSAGE_ALEX_FOR_VALUE
    4. REACT_APP_AUTH0_AUDIENCE=MESSAGE_ALEX_FOR_VALUE
+5. Run `npm install` to install dependencies.
 
 ## Available Scripts
 

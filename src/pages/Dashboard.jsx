@@ -1,4 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+  useContext,
+  // useEffect,
+  useState,
+} from 'react';
 import useGetBooks from '../hooks/useBooksApi';
 import Book from '../components/Book';
 import Header from '../components/Header';
@@ -21,8 +25,13 @@ export default function DashboardPage() {
     setSortBy,
   } = useContext(PageContext);
 
-  // const { data: lists } = useGetAllLists();
-  // const { data: books, isLoading, isError, refetch } = useGetBooks();
+  const { data: lists } = useGetAllLists();
+  const {
+    data: books,
+    isLoading,
+    isError,
+    // refetch
+  } = useGetBooks();
 
   const [searchResults, setSearchResults] = useState([]);
 
@@ -58,7 +67,7 @@ export default function DashboardPage() {
             Books
           </h2>
         </div>
-        {/* {isLoading && (
+        {isLoading && (
           <div className="flex justify-center items-center mt-40">
             <div
               className="spinner-border animate-spin inline-block w-32 h-32 border-8 rounded-full text-booklistBlue-light"
@@ -112,7 +121,7 @@ export default function DashboardPage() {
               </div>
             )}
           </>
-        )} */}
+        )}
         <div>
           <a href="https://book-lists.com/dashboard">
             book-lists.com/dashboard

@@ -4,6 +4,7 @@ import { Auth0Provider } from '@auth0/auth0-react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import AuthenticateRoute from './AuthenticateRoute';
+import AuthTokenSaver from './AuthTokenSaver';
 
 import LandingPage from '../pages/Landing';
 import DashboardPage from '../pages/Dashboard';
@@ -26,6 +27,8 @@ function App() {
       <PageProvider>
         <ToastProvider>
           <Toasts />
+          {/* Add AuthTokenSaver to capture and store tokens */}
+          <AuthTokenSaver />
           <Route path="/" component={LandingPage} exact />
           <Route component={AuthPage} path="/auth" />
           <Route component={DashboardPage} path="/dashboard" />

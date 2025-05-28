@@ -14,7 +14,8 @@ ReactDOM.render(
       clientId={process.env.REACT_APP_AUTH0_CLIENTID}
       authorizationParams={{
         redirect_uri: window.location.origin,
-        audience: 'https://utahfcc.us.auth0.com/api/v2/',
+        // Update audience to point to your API identifier, not the Auth0 management API
+        audience: process.env.REACT_APP_AUTH0_AUDIENCE || 'your-api-identifier',
       }}
       scope="read:current_user update:current_user_metadata"
       cacheLocation="localstorage"

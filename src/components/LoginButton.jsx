@@ -14,7 +14,11 @@ const LoginButton = () => {
   return (
     <button
       type="submit"
-      onClick={() => loginWithRedirect()}
+      onClick={() =>
+        loginWithRedirect({
+          appState: { targetUrl: '/dashboard' },
+        })
+      }
       className="w-full py-2 text-white rounded-md bg-booklistBlue-light hover:bg-booklistBlue "
     >
       Sign in or create an account

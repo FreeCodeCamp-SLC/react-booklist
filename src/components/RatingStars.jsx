@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useRateBook } from '../hooks/useBooksApi';
 
 const RatingStars = ({ book, isEditPage, starRating, setStarRating }) => {
   const { mutate: rateBook } = useRateBook();
-  const [starHover, setStarHover] = useState(0);
+  const [starHover, setStarHover] = React.useState(0);
   const ratingHandler = (bookRating) => {
     if (isEditPage) {
       setStarRating(bookRating);

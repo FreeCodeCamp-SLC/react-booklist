@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import useListsApi, { getbooksByList } from '../hooks/useListsApi';
@@ -21,7 +21,7 @@ export default function Lists() {
     setPageNumber,
     setSortBy,
     sortBy,
-  } = useContext(PageContext);
+  } = React.useContext(PageContext);
   const {
     data: lists,
     isLoading: listsIsLoading,
@@ -29,14 +29,14 @@ export default function Lists() {
     refetch: refetchLists,
   } = useListsApi(listsItemCount, pageNumber, sortBy);
 
-  const [searchResults, setSearchResults] = useState(null);
+  const [searchResults, setSearchResults] = React.useState(null);
 
   let totalBookPages = 0;
   if (lists && lists.books) {
     totalBookPages = lists.books.length;
   }
 
-  useEffect(async () => {
+  React.useEffect(async () => {
     await refetchLists();
   }, [listsItemCount, pageNumber, sortBy]);
 
@@ -67,7 +67,7 @@ export default function Lists() {
     }
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (listName) {
       searchHandler(listName);
     }
@@ -102,7 +102,7 @@ export default function Lists() {
             <span className="text-sm hidden sm:inline-block">new list</span>
           </div>
         </div>
-        {/* {listsIsLoading && (
+        {listsIsLoading && (
           <div className="flex justify-center items-center mt-40">
             <div
               className="spinner-border animate-spin inline-block w-32 h-32 border-8 rounded-full text-booklistBlue-light"
@@ -174,7 +174,7 @@ export default function Lists() {
               </div>
             )}
           </>
-        )} */}
+        )}
         <a href="https://book-lists.com/dashboard">book-lists.com/dashboard</a>
       </div>
     </section>

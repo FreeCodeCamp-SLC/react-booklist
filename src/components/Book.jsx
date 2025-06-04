@@ -106,7 +106,7 @@ export default function Book({ book, lists, pageNumber, isFavoritesPage }) {
         {book.pages ? book.pages : 'N/A'}
       </h4>
       <div className="w-full">
-        {list && (
+        {list && list.length > 0 && (
           <button
             onClick={(e) => navigateToList(e)}
             type="button"

@@ -12,7 +12,7 @@ export default function Header({ searchHandler, listName }) {
   const [toggle, setToggle] = useState(false);
   const [searchValue, setSearchValue] = useState(listName || '');
 
-  // const { data: profileData } = useProfile();
+  const { data: profileData } = useProfile();
 
   let homeButton = (
     <Link to="/">
@@ -209,7 +209,7 @@ export default function Header({ searchHandler, listName }) {
           )}
         </div>
         <div className="z-10 flex min-w-max">
-          {/* {profileData?.data[0]?.image_url ? (
+          {profileData?.data[0]?.image_url ? (
             <Link className="flex px-5" to="/profile">
               <img
                 src={`https://res.cloudinary.com/${process.env.REACT_APP_CLOUD_NAME}/image/upload/ar_1:1,b_rgb:ffffff,bo_3px_solid_rgb:195885,c_thumb,g_face:center,r_max,w_40/${profileData?.data[0]?.image_url}`}
@@ -234,7 +234,7 @@ export default function Header({ searchHandler, listName }) {
                 />
               </svg>
             </Link>
-          )} */}
+          )}
         </div>
       </div>
       {/* desktop */}

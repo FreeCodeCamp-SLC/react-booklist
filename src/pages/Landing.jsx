@@ -1,12 +1,18 @@
 import React from 'react';
 
-// import { useAuth0 } from '@auth0/auth0-react';
+import { useAuth0 } from '@auth0/auth0-react';
 import logo from '../images/main-logo-new.png';
 import bgImg from '../images/sign-in.jpg';
 import LoginButton from '../components/LoginButton';
 
 export default function LandingPage() {
-  // const { user, isAuthenticated } = useAuth0();
+  const { isAuthenticated } = useAuth0();
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      // Redirect to the dashboard or any other page
+      window.location.href = '/dashboard';
+    }
+  });
   return (
     <article className="h-screen md:flex">
       <section className="flex flex-col items-center justify-center w-full px-10 md:w-5/12">

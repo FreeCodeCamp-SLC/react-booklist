@@ -1,17 +1,13 @@
-import React, {
-  useContext,
-  // useEffect,
-  useState,
-} from 'react';
-import useGetBooks from '../hooks/useBooksApi';
+import React from 'react';
 import Book from '../components/Book';
 import Header from '../components/Header';
-import SortOptions from '../components/SortOptions';
-import PageContext from '../contexts/page-context';
 import PageSelectors from '../components/PageSelectors';
 import PaginationOptions from '../components/PaginationOptions';
-import { useGetAllLists } from '../hooks/useListsApi';
+import SortOptions from '../components/SortOptions';
 import api from '../config';
+import PageContext from '../contexts/page-context';
+import useGetBooks from '../hooks/useBooksApi';
+import { useGetAllLists } from '../hooks/useListsApi';
 
 export default function DashboardPage() {
   const {
@@ -23,7 +19,7 @@ export default function DashboardPage() {
     setPageNumber,
     sortBy,
     setSortBy,
-  } = useContext(PageContext);
+  } = React.useContext(PageContext);
 
   const { data: lists } = useGetAllLists();
   const {
@@ -33,7 +29,7 @@ export default function DashboardPage() {
     // refetch
   } = useGetBooks();
 
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = React.useState([]);
 
   // useEffect(() => {
   //   refetch();
@@ -86,7 +82,7 @@ export default function DashboardPage() {
           <>
             <div className="grid grid-cols-1 pb-6 mx-6 gap-x-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {searchResults?.length === 0 &&
-                books.data[0].map((book) => (
+                books.data[0]?.map((book) => (
                   <Book
                     book={book}
                     key={book.book_id}

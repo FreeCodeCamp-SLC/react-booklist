@@ -1,13 +1,15 @@
 import React from 'react';
 
-const SearchIcon = () => (
-  <div>
+const SearchIcon = ({ size = 1 }) => (
+  <div style={{ width: `${size * 40}px`, height: `${size * 40}px` }}>
     <svg
-      className="h-5 px-2 stroke-current text-booklistBlue-dark"
+      className="px-2 stroke-current text-booklistBlue-dark"
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
+      width="100%"
+      height={`${size * 40}px`}
     >
       <path
         strokeLinecap="round"
